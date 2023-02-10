@@ -12,6 +12,14 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
 ### Entregables obligatorios
 - [ ] Protitpos de Interfaz gráfica
     - [ ] Establecer interfaces necesarias
+    - [ ] ClienteForm
+        - [ ] Nuevo
+        - [ ] Editar
+    - [ ] CuentaBancariaForm
+        - [ ] Nuevo
+        - [ ] Cancelar
+    - [ ] Transferencia
+    - [ ] Retiro Sin Tarjeta
     - [ ] <b style="color:red;">TODO</b>
 - [ ] Modelos
     - [ ] Entidad Relacion
