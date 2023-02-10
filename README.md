@@ -8,6 +8,7 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
 
 ## Requisitos actuales
 
+
 ### Entregables obligatorios
 - [ ] Protitpos de Interfaz gráfica
     - [ ] Establecer interfaces necesarias
