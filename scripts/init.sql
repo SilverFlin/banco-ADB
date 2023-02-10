@@ -1,5 +1,8 @@
 /*
-Script que crea la base de datos, tablas, y triggers del sistema.
+Script que crea la base de datos, tablas, vistas, y triggers del sistema.
+TODO: Vistas, Triggers
+TODO: domicilios NOT NULL
+TODO: password
 */
 
 DROP DATABASE IF EXISTS banco_transacciones;
@@ -18,46 +21,46 @@ CREATE TABLE domicilios(
 
 CREATE TABLE clientes(
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    nombres VARCHAR(50),
-    apellidoPaterno VARCHAR(50),
+    nombres VARCHAR(50) NOT NULL,
+    apellidoPaterno VARCHAR(50) NOT NULL,
     apellidoMaterno VARCHAR(50),
-    fechaNacimiento DATE,
-    idDomicilio INT,
+    fechaNacimiento DATE NOT NULL,
+    idDomicilio INT NOT NULL,
     FOREIGN KEY (idDomicilio) REFERENCES domicilios (id)  
 );
 
 CREATE TABLE operaciones(
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    tipoOperacion ENUM("actualizacion","transferencia","retiro"),
+    tipoOperacion ENUM("actualizacion","transferencia","retiro") NOT NULL,
     fechaHora DATETIME DEFAULT(CURRENT_TIMESTAMP),
     detalles VARCHAR(250),
-    idCliente INT,
+    idCliente INT NOT NULL,
     FOREIGN KEY (idCliente) REFERENCES clientes (id)
 );
 
 CREATE TABLE cuentasBancarias(
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    noCuenta VARCHAR(20),
-    fechaHora DATETIME DEFAULT(CURRENT_TIMESTAMP),
-    saldoMXN DECIMAL(8,4),
-    idCliente INT,
+    noCuenta VARCHAR(20) NOT NULL,
+    fechaApertura DATETIME DEFAULT(CURRENT_TIMESTAMP) NOT NULL,
+    saldoMXN DECIMAL(8,4) NOT NULL,
+    idCliente INT NOT NULL,
     FOREIGN KEY (idCliente) REFERENCES clientes (id)
 );
 
 CREATE TABLE transferencias(
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    monto DECIMAL(8,4),
-    idCuentaOrigen INT,
-    idCuentaDestino INT,
-    FOREIGN KEY (idCuentaOrigen) REFERENCES cuentasbancarias (id),
-    FOREIGN KEY (idCuentaDestino) REFERENCES cuentasbancarias (id)
+    monto DECIMAL(8,4) NOT NULL,
+    idCuentaOrigen INT NOT NULL,
+    idCuentaDestino INT NOT NULL,
+    FOREIGN KEY (idCuentaOrigen) REFERENCES cuentasBancarias (id),
+    FOREIGN KEY (idCuentaDestino) REFERENCES cuentasBancarias (id)
 );
 
 CREATE TABLE retirosSinCuenta(
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    password VARCHAR(100),
-    monto DECIMAL(8,4),
-    folio VARCHAR(50),
-    idCuentaBancaria INT,
-	FOREIGN KEY (idCuentaBancaria ) REFERENCES cuentasbancarias (id)
+    password VARCHAR(100) NOT NULL,
+    monto DECIMAL(8,4) NOT NULL,
+    folio VARCHAR(50) NOT NULL,
+    idCuentaBancaria INT NOT NULL,
+	FOREIGN KEY (idCuentaBancaria ) REFERENCES cuentasBancarias (id)
 );
