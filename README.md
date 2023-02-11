@@ -6,6 +6,9 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
     - Maven
 - MySQL 5.7 o superior
 
+## Recursos
+[Prototipo de interfaz gráfica](https://www.figma.com/proto/ZyDg6Mm642d4zf3FPzFO1z/frmCuentaBancaria?node-id=1%3A2701&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=1%3A2701)
+
 ## Requisitos actuales
 
 
@@ -15,12 +18,12 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
     - [ ] ClienteForm
         - [ ] Nuevo
         - [ ] Editar
-    - [ ] CuentaBancariaForm
-        - [ ] Nuevo
-        - [ ] Cancelar
-    - [ ] Transferencia
-    - [ ] Retiro Sin Tarjeta
-    - [ ] <b style="color:red;">TODO</b>
+    - [X] CuentaBancariaForm
+        - [X] Nuevo
+        - [X] Cancelar
+    - [X] Transferencia
+    - [X] Retiro Sin Tarjeta
+    - [X] Login
 - [ ] Modelos
     - [ ] Entidad Relacion
     - [ ] Relacional
