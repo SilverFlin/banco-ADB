@@ -44,6 +44,7 @@ CREATE TABLE cuentasBancarias(
     fechaApertura DATETIME DEFAULT(CURRENT_TIMESTAMP) NOT NULL,
     saldoMXN DECIMAL(8,4) NOT NULL,
     idCliente INT NOT NULL,
+    estadoCuenta ENUM("Activa","Inactiva") DEFAULT ("Activa") NOT NULL,
     FOREIGN KEY (idCliente) REFERENCES clientes (id)
 );
 
