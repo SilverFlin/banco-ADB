@@ -4,6 +4,7 @@
 **/nbproject/build-impl.xml
 **/nbproject/genfiles.properties
 **/nbproject/project.properties
+**/target/
 build/
 nbbuild/
 dist/
