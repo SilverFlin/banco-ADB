@@ -75,7 +75,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         txtRegistar.setForeground(new java.awt.Color(255, 255, 255));
         txtRegistar.setText("Registrar");
 
-        btnAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/flecha.png"))); // NOI18N
+        btnAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/flecha.png"))); // NOI18N
         btnAtras.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAtras.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
