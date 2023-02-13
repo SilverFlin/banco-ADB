@@ -15,20 +15,24 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
 ### Entregables obligatorios
 - [ ] Protitpos de Interfaz gráfica
     - [ ] Establecer interfaces necesarias
-    - [ ] ClienteForm
-        - [ ] Nuevo
-        - [ ] Editar
+    - [X] ClienteForm
+        - [X] Nuevo
+        - [X] Editar
     - [X] CuentaBancariaForm
         - [X] Nuevo
         - [X] Cancelar
     - [X] Transferencia
     - [X] Retiro Sin Tarjeta
     - [X] Login
-- [ ] Modelos
-    - [ ] Entidad Relacion
-    - [ ] Relacional
+- [X] Modelos
+    - [X] Entidad Relacion
+    - [X] Relacional
 - [ ] Scripts
-    - [ ] init.sql (db + tablas + triggers)
+    - [ ] init.sql 
+        - [X] DB
+        - [X] Tablas
+        - [ ] Triggers
+        - [ ] Views
     - [ ] dumbdata.sql
 - [ ] Check transacciones
 - [ ] Uso de Maven
@@ -40,7 +44,7 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
 - [ ] Posibilidad de registro de usuario
 - [ ] Posibilidad de actualizar datos de usuario
 - [ ] Posibilidad de cancelar cuenta
-- [ ] Un ususario puede transferir a otras cuentas (suyas o no)
+- [ ] Un usuario puede transferir a otras cuentas (suyas o no)
 - [ ] Realizar retiros sin ser clientes
 - [ ] Historial de operaciones con rango de fechas
 - [ ] Diferentes cuentas por usuario.
@@ -56,6 +60,25 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
     - [ ] información repetida
 - [ ] Fechas y dinero con formato correspondiente
 
+## Avances
+
+### Avance 1
+- [X] [Modelo entidad-relación de la base de datos.](./modelado/ModeloER.drawio)
+- [X] [Modelo relacional de la base de datos.](./modelado/ModeloRelacional.md)
+- [X] [Script SQL de creación de base de datos.](./scripts/init.sql)
+- [ ] Diagrama de base de datos generado por el asistente de MySQL Workbench.
+- [X] [Prototipos de interfaz gráfica con información de muestra.](README.md#recursos) 
+    - Consideren utilizar el control apropiado según el contenido que deseen mostrar o interactuar.
+
+
+### Avance 2
+- [ ] Definir dónde pretenden utilizar el trigger.
+- [ ] Definir dónde pretenden utilizar la transacción.
+- [ ] Definir dónde pretenden utilizar el stored procedure.
+- [ ] Desarrollar completamente un formulario de su elección. Debe incluir conexión con
+BD, DAO, Formulario, clases de Dominio, validaciones, etc.
+- [X] URL del repositorio público de Github con el código del proyecto actualizado
+hasta ese momento.
 
 
 
