@@ -1,3 +1,4 @@
+# Netbeans
 **/nbproject/private/
 **/nbproject/Makefile-*.mk
 **/nbproject/Package-*.bash
@@ -10,3 +11,7 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+# draw.io
+*.drawio.bkp
+*.drawio.dtmp
