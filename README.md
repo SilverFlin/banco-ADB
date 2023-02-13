@@ -66,7 +66,7 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
 - [X] [Modelo entidad-relación de la base de datos.](./modelado/ModeloER.drawio)[^1]
 - [X] [Modelo relacional de la base de datos.](./modelado/ModeloRelacional.md)
 - [X] [Script SQL de creación de base de datos.](./scripts/init.sql)
-- [ ] Diagrama de base de datos generado por el asistente de MySQL Workbench.
+- [X] [Diagrama de base de datos generado por el asistente de MySQL Workbench.](./modelado/EERDiagram_MySQL.mwb)
 - [X] [Prototipos de interfaz gráfica con información de muestra.](README.md#recursos) 
     - Consideren utilizar el control apropiado según el contenido que deseen mostrar o interactuar.
 
