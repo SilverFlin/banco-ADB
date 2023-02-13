@@ -63,7 +63,7 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
 ## Avances
 
 ### Avance 1
-- [X] [Modelo entidad-relación de la base de datos.](./modelado/ModeloER.drawio)
+- [X] [Modelo entidad-relación de la base de datos.](./modelado/ModeloER.drawio)[^1]
 - [X] [Modelo relacional de la base de datos.](./modelado/ModeloRelacional.md)
 - [X] [Script SQL de creación de base de datos.](./scripts/init.sql)
 - [ ] Diagrama de base de datos generado por el asistente de MySQL Workbench.
@@ -82,5 +82,4 @@ hasta ese momento.
 
 
 
-
-
+[^1]: El modelo ER pueden ser abierto mediante [esta página](https://app.diagrams.net/) o usando la [aplicación de escritorio](https://drawio-app.com/)
