@@ -17,10 +17,10 @@
     - ApellidoPaterno: texto
     - ApellidoMaterno: texto
     - FechaNacimiento:fecha
+    - Correo: texto
     - IdDomicilio: entero
 )
 > IdDomicilio, que viene de Domicilios.
-TODO actualizar ER, remover Edad
 
 - Operaciones (
     - <u>id</u>:entero 
