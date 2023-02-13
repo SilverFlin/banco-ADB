@@ -15,7 +15,7 @@
     - <u>id</u>:entero 
     - Nombres: texto
     - ApellidoPaterno: texto
-    - ApellidoMaterno: texto
+    - ApellidoMaterno: texto opcional
     - FechaNacimiento:fecha
     - Correo: texto
     - IdDomicilio: entero
@@ -24,18 +24,17 @@
 
 - Operaciones (
     - <u>id</u>:entero 
-    - TipoOperacion: enum("actualizacion","transferencia","retiro")
+    - TipoOperacion: texto("actualizacion","transferencia","retiro")
     - FechaHora: fechaHora
     - Detalles: texto
     - idCliente: entero
 )
 > FechaHora, que se genera al ingresar el registro.
 > IdCliente, que viene de Clientes.
-TODO enum en relacional?
 
 - CuentasBancarias (
     - <u>id</u>:entero 
-    - NoCuenta: texto
+    - NoCuenta: texto unico
     - FechaApertura: fechaHora
     - SaldoMXN: decimal
     - IdCliente: entero
