@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package UI;
+package presentacion;
 
 import java.awt.Color;
 import javax.swing.JFrame;
@@ -61,7 +61,6 @@ public class ClienteForm extends javax.swing.JFrame {
         jButton2.setText("jButton2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(600, 400));
         setMinimumSize(new java.awt.Dimension(600, 400));
         setResizable(false);
         setSize(new java.awt.Dimension(600, 400));
@@ -118,7 +117,7 @@ public class ClienteForm extends javax.swing.JFrame {
         jButton1.setText("Ingresar");
         jButton1.setBorder(null);
         jButton1.setBorderPainted(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -133,7 +132,7 @@ public class ClienteForm extends javax.swing.JFrame {
         lblRegistrar.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
         lblRegistrar.setForeground(new java.awt.Color(0, 153, 255));
         lblRegistrar.setText("Registrarse");
-        lblRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         lblRegistrar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 lblRegistrarMousePressed(evt);
@@ -144,7 +143,7 @@ public class ClienteForm extends javax.swing.JFrame {
         lblRetiroSinTarjeta.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
         lblRetiroSinTarjeta.setForeground(new java.awt.Color(0, 153, 255));
         lblRetiroSinTarjeta.setText("Retiro sin tarjeta");
-        lblRetiroSinTarjeta.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblRetiroSinTarjeta.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         lblRetiroSinTarjeta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 lblRetiroSinTarjetaMousePressed(evt);

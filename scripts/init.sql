@@ -12,6 +12,7 @@ USE banco_transacciones;
 CREATE TABLE domicilios(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     calle VARCHAR(50),
+    numero VARCHAR(50),
     colonia VARCHAR(50),
     ciudad VARCHAR(30),
     estado VARCHAR(30),
@@ -32,7 +33,6 @@ CREATE TABLE clientes(
 
 CREATE TABLE operaciones(
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    tipoOperacion ENUM("actualizacion","transferencia","retiro") NOT NULL,
     fechaHora DATETIME DEFAULT(CURRENT_TIMESTAMP),
     detalles VARCHAR(250),
     idCliente INT NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE operaciones(
 
 CREATE TABLE cuentasBancarias(
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    noCuenta VARCHAR(20) NOT NULL,
+    noCuenta VARCHAR(20) NOT NULL UNIQUE,
     fechaApertura DATETIME DEFAULT(CURRENT_TIMESTAMP) NOT NULL,
     saldoMXN DECIMAL(8,4) NOT NULL,
     idCliente INT NOT NULL,
@@ -63,6 +63,7 @@ CREATE TABLE retirosSinCuenta(
     password VARCHAR(100) NOT NULL,
     monto DECIMAL(8,4) NOT NULL,
     folio VARCHAR(50) NOT NULL,
+    isCobrado ENUM("Cobrado","Pendiente"),
     idCuentaBancaria INT NOT NULL,
 	FOREIGN KEY (idCuentaBancaria ) REFERENCES cuentasBancarias (id)
 );
