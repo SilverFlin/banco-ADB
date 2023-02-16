@@ -51,7 +51,7 @@ public class ClientesDAO implements IClientesDAO {
                 String fechaNacimiento = resultado.getString("fechaNacimiento");
                 Integer idDireccion = resultado.getInt("idDomicilio");
                 cliente = new Cliente(id, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, idDireccion);
-                cliente.setContraseña(resultado.getString("contraseña"));
+                cliente.setContrasenia(resultado.getString("contraseña"));
             }
 
             return cliente;
@@ -64,7 +64,7 @@ public class ClientesDAO implements IClientesDAO {
 
     @Override
     public Cliente insertar(Cliente cliente) throws PersistenciaException {
-        String SQLQuery = "INSERT INTO clientes(nombres,apellidoPaterno, apellidoMaterno, fechaNacimiento, idDomicilio) VALUES (?,?,?,?,?)";
+        String SQLQuery = "INSERT INTO clientes(nombres,apellidoPaterno, apellidoMaterno, fechaNacimiento, idDomicilio, correo, contrasenia) VALUES (?,?,?,?,?,?,?)";
 
         try (Connection conexion = GENERADOR_CONEXIONES.crearConexion(); 
                 PreparedStatement comando = conexion.prepareStatement(SQLQuery, Statement.RETURN_GENERATED_KEYS);
@@ -75,7 +75,8 @@ public class ClientesDAO implements IClientesDAO {
             comando.setString(3, cliente.getApellidoM());
             comando.setString(4, cliente.getFechaNacimiento());
             comando.setInt(5, cliente.getIdDomicilio());
-
+            comando.setString(6, cliente.getCorreo());
+            comando.setString(7, cliente.getContrasenia());
             comando.executeUpdate();
 
             ResultSet llavesGeneradas = comando.getGeneratedKeys();
@@ -101,7 +102,7 @@ public class ClientesDAO implements IClientesDAO {
 
         try (Connection conexion = GENERADOR_CONEXIONES.crearConexion(); PreparedStatement comando = conexion.prepareStatement(SQLQuery);) {
 
-            comando.setString(1, cliente.getContraseña());
+            comando.setString(1, cliente.getContrasenia());
             comando.setInt(2, cliente.getId());
 
             int numeroClientesEditados = comando.executeUpdate();

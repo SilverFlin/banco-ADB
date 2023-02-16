@@ -69,7 +69,7 @@ public class ClienteForm extends javax.swing.JFrame {
         Cliente cliente = clientesDAO.consultar(txtUsuario.getText());
 
         if (cliente != null) {
-            return validarContraseña(cliente.getContraseña());
+            return validarContraseña(cliente.getContrasenia());
         }else{
             return false;
         }

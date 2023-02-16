@@ -5,6 +5,9 @@
  */
 package presentacion;
 
+import dominio.Cliente;
+import dominio.Domicilio;
+import excepciones.PersistenciaException;
 import implementaciones.ClientesDAO;
 import implementaciones.ConexionBD;
 import implementaciones.DomiciliosDAO;
@@ -12,6 +15,8 @@ import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
 import interfaces.IDomiciliosDAO;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -35,7 +40,15 @@ public class RegistroClienteForm extends javax.swing.JFrame {
 
     private void registrar() {
         if (validarCampos()) {
-            
+            try {
+                Domicilio id = domiciliosDAO.insertar(extraerDomicilio());
+                Cliente cliente = extraerCliente();
+                cliente.setIdDomicilio(id.getId());
+                clientesDAO.insertar(cliente);
+            } catch (PersistenciaException ex) {
+                ex.printStackTrace();
+                Logger.getLogger(RegistroClienteForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -64,7 +77,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         txtColonia = new javax.swing.JTextField();
         jSeparator6 = new javax.swing.JSeparator();
         lblContrasena = new javax.swing.JLabel();
-        txtCodigoPostal = new javax.swing.JTextField();
+        txtNumero = new javax.swing.JTextField();
         jSeparator7 = new javax.swing.JSeparator();
         lblCodigoPostal = new javax.swing.JLabel();
         btnRegistrar = new javax.swing.JButton();
@@ -75,6 +88,9 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         txtCalle = new javax.swing.JTextField();
         jSeparator9 = new javax.swing.JSeparator();
         lblCalle1 = new javax.swing.JLabel();
+        txtCodigoPostal = new javax.swing.JTextField();
+        lblCodigoPostal1 = new javax.swing.JLabel();
+        jSeparator10 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(600, 400));
@@ -177,15 +193,15 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         lblContrasena.setText("Contraseña");
         background3.add(lblContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 280, 80, 20));
 
-        txtCodigoPostal.setForeground(new java.awt.Color(51, 51, 51));
-        txtCodigoPostal.setToolTipText("");
-        txtCodigoPostal.setBorder(null);
-        background3.add(txtCodigoPostal, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 250, 100, 20));
-        background3.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 270, 100, 10));
+        txtNumero.setForeground(new java.awt.Color(51, 51, 51));
+        txtNumero.setToolTipText("");
+        txtNumero.setBorder(null);
+        background3.add(txtNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 110, 100, 20));
+        background3.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 130, 100, 10));
 
         lblCodigoPostal.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
-        lblCodigoPostal.setText("Codigo postal");
-        background3.add(lblCodigoPostal, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 230, 90, 20));
+        lblCodigoPostal.setText("Numero");
+        background3.add(lblCodigoPostal, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 90, 90, 20));
 
         btnRegistrar.setBackground(new java.awt.Color(0, 102, 255));
         btnRegistrar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
@@ -193,6 +209,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         btnRegistrar.setText("Registrar");
         btnRegistrar.setBorder(null);
         btnRegistrar.setBorderPainted(false);
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
         background3.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 340, 200, 30));
 
         lblColonia1.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
@@ -203,6 +224,9 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         background3.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 300, 210, 20));
         background3.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 290, 190, 10));
 
+        dtFechaNacimiento.setBackground(new java.awt.Color(0, 0, 0));
+        dtFechaNacimiento.setForeground(new java.awt.Color(255, 255, 255));
+        dtFechaNacimiento.setDateFormatString("yyyy/m/dd");
         dtFechaNacimiento.setName("dtFechaNacimiento"); // NOI18N
         background3.add(dtFechaNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 330, 190, -1));
 
@@ -215,6 +239,16 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         lblCalle1.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
         lblCalle1.setText("Calle");
         background3.add(lblCalle1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 180, 90, 20));
+
+        txtCodigoPostal.setForeground(new java.awt.Color(51, 51, 51));
+        txtCodigoPostal.setToolTipText("");
+        txtCodigoPostal.setBorder(null);
+        background3.add(txtCodigoPostal, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 250, 100, 20));
+
+        lblCodigoPostal1.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
+        lblCodigoPostal1.setText("Codigo postal");
+        background3.add(lblCodigoPostal1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 230, 90, 20));
+        background3.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 270, 100, 10));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -236,6 +270,10 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         clnFrm.setVisible(true);
     }//GEN-LAST:event_btnAtrasMousePressed
 
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        registrar();
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+
     private boolean validarCampos() {
         String nombre = txtNombre.getText();
         String apellidoP = txtApellidoP.getText();
@@ -244,14 +282,17 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         String correo = txtCorreo.getText();
         String calle = txtCorreo.getText();
         String colonia = txtColonia.getText();
-        String codigoPostal = txtCodigoPostal.getText();
+        String codigoPostal = txtNumero.getText();
         String contrasenha = txtContrasena.getText();
-
+        
+        System.out.println(!nombre.isEmpty());
+        System.out.println(validarEmail(correo));
+        
         return !nombre.isEmpty() && !apellidoP.isEmpty()
-                && !apellidoM.isEmpty() && dtFechaNacimiento == null
+                && !apellidoM.isEmpty() && dtFechaNacimiento != null
                 && !calle.isEmpty() && !colonia.isEmpty()
                 && !codigoPostal.isEmpty() && !contrasenha.isEmpty()
-                && (!correo.isEmpty() && validarEmail(correo));
+                && validarEmail(correo);
     }
 
     public boolean validarEmail(String texto) {
@@ -265,6 +306,31 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         return matcher.matches();
     }
 
+    private Cliente extraerCliente() {
+        String nombre = txtNombre.getText();
+        String apellidoP = txtApellidoP.getText();
+        String apellidoM = txtApellidoM.getText();
+        java.sql.Date fechaNacimiento = new java.sql.Date(dtFechaNacimiento.getDate().getTime());
+        String correo = txtCorreo.getText();
+        System.out.println(dtFechaNacimiento.getDate());
+        String contrasena = new String(txtContrasena.getPassword());
+
+        Cliente cliente = new Cliente(nombre, apellidoP, apellidoM, fechaNacimiento.toString(), 0);
+        cliente.setCorreo(correo);
+        cliente.setContrasenia(contrasena);
+        return cliente;
+    }
+
+    private Domicilio extraerDomicilio() {
+        String calle = txtCalle.getText();
+        String colonia = txtColonia.getText();
+        String codigoPostal = txtNumero.getText();
+        String numero = txtNumero.getText();
+        
+        Domicilio domicilio = new Domicilio(0,calle, numero, colonia, codigoPostal);
+        return domicilio;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background3;
@@ -273,6 +339,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser dtFechaNacimiento;
     private javax.swing.JPanel head3;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
@@ -285,6 +352,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblApellidoP;
     private javax.swing.JLabel lblCalle1;
     private javax.swing.JLabel lblCodigoPostal;
+    private javax.swing.JLabel lblCodigoPostal1;
     private javax.swing.JLabel lblColonia1;
     private javax.swing.JLabel lblContrasena;
     private javax.swing.JLabel lblCorreo;
@@ -298,6 +366,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtContrasena;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtNumero;
     private javax.swing.JLabel txtRegistar;
     // End of variables declaration//GEN-END:variables
 }

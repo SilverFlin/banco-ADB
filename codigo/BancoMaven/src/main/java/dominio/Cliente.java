@@ -17,7 +17,8 @@ public class Cliente {
     private String apellidoM;
     private String fechaNacimiento;
     private int idDomicilio;
-    private String contraseña;
+    private String contrasenia;
+    private String correo;
 
     public Cliente(int id, String nombres, String apellidoP, String apellidoM, String fechaNacimiento, int idDomicilio) {
         this.id = id;
@@ -89,16 +90,23 @@ public class Cliente {
         this.idDomicilio = idDomicilio;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasenia() {
+        return contrasenia;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
-    
-    
 
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+        
+    
     @Override
     public int hashCode() {
         int hash = 5;
@@ -123,7 +131,7 @@ public class Cliente {
 
     @Override
     public String toString() {
-        return "Cliente{" + "id=" + id + ", nombres=" + nombres + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", fechaNacimiento=" + fechaNacimiento + ", idDomicilio=" + idDomicilio + ", contrase\u00f1a=" + contraseña + '}';
+        return "Cliente{" + "id=" + id + ", nombres=" + nombres + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", fechaNacimiento=" + fechaNacimiento + ", idDomicilio=" + idDomicilio + ", contrase\u00f1a=" + contrasenia + '}';
     }
 
     
