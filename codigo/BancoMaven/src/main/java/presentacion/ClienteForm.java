@@ -5,6 +5,11 @@
  */
 package presentacion;
 
+import dominio.Cliente;
+import implementaciones.ClientesDAO;
+import implementaciones.ConexionBD;
+import interfaces.IClientesDAO;
+import interfaces.IConexionBD;
 import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -16,29 +21,72 @@ import javax.swing.JOptionPane;
 public class ClienteForm extends javax.swing.JFrame {
 
     private final static int INGRESAR = 1;
-    
-    
+
     private final static int REGISTRAR = 2;
     private final RegistroClienteForm regClnFrm;
-    
-    public ClienteForm() {
+    private final IClientesDAO clientesDAO;
+
+    public ClienteForm(IConexionBD conBD) {
         initComponents();
-        regClnFrm = new RegistroClienteForm(this);
+        regClnFrm = new RegistroClienteForm(this,conBD);
+        this.clientesDAO = new ClientesDAO(conBD);
     }
 
     private void openNewWindow(int type) {
         switch (type) {
             case INGRESAR:
                 this.setVisible(false);
-                regClnFrm.setVisible(true);               
+                regClnFrm.setVisible(true);
                 break;
             case REGISTRAR:
                 this.setVisible(false);
-               regClnFrm.setVisible(true);         
+                regClnFrm.setVisible(true);
                 break;
         }
     }
 
+    private void login() {
+        if (validarCampos()) {
+            if (validarCredenciales()) {
+                openNewWindow(INGRESAR);
+            } else {
+                JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Credenciales no validas", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private boolean validarCampos() {
+        String correo = txtUsuario.getText();
+        String contraseña = txtContraseña.getText();
+
+        return correo.length() > 0 && contraseña.length() > 0;
+
+    }
+
+    private boolean validarCredenciales() {
+        Cliente cliente = clientesDAO.consultar(txtUsuario.getText());
+
+        if (cliente != null) {
+            return validarContraseña(cliente.getContraseña());
+        }else{
+            return false;
+        }
+    }
+    
+    private boolean validarContraseña(String contraseña){
+        if(txtContraseña.getPassword().length == contraseña.length()){
+            for(int i = 0;i<txtContraseña.getPassword().length; i++){
+                if(txtContraseña.getPassword()[i] != contraseña.toCharArray()[i]){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -52,7 +100,7 @@ public class ClienteForm extends javax.swing.JFrame {
         lblUsuario = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         lblContraseña = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        txtContraseña = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
         txtIniciarSesion = new javax.swing.JLabel();
         lblRegistrar = new javax.swing.JLabel();
@@ -108,8 +156,8 @@ public class ClienteForm extends javax.swing.JFrame {
         lblContraseña.setText("Contraseña");
         Background.add(lblContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 240, -1, -1));
 
-        jPasswordField1.setBorder(null);
-        Background.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 260, 190, 20));
+        txtContraseña.setBorder(null);
+        Background.add(txtContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 260, 190, 20));
 
         jButton1.setBackground(new java.awt.Color(0, 102, 204));
         jButton1.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 12)); // NOI18N
@@ -171,7 +219,7 @@ public class ClienteForm extends javax.swing.JFrame {
     }//GEN-LAST:event_lblRegistrarMousePressed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        openNewWindow(INGRESAR);
+        login();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void lblRetiroSinTarjetaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRetiroSinTarjetaMousePressed
@@ -209,7 +257,7 @@ public class ClienteForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ClienteForm().setVisible(true);
+                new ClienteForm(new ConexionBD("jdbc:mysql://localhost/banco_transacciones", "root", "BaseDeDatos*")).setVisible(true);
             }
         });
     }
@@ -219,7 +267,6 @@ public class ClienteForm extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lblBienvenido;
@@ -227,6 +274,7 @@ public class ClienteForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblRegistrar;
     private javax.swing.JLabel lblRetiroSinTarjeta;
     private javax.swing.JLabel lblUsuario;
+    private javax.swing.JPasswordField txtContraseña;
     private javax.swing.JLabel txtIniciarSesion;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
