@@ -64,8 +64,8 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
 
 ### Triggers
 1. Entradas a la tabla `operaciones`
-    1. Rationale: esta tabla va a guardar diferentes tipos de operaciones, entre estos se encuentran: "actualizacion", "transferencia", y "retiro". 
-        a. Las actualizaciones se refiere a cambios en la información del usuario, estos se van a ver efectuadas mediante `UPDATE`'s, un trigger en los updates a la tabla `clientes` podría alimentar esos registros.
+    1. esta tabla va a guardar diferentes tipos de operaciones, entre estos se encuentran: "actualizacion", "transferencia", y "retiro". 
+        a. -Las actualizaciones se refiere a cambios en la información del usuario, estos se van a ver efectuadas mediante `UPDATE`'s, un trigger en los updates a la tabla `clientes` podría alimentar esos registros.-
         b. Las operacion "transferencia" indica la creación de un registro en la tabla `transferencias`, otro trigger podría estar en todos los `INSERT INTO` de esta tabla.
         c. En la última operación "retiro", un trigger podría ser aplicado al hacer `UPDATE` en la tabla de `CuentasBancarias`, el único campo a actualizar es el saldo.
     <p style="color:red;"> TODO Agregar depósito o englobar en un solo tipo de operación el retiro y depósito a la cuenta</p>
@@ -74,6 +74,11 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
 ### Transacciones
 1. La transferencia de dinero de una cuenta a otra require el uso de transacciones para asegurar la integridad de la operación.
 2. Se podría aplicar transferencia en ambas, retiro y depósito, a cuentas bancarias, siendo este aparentemente no tan necesario podría asegurar que los movimientos se reflejen de manera correcta.
+
+
+### Stored Procedures
+
+Se puede hacer uso de un stored procedure para cargar los scripts de la información falsa.
 
 
 ### Stored Procedures
@@ -90,10 +95,10 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
 
 
 ### Avance 2
-- [ ] Definir dónde pretenden utilizar el trigger.
-- [ ] Definir dónde pretenden utilizar la transacción.
-- [ ] Definir dónde pretenden utilizar el stored procedure.
-- [ ] Desarrollar completamente un formulario de su elección. Debe incluir conexión con
+- [X] Definir dónde pretenden utilizar el trigger.
+- [X] Definir dónde pretenden utilizar la transacción.
+- [X] Definir dónde pretenden utilizar el stored procedure.
+- [X] Desarrollar completamente un formulario de su elección. Debe incluir conexión con
 BD, DAO, Formulario, clases de Dominio, validaciones, etc.
 - [X] URL del repositorio público de Github con el código del proyecto actualizado
 hasta ese momento.

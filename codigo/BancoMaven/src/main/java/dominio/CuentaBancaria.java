@@ -118,8 +118,8 @@ public class CuentaBancaria {
         return idCliente;
     }
 
-    public EstadoCuenta getEstadoCuenta() {
-        return estadoCuenta;
+    public String getEstadoCuenta() {
+        return estadoCuenta == EstadoCuenta.ACTIVO ? "Activa":"Inactiva";
     }
 
     public void setSaldoMXN(Double saldoMXN) {
@@ -145,13 +145,12 @@ public class CuentaBancaria {
     public void setFechaApertura(Date fechaApertura) {
         this.fechaApertura = fechaApertura;
     }
-    
 
     @Override
     public String toString() {
-        return "CuentaBancaria{" + "id=" + id + ", noCuenta=" + noCuenta + ", fechaApertura=" + fechaApertura + ", saldoMXN=" + saldoMXN + '}';
+        return "CuentaBancaria{" + "id=" + id + ", noCuenta=" + noCuenta + ", fechaApertura=" + fechaApertura + ", saldoMXN=" + saldoMXN + ", idCliente=" + idCliente + ", estadoCuenta=" + estadoCuenta + '}';
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 7;

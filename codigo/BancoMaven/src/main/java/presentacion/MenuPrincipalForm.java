@@ -204,10 +204,8 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         CuentaBancaria cuentaBancaria = extraerDatosCuenta(input);
 
         try {
-            System.out.println(cuentaBancaria.getSaldoMXN());
             CuentaBancaria cuentaCreada = this.cuentasBancariasDAO.insertar(cuentaBancaria, this.cliente);
             this.mostrarMensajeExito("Cuenta creada con No. " + cuentaCreada.getNoCuenta());
-            System.out.println(this.cuentasBancariasDAO.consultar(cuentaCreada.getId()));
         } catch (PersistenciaException ex) {
             mostrarMensajeError("Error al crear cuenta");
             Logger.getLogger(MenuPrincipalForm.class.getName()).log(Level.SEVERE, null, ex);
