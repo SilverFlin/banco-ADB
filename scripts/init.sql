@@ -35,7 +35,7 @@ CREATE TABLE cuentasBancarias(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     noCuenta VARCHAR(20) NOT NULL UNIQUE,
     fechaApertura DATETIME DEFAULT(CURRENT_TIMESTAMP) NOT NULL,
-    saldoMXN DECIMAL(8,4) NOT NULL,
+    saldoMXN DECIMAL(8,4) NOT NULL DEFAULT 0,
     idCliente INT NOT NULL,
     estadoCuenta ENUM("Activa","Inactiva") DEFAULT ("Activa") NOT NULL,
     FOREIGN KEY (idCliente) REFERENCES clientes (id)

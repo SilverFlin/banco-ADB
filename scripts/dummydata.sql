@@ -227,7 +227,7 @@ INSERT INTO `clientes` (`id`, `nombres`, `apellidoPaterno`, `apellidoMaterno`, `
 #  cuentasBancarias
 #
 
-INSERT INTO `cuentasBancarias` (`id`, `noCuenta`, `fechaApertura`, `saldoMXN`, `idCliente`, `estadoCuenta`) VALUES (1, '4356777034692', '1993-11-04 03:46:35', '9999.9999', 1, 'Activa');
+INSERT INTO `cuentasBancarias` (`id`, `noCuenta`, `fechaApertura`, `idCliente`, `estadoCuenta`) VALUES (1, '4356777034692', '1993-11-04 03:46:35', 1, 'Activa');
 INSERT INTO `cuentasBancarias` (`id`, `noCuenta`, `fechaApertura`, `saldoMXN`, `idCliente`, `estadoCuenta`) VALUES (2, '5206123364992813', '1986-10-16 22:42:04', '9999.9999', 2, 'Activa');
 INSERT INTO `cuentasBancarias` (`id`, `noCuenta`, `fechaApertura`, `saldoMXN`, `idCliente`, `estadoCuenta`) VALUES (3, '4716885301442', '1985-07-26 00:03:38', '2.0660', 3, 'Inactiva');
 INSERT INTO `cuentasBancarias` (`id`, `noCuenta`, `fechaApertura`, `saldoMXN`, `idCliente`, `estadoCuenta`) VALUES (4, '5293667976505666', '1999-09-22 22:20:56', '1855.1160', 4, 'Inactiva');
