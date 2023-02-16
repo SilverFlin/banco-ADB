@@ -5,6 +5,7 @@
  */
 package implementacion;
 
+import dominio.Cliente;
 import dominio.CuentaBancaria;
 import excepciones.PersistenciaException;
 import interfaces.IConexionBD;
@@ -14,6 +15,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,6 +37,13 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
         this.GENERADOR_CONEXIONES = generarConexion;
     }
 
+    /**
+     * Regresa la cuenta bancaria en base al id proporcionado
+     *
+     * @param id
+     * @return
+     * @throws PersistenciaException
+     */
     @Override
     public CuentaBancaria consultar(int id) throws PersistenciaException {
         /* Consultas */
@@ -85,9 +94,42 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
         }
     }
 
+    /**
+     * Inserta una cuenta bancaria, relacionandose con el id de un cliente.
+     * @param cuentaBancaria
+     * @param cliente
+     * @return la cuenta bancaria, pero con el id asignado por la base de datos.
+     * @throws PersistenciaException 
+     */
     @Override
-    public CuentaBancaria insertar(CuentaBancaria cuentaBancaria) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public CuentaBancaria insertar(CuentaBancaria cuentaBancaria,Cliente cliente) throws PersistenciaException {
+
+        /* Consultas */
+        String insertStatement = "INSERT INTO cuentasBancarias (noCuenta, idCliente)"
+                + "VALUES (?,?)";
+        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement insertCuenta = con.prepareStatement(insertStatement,Statement.RETURN_GENERATED_KEYS);) {
+
+            /* Asignar valores a consulta INSERT*/
+            insertCuenta.setString(1, cuentaBancaria.getNoCuenta());
+            insertCuenta.setInt(2, cliente.getId());
+
+            /* Ejecutar las consultas */
+            insertCuenta.executeUpdate();
+            
+            ResultSet llavesGeneradas = insertCuenta.getGeneratedKeys();
+            /* Validar consultas*/
+            if (llavesGeneradas.next()) {
+                cuentaBancaria.setId(llavesGeneradas.getInt(Statement.RETURN_GENERATED_KEYS));
+                return cuentaBancaria;
+            }
+
+            throw new PersistenciaException("Error al insertar cuenta"); 
+
+        } catch (SQLException e) {
+            LOG.log(Level.SEVERE, e.getMessage());
+            throw new PersistenciaException("Error en la conexión"); 
+        }
+
     }
 
     @Override

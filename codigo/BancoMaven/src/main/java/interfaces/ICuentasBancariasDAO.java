@@ -5,6 +5,7 @@
  */
 package interfaces;
 
+import dominio.Cliente;
 import dominio.CuentaBancaria;
 import excepciones.PersistenciaException;
 import java.util.List;
@@ -18,7 +19,7 @@ public interface ICuentasBancariasDAO {
 
     CuentaBancaria consultar(int id) throws PersistenciaException;
 
-    CuentaBancaria insertar(CuentaBancaria cuentaBancaria) throws PersistenciaException;
+    CuentaBancaria insertar(CuentaBancaria cuentaBancaria,Cliente cliente) throws PersistenciaException;
 
     CuentaBancaria eliminar(Integer id);
 
