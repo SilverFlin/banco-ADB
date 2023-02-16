@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,7 +52,7 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
         String query
                 = "SELECT id, noCuenta, fechaApertura, saldoMXN, "
                 + " estadoCuenta, idCliente "
-                + "FROM "+NOMBRE_TABLA+" WHERE id = ?;";
+                + "FROM " + NOMBRE_TABLA + " WHERE id = ?;";
         try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement updateClientes = con.prepareStatement(query);) {
 
 
@@ -61,30 +62,8 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
             /* Ejecutar Consulta */
             ResultSet result = updateClientes.executeQuery();
             if (result.next()) {
-                /* Sacar valores de la consulta*/
-                Integer resultId = Integer.parseInt(result.getString("id"));
-                String noCuenta = result.getString("noCuenta");
-                Date fechaApertura = result.getDate("fechaApertura");
-                Double saldoMXN = result.getDouble("saldoMXN");
-                String estadoCuenta = result.getString("estadoCuenta");
-                Integer idCliente = result.getInt("idCliente");
-
-                /* Crear CuentaBancaria*/
-                CuentaBancaria.EstadoCuenta enumEstadoCuenta;
-                if (estadoCuenta.equals(ESTADO_CUENTA_ACTIVO)) {
-                    enumEstadoCuenta = CuentaBancaria.EstadoCuenta.ACTIVO;
-                } else {
-                    enumEstadoCuenta = CuentaBancaria.EstadoCuenta.INACTIVO;
-                }
-                CuentaBancaria cuentaBancaria;
-                cuentaBancaria = new CuentaBancaria(
-                        resultId,
-                        noCuenta,
-                        fechaApertura,
-                        saldoMXN,
-                        idCliente,
-                        enumEstadoCuenta);
-
+                /* Sacar valores de la consulta y crear usuario*/
+                CuentaBancaria cuentaBancaria = crearCuentaBancaria(result);
                 return cuentaBancaria;
             }
             throw new PersistenciaException("No se encontro la cuenta bancaria");
@@ -107,7 +86,7 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
     public CuentaBancaria insertar(CuentaBancaria cuentaBancaria, Cliente cliente) throws PersistenciaException {
 
         /* Consultas */
-        String insertStatement = "INSERT INTO "+NOMBRE_TABLA+" (noCuenta, idCliente)"
+        String insertStatement = "INSERT INTO " + NOMBRE_TABLA + " (noCuenta, idCliente)"
                 + "VALUES (?,?)";
         try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement insertCuenta = con.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);) {
 
@@ -136,14 +115,15 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
 
     /**
      * Elimina la cuenta bancaria de la base de datos, usando su id
+     *
      * @param id
      * @return la cuenta bancaria eliminada o null si no existia
      */
     @Override
     public CuentaBancaria eliminar(Integer id) {
         /* Consultas */
-        String deleteStatement = "DELETE FROM "+NOMBRE_TABLA+" WHERE id = ?;";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement deleteClientes = con.prepareStatement(deleteStatement);) {
+        String deleteStatement = "DELETE FROM " + NOMBRE_TABLA + " WHERE id = ?;";
+        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement deleteClientes = con.prepareStatement(deleteStatement);) {
 
 
             /* Verificar si la cuenta existe*/
@@ -174,7 +154,57 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
 
     @Override
     public List<CuentaBancaria> consultar(ConfigPaginado configPaginado) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion()) {
+            /* Consultas */
+            String query
+                    = "SELECT id, noCuenta, fechaApertura, saldoMXN, "
+                    + " estadoCuenta, idCliente "
+                    + " FROM " + NOMBRE_TABLA
+                    + " LIMIT ? OFFSET ?;";
+            /* Crear Consultas */
+            PreparedStatement updateClientes = con.prepareStatement(query);
+            updateClientes.setInt(1, configPaginado.getLimite());
+            updateClientes.setInt(2, configPaginado.getOffset());
+            List<CuentaBancaria> listaCuentas = new LinkedList<>();
+            /* Ejecutar Consulta */
+            ResultSet result = updateClientes.executeQuery();
+            while (result.next()) {
+                /* Sacar valores de la consulta y crear usuario*/
+                CuentaBancaria cuentaBancaria = crearCuentaBancaria(result);
+                listaCuentas.add(cuentaBancaria);
+            }
+            return listaCuentas;
+        } catch (SQLException e) {
+            LOG.log(Level.SEVERE, e.getMessage());
+            throw new PersistenciaException("Error al consultar cuentas");
+        }
+    }
+
+    private CuentaBancaria crearCuentaBancaria(ResultSet result) throws SQLException {
+        /*Extraer del ResultSet*/
+        Integer resultId = Integer.parseInt(result.getString("id"));
+        String noCuenta = result.getString("noCuenta");
+        Date fechaApertura = result.getDate("fechaApertura");
+        Double saldoMXN = result.getDouble("saldoMXN");
+        String estadoCuenta = result.getString("estadoCuenta");
+        Integer idCliente = result.getInt("idCliente");
+
+        /* Crear CuentaBancaria*/
+        CuentaBancaria.EstadoCuenta enumEstadoCuenta;
+        if (estadoCuenta.equals(ESTADO_CUENTA_ACTIVO)) {
+            enumEstadoCuenta = CuentaBancaria.EstadoCuenta.ACTIVO;
+        } else {
+            enumEstadoCuenta = CuentaBancaria.EstadoCuenta.INACTIVO;
+        }
+        CuentaBancaria cuentaBancaria;
+        cuentaBancaria = new CuentaBancaria(
+                resultId,
+                noCuenta,
+                fechaApertura,
+                saldoMXN,
+                idCliente,
+                enumEstadoCuenta);
+        return cuentaBancaria;
     }
 
 }
