@@ -5,17 +5,35 @@
  */
 package presentacion;
 
+import dominio.ClienteBorrar;
+import dominio.CuentaBancaria;
+import excepciones.PersistenciaException;
+import interfaces.ICuentasBancariasDAO;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import utils.ConfigPaginado;
+
 /**
  *
  * @author Elkur
  */
-public class EditarClienteForm extends javax.swing.JFrame {
+public class CuentasForm extends javax.swing.JFrame {
 
     /**
      * Creates new form EditarClienteForm
      */
-    public EditarClienteForm() {
+    private static final Logger LOG = Logger.getLogger(CuentasForm.class.getName());
+    private final ICuentasBancariasDAO cuentasBancariasDAO;
+    private ConfigPaginado configPaginado;
+    private ClienteBorrar cliente;
+    public CuentasForm(ICuentasBancariasDAO cuentasBancariasDAO, ClienteBorrar cliente) {
+        this.cuentasBancariasDAO = cuentasBancariasDAO;
+        this.configPaginado = new ConfigPaginado();
+        this.cliente = cliente;
         initComponents();
+        this.llenarTablaCuentas();
     }
 
     /**
@@ -29,21 +47,12 @@ public class EditarClienteForm extends javax.swing.JFrame {
 
         background3 = new javax.swing.JPanel();
         head3 = new javax.swing.JPanel();
-        txtEditar = new javax.swing.JLabel();
-        jSeparator3 = new javax.swing.JSeparator();
-        txtCalle = new javax.swing.JTextField();
-        jSeparator5 = new javax.swing.JSeparator();
-        lblCalle = new javax.swing.JLabel();
-        txtColonia = new javax.swing.JTextField();
-        jSeparator6 = new javax.swing.JSeparator();
-        lblContrasena = new javax.swing.JLabel();
-        txtCodigoPostal = new javax.swing.JTextField();
-        jSeparator7 = new javax.swing.JSeparator();
-        lblCodigoPostal = new javax.swing.JLabel();
-        btnCambiar = new javax.swing.JButton();
-        lblColonia1 = new javax.swing.JLabel();
-        txtContrasena = new javax.swing.JPasswordField();
-        btnCancelar = new javax.swing.JButton();
+        txtBienvenida = new javax.swing.JLabel();
+        panelTablaCuentas = new javax.swing.JScrollPane();
+        tablaCuentas = new javax.swing.JTable();
+        btnRegresar = new javax.swing.JButton();
+        btnBorrarCuenta = new javax.swing.JButton();
+        btnRetiroSinTarjeta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,87 +64,96 @@ public class EditarClienteForm extends javax.swing.JFrame {
 
         head3.setBackground(new java.awt.Color(0, 102, 255));
 
-        txtEditar.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 24)); // NOI18N
-        txtEditar.setForeground(new java.awt.Color(255, 255, 255));
-        txtEditar.setText("Editar");
+        txtBienvenida.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 24)); // NOI18N
+        txtBienvenida.setForeground(new java.awt.Color(255, 255, 255));
+        txtBienvenida.setText("Bienvenido");
 
         javax.swing.GroupLayout head3Layout = new javax.swing.GroupLayout(head3);
         head3.setLayout(head3Layout);
         head3Layout.setHorizontalGroup(
             head3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(head3Layout.createSequentialGroup()
-                .addGap(273, 273, 273)
-                .addComponent(txtEditar)
-                .addContainerGap(268, Short.MAX_VALUE))
+                .addGap(28, 28, 28)
+                .addComponent(txtBienvenida)
+                .addContainerGap(460, Short.MAX_VALUE))
         );
         head3Layout.setVerticalGroup(
             head3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, head3Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
-                .addComponent(txtEditar)
-                .addGap(36, 36, 36))
+            .addGroup(head3Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(txtBienvenida)
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         background3.add(head3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 90));
-        background3.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 210, 10));
 
-        txtCalle.setForeground(new java.awt.Color(51, 51, 51));
-        txtCalle.setToolTipText("");
-        txtCalle.setBorder(null);
-        background3.add(txtCalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, 210, 20));
-        background3.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 210, 10));
+        tablaCuentas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-        lblCalle.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
-        lblCalle.setText("Calle");
-        background3.add(lblCalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 120, 90, 20));
+            },
+            new String [] {
+                "No. Cuenta", "Fecha Apertura", "Saldo MXN", "Estado"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
-        txtColonia.setForeground(new java.awt.Color(51, 51, 51));
-        txtColonia.setToolTipText("");
-        txtColonia.setBorder(null);
-        background3.add(txtColonia, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 200, 100, 20));
-        background3.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 220, 100, 10));
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
-        lblContrasena.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
-        lblContrasena.setText("Contraseña");
-        background3.add(lblContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 240, 80, 20));
-
-        txtCodigoPostal.setForeground(new java.awt.Color(51, 51, 51));
-        txtCodigoPostal.setToolTipText("");
-        txtCodigoPostal.setBorder(null);
-        background3.add(txtCodigoPostal, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 200, 100, 20));
-        background3.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 220, 100, 10));
-
-        lblCodigoPostal.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
-        lblCodigoPostal.setText("Codigo postal");
-        background3.add(lblCodigoPostal, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 180, 90, 20));
-
-        btnCambiar.setBackground(new java.awt.Color(0, 102, 255));
-        btnCambiar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
-        btnCambiar.setForeground(new java.awt.Color(255, 255, 255));
-        btnCambiar.setText("Guardar");
-        btnCambiar.setBorder(null);
-        btnCambiar.setBorderPainted(false);
-        btnCambiar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCambiarActionPerformed(evt);
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        background3.add(btnCambiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 320, 80, 30));
+        tablaCuentas.setColumnSelectionAllowed(true);
+        panelTablaCuentas.setViewportView(tablaCuentas);
+        tablaCuentas.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        lblColonia1.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
-        lblColonia1.setText("Colonia");
-        background3.add(lblColonia1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 180, 50, 20));
+        background3.add(panelTablaCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 560, 210));
 
-        txtContrasena.setBorder(null);
-        background3.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 260, 210, 20));
+        btnRegresar.setBackground(new java.awt.Color(0, 102, 255));
+        btnRegresar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresar.setText("Regresar");
+        btnRegresar.setBorder(null);
+        btnRegresar.setBorderPainted(false);
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+        background3.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 90, 20));
 
-        btnCancelar.setBackground(new java.awt.Color(0, 102, 255));
-        btnCancelar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
-        btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
-        btnCancelar.setText("Cancelar");
-        btnCancelar.setBorder(null);
-        btnCancelar.setBorderPainted(false);
-        background3.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 320, 80, 30));
+        btnBorrarCuenta.setBackground(new java.awt.Color(0, 102, 255));
+        btnBorrarCuenta.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnBorrarCuenta.setForeground(new java.awt.Color(255, 255, 255));
+        btnBorrarCuenta.setText("Borrar Cuenta");
+        btnBorrarCuenta.setBorder(null);
+        btnBorrarCuenta.setBorderPainted(false);
+        btnBorrarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarCuentaActionPerformed(evt);
+            }
+        });
+        background3.add(btnBorrarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 100, 40));
+
+        btnRetiroSinTarjeta.setBackground(new java.awt.Color(0, 102, 255));
+        btnRetiroSinTarjeta.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnRetiroSinTarjeta.setForeground(new java.awt.Color(255, 255, 255));
+        btnRetiroSinTarjeta.setText("Retiro Sin Tarjeta");
+        btnRetiroSinTarjeta.setBorder(null);
+        btnRetiroSinTarjeta.setBorderPainted(false);
+        btnRetiroSinTarjeta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRetiroSinTarjetaActionPerformed(evt);
+            }
+        });
+        background3.add(btnRetiroSinTarjeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 350, 120, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -149,64 +167,54 @@ public class EditarClienteForm extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCambiarActionPerformed
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        MenuPrincipalForm menuPrincipal = new MenuPrincipalForm(cuentasBancariasDAO, cliente);
+        menuPrincipal.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnRegresarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditarClienteForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditarClienteForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditarClienteForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditarClienteForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void btnBorrarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarCuentaActionPerformed
+    }//GEN-LAST:event_btnBorrarCuentaActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new EditarClienteForm().setVisible(true);
-            }
-        });
-    }
+    private void btnRetiroSinTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinTarjetaActionPerformed
+    }//GEN-LAST:event_btnRetiroSinTarjetaActionPerformed
+
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background3;
-    private javax.swing.JButton btnCambiar;
-    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnBorrarCuenta;
+    private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnRetiroSinTarjeta;
     private javax.swing.JPanel head3;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JSeparator jSeparator6;
-    private javax.swing.JSeparator jSeparator7;
-    private javax.swing.JLabel lblCalle;
-    private javax.swing.JLabel lblCodigoPostal;
-    private javax.swing.JLabel lblColonia1;
-    private javax.swing.JLabel lblContrasena;
-    private javax.swing.JTextField txtCalle;
-    private javax.swing.JTextField txtCodigoPostal;
-    private javax.swing.JTextField txtColonia;
-    private javax.swing.JPasswordField txtContrasena;
-    private javax.swing.JLabel txtEditar;
+    private javax.swing.JScrollPane panelTablaCuentas;
+    private javax.swing.JTable tablaCuentas;
+    private javax.swing.JLabel txtBienvenida;
     // End of variables declaration//GEN-END:variables
+
+    private void llenarTablaCuentas() {
+         try {
+
+            List<CuentaBancaria> listaCuentas = this.cuentasBancariasDAO.consultar(this.configPaginado,this.cliente.getId());
+            DefaultTableModel modeloTabla = (DefaultTableModel)this.tablaCuentas.getModel();
+            modeloTabla.setRowCount(0);
+            
+            for (CuentaBancaria cuenta : listaCuentas) {
+                Object[] fila = {
+                    cuenta.getNoCuenta(),
+                    cuenta.getFechaApertura(),
+                    cuenta.getSaldoMXN(),
+                    cuenta.getEstadoCuenta()
+                };
+                modeloTabla.addRow(fila);
+                
+            }
+            
+        } catch (PersistenciaException e) {
+            LOG.log(Level.SEVERE,e.getMessage());
+        }
+    }
 }
