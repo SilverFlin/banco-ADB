@@ -5,6 +5,7 @@
  */
 package dominio;
 
+import java.sql.Date;
 import java.util.Objects;
 
 /**
@@ -15,12 +16,12 @@ public class CuentaBancaria {
 
     private Integer id;
     private String noCuenta;
-    private String fechaApertura;
+    private Date fechaApertura;
     private Double saldoMXN;
-    private Cliente clientePropietario;
+    private Integer idCliente;
     private EstadoCuenta estadoCuenta;
 
-    private enum EstadoCuenta {
+    public enum EstadoCuenta {
         ACTIVO, INACTIVO
     };
 
@@ -29,6 +30,16 @@ public class CuentaBancaria {
         this.saldoMXN = 0.0;
         this.estadoCuenta = EstadoCuenta.ACTIVO;
     }
+
+    public CuentaBancaria(Integer id, String noCuenta, Date fechaApertura, Double saldoMXN, Integer idCliente, EstadoCuenta estadoCuenta) {
+        this.id = id;
+        this.noCuenta = noCuenta;
+        this.fechaApertura = fechaApertura;
+        this.saldoMXN = saldoMXN;
+        this.idCliente = idCliente;
+        this.estadoCuenta = estadoCuenta;
+    }
+    
 
     /**
      * Genera un String de 16 numeros con espaciado cada 4 y lo guarda en
@@ -89,7 +100,7 @@ public class CuentaBancaria {
         return noCuenta;
     }
 
-    public String getFechaApertura() {
+    public Date getFechaApertura() {
         return fechaApertura;
     }
 
@@ -97,8 +108,8 @@ public class CuentaBancaria {
         return saldoMXN;
     }
 
-    public Cliente getClientePropietario() {
-        return clientePropietario;
+    public Integer getClientePropietario() {
+        return idCliente;
     }
 
     public EstadoCuenta getEstadoCuenta() {
@@ -109,13 +120,26 @@ public class CuentaBancaria {
         this.saldoMXN = saldoMXN;
     }
 
-    public void setClientePropietario(Cliente clientePropietario) {
-        this.clientePropietario = clientePropietario;
+    public void setClientePropietario(Integer clientePropietario) {
+        this.idCliente = clientePropietario;
     }
 
     public void setEstadoCuenta(EstadoCuenta estadoCuenta) {
         this.estadoCuenta = estadoCuenta;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setNoCuenta(String noCuenta) {
+        this.noCuenta = noCuenta;
+    }
+
+    public void setFechaApertura(Date fechaApertura) {
+        this.fechaApertura = fechaApertura;
+    }
+    
 
     @Override
     public String toString() {
