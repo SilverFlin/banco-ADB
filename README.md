@@ -82,6 +82,7 @@ Se puede hacer uso de un stored procedure para cargar los scripts de la informac
 
 
 ### Stored Procedures
+Se pueden simplificar operaciones CRUD para realizar conjuntos de consultas en una sola desde el código, por ejemplo, se puede crear un procedimiento almacenado que maneje las transferencias, recibiendo una referencia de cada cuenta con el monto, y que se encargue de crear el registro de la misma transferencia y los cambios en el dinero de ambas cuentas
 
 ## Avances
 
