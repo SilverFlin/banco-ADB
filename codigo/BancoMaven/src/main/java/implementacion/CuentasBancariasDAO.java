@@ -86,13 +86,14 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
     public CuentaBancaria insertar(CuentaBancaria cuentaBancaria, Cliente cliente) throws PersistenciaException {
 
         /* Consultas */
-        String insertStatement = "INSERT INTO " + NOMBRE_TABLA + " (noCuenta, idCliente)"
-                + "VALUES (?,?)";
+        String insertStatement = "INSERT INTO " + NOMBRE_TABLA + " (noCuenta, saldoMXN, idCliente) "
+                + "VALUES (?,?,?)";
         try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement insertCuenta = con.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);) {
 
             /* Asignar valores a consulta INSERT*/
             insertCuenta.setString(1, cuentaBancaria.getNoCuenta());
-            insertCuenta.setInt(2, cliente.getId());
+            insertCuenta.setDouble(2, cuentaBancaria.getSaldoMXN());
+            insertCuenta.setInt(3, cliente.getId());
 
             /* Ejecutar las consultas */
             insertCuenta.executeUpdate();
@@ -153,18 +154,20 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
     }
 
     @Override
-    public List<CuentaBancaria> consultar(ConfigPaginado configPaginado) throws PersistenciaException {
+    public List<CuentaBancaria> consultar(ConfigPaginado configPaginado,int idCliente) throws PersistenciaException {
         try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion()) {
             /* Consultas */
             String query
                     = "SELECT id, noCuenta, fechaApertura, saldoMXN, "
                     + " estadoCuenta, idCliente "
                     + " FROM " + NOMBRE_TABLA
+                    + " WHERE idCliente = ? "
                     + " LIMIT ? OFFSET ?;";
             /* Crear Consultas */
             PreparedStatement updateClientes = con.prepareStatement(query);
-            updateClientes.setInt(1, configPaginado.getLimite());
-            updateClientes.setInt(2, configPaginado.getOffset());
+            updateClientes.setInt(1, idCliente);
+            updateClientes.setInt(2, configPaginado.getLimite());
+            updateClientes.setInt(3, configPaginado.getOffset());
             List<CuentaBancaria> listaCuentas = new LinkedList<>();
             /* Ejecutar Consulta */
             ResultSet result = updateClientes.executeQuery();

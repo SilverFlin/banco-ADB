@@ -30,6 +30,12 @@ public class CuentaBancaria {
         this.saldoMXN = 0.0;
         this.estadoCuenta = EstadoCuenta.ACTIVO;
     }
+    
+    public CuentaBancaria(Double saldoMXN) {
+        generarNoCuenta();
+        this.saldoMXN = saldoMXN;
+        this.estadoCuenta = EstadoCuenta.ACTIVO;
+    }
 
     public CuentaBancaria(Integer id, String noCuenta, Date fechaApertura, Double saldoMXN, Integer idCliente, EstadoCuenta estadoCuenta) {
         this.id = id;

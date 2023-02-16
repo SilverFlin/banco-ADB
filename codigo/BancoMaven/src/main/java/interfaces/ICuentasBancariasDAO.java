@@ -23,5 +23,5 @@ public interface ICuentasBancariasDAO {
 
     CuentaBancaria eliminar(Integer id);
 
-    List<CuentaBancaria> consultar(ConfigPaginado configPaginado) throws PersistenciaException;
+    List<CuentaBancaria> consultar(ConfigPaginado configPaginado,int idCliente) throws PersistenciaException;
 }
