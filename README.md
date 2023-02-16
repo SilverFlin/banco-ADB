@@ -75,13 +75,8 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
 1. La transferencia de dinero de una cuenta a otra require el uso de transacciones para asegurar la integridad de la operación.
 2. Se podría aplicar transferencia en ambas, retiro y depósito, a cuentas bancarias, siendo este aparentemente no tan necesario podría asegurar que los movimientos se reflejen de manera correcta.
 
-
 ### Stored Procedures
-
-Se puede hacer uso de un stored procedure para cargar los scripts de la información falsa.
-
-
-### Stored Procedures
+Se pueden simplificar operaciones CRUD para realizar conjuntos de consultas en una sola desde el código, por ejemplo, se puede crear un procedimiento almacenado que maneje las transferencias, recibiendo una referencia de cada cuenta con el monto, y que se encargue de crear el registro de la misma transferencia y los cambios en el dinero de ambas cuentas
 
 ## Avances
 
