@@ -22,15 +22,6 @@
 )
 > IdDomicilio, que viene de Domicilios.
 
-- Operaciones (
-    - <u>id</u>:entero 
-    - FechaHora: fechaHora
-    - Detalles: texto(250)
-    - idCliente: entero
-)
-> FechaHora, que se genera al ingresar el registro.
-> IdCliente, que viene de Clientes.
-
 - CuentasBancarias (
     - <u>id</u>:entero 
     - NoCuenta: texto(20) unico
@@ -40,6 +31,15 @@
 )
 > FechaApertura, que se genera al ingresar el registro
 > IdCliente, que viene de Clientes
+
+- Operaciones (
+    - <u>id</u>:entero 
+    - FechaHora: fechaHora
+    - Detalles: texto(250)
+    - idCuentaBancaria: entero
+)
+> FechaHora, que se genera al ingresar el registro.
+> idCuentaBancaria, que viene de CuentasBancarias.
 
 - Transferencias (
     - <u>id</u>:entero 
@@ -56,7 +56,9 @@
     - Password: texto(100)
     - Monto: decimal
     - Folio: texto(50)
-    - IdCuentaBancaria: entero
+    - FechaInicio: fechaHora
+    - FechaFin: fechaHora
     - Cobrado: texto("Cobrado","Pendiente")
+    - IdCuentaBancaria: entero
 )
 > IdCuentaBancaria, que viene de CuentasBancarias

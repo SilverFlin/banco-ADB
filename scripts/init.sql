@@ -31,27 +31,28 @@ CREATE TABLE clientes(
     FOREIGN KEY (idDomicilio) REFERENCES domicilios (id)  
 );
 
-CREATE TABLE operaciones(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    fechaHora DATETIME DEFAULT(CURRENT_TIMESTAMP),
-    detalles VARCHAR(250),
-    idCliente INT NOT NULL,
-    FOREIGN KEY (idCliente) REFERENCES clientes (id)
-);
-
 CREATE TABLE cuentasBancarias(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     noCuenta VARCHAR(20) NOT NULL UNIQUE,
     fechaApertura DATETIME DEFAULT(CURRENT_TIMESTAMP) NOT NULL,
-    saldoMXN DECIMAL(8,4) NOT NULL,
+    saldoMXN DECIMAL(8,4) NOT NULL DEFAULT 0,
     idCliente INT NOT NULL,
     estadoCuenta ENUM("Activa","Inactiva") DEFAULT ("Activa") NOT NULL,
     FOREIGN KEY (idCliente) REFERENCES clientes (id)
 );
 
+CREATE TABLE operaciones(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    fechaHora DATETIME DEFAULT(CURRENT_TIMESTAMP),
+    detalles VARCHAR(250),
+    idCuentaBancaria INT NOT NULL,
+    FOREIGN KEY (idCuentaBancaria) REFERENCES cuentasBancarias (id)
+);
+
 CREATE TABLE transferencias(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     monto DECIMAL(8,4) NOT NULL,
+    fechaHora DATETIME NOT NULL,
     idCuentaOrigen INT NOT NULL,
     idCuentaDestino INT NOT NULL,
     FOREIGN KEY (idCuentaOrigen) REFERENCES cuentasBancarias (id),
@@ -63,7 +64,9 @@ CREATE TABLE retirosSinCuenta(
     password VARCHAR(100) NOT NULL,
     monto DECIMAL(8,4) NOT NULL,
     folio VARCHAR(50) NOT NULL,
-    isCobrado ENUM("Cobrado","Pendiente"),
+    Estado ENUM("Cobrado","Pendiente"),
+    fechaInicio DATETIME NOT NULL,
+    fechaFin DATETIME NOT NULL,
     idCuentaBancaria INT NOT NULL,
 	FOREIGN KEY (idCuentaBancaria ) REFERENCES cuentasBancarias (id)
 );
