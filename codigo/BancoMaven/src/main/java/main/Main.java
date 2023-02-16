@@ -30,7 +30,7 @@ public class Main {
      */
     public static void main(String[] args) {
         /*Pruebas, borrar*/
-        IConexionBD conexion = new ConexionBD("jdbc:mysql://localhost:3306/banco_transacciones", "root", "325a7fd7a79a");
+        IConexionBD conexion = new ConexionBD("jdbc:mysql://localhost:3306/banco_transacciones", "root", "pass");
         ICuentasBancariasDAO cuentasBancariasDAO = new CuentasBancariasDAO(conexion);
         CuentaBancaria cuentaBancaria;
         ClienteBorrar cliente = new ClienteBorrar(5);
