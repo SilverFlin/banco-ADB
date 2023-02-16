@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import presentacion.MenuPrincipalForm;
-import utils.ConfigPaginado;
+import utils.ConfiguracionPaginado;
 
 /**
  *
@@ -30,7 +30,7 @@ public class Main {
      */
     public static void main(String[] args) {
         /*Pruebas, borrar*/
-        IConexionBD conexion = new ConexionBD("jdbc:mysql://localhost:3306/banco_transacciones", "root", "pass");
+        IConexionBD conexion = new ConexionBD("jdbc:mysql://localhost:3306/banco_transacciones", "root", "325a7fd7a79a");
         ICuentasBancariasDAO cuentasBancariasDAO = new CuentasBancariasDAO(conexion);
         CuentaBancaria cuentaBancaria;
         ClienteBorrar cliente = new ClienteBorrar(5);

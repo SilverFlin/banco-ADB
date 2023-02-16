@@ -34,7 +34,7 @@ public class ClientesDAO implements IClientesDAO {
 
     @Override
     public Cliente consultar(String correo) {
-        String SQLQuery = "SELECT id, nombres, apellidoPaterno,apellidoMaterno, fechaNacimiento,idDomicilio,contraseña FROM CLIENTES WHERE correo=?";
+        String SQLQuery = "SELECT id, nombres, apellidoPaterno,apellidoMaterno, fechaNacimiento,idDomicilio,contraseña FROM CLIENTES WHERE correo=?;";
 
         try (
                 Connection conexion = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement comando = conexion.prepareStatement(SQLQuery);) {
@@ -97,7 +97,7 @@ public class ClientesDAO implements IClientesDAO {
 
     @Override
     public Cliente editar(Cliente cliente) throws PersistenciaException {
-        String SQLQuery = "UPDATE clientes SET contraseña = ? WHERE id = ?";
+        String SQLQuery = "UPDATE clientes SET contraseÃ±a = ? WHERE id = ?";
 
         try (Connection conexion = GENERADOR_CONEXIONES.crearConexion(); PreparedStatement comando = conexion.prepareStatement(SQLQuery);) {
 
@@ -124,8 +124,8 @@ public class ClientesDAO implements IClientesDAO {
                 PreparedStatement comando = conexion.prepareStatement(SQLQuery);
                 ) {
 
-            comando.setInt(1, configPaginado.getPagina());
-            comando.setInt(2, configPaginado.getElementosASaltar());
+            comando.setInt(1, configPaginado.getLimite());
+            comando.setInt(2, configPaginado.getOffset());
             ResultSet resultado = comando.executeQuery();
 
             while (resultado.next()) {

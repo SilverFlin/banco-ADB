@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
-import utils.ConfigPaginado;
+import utils.ConfiguracionPaginado;
 
 /**
  *
@@ -26,11 +26,11 @@ public class CuentasForm extends javax.swing.JFrame {
      */
     private static final Logger LOG = Logger.getLogger(CuentasForm.class.getName());
     private final ICuentasBancariasDAO cuentasBancariasDAO;
-    private ConfigPaginado configPaginado;
+    private ConfiguracionPaginado configPaginado;
     private ClienteBorrar cliente;
     public CuentasForm(ICuentasBancariasDAO cuentasBancariasDAO, ClienteBorrar cliente) {
         this.cuentasBancariasDAO = cuentasBancariasDAO;
-        this.configPaginado = new ConfigPaginado();
+        this.configPaginado = new ConfiguracionPaginado();
         this.cliente = cliente;
         initComponents();
         this.llenarTablaCuentas();

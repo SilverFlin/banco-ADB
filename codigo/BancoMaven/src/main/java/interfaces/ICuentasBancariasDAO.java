@@ -9,7 +9,7 @@ import dominio.ClienteBorrar;
 import dominio.CuentaBancaria;
 import excepciones.PersistenciaException;
 import java.util.List;
-import utils.ConfigPaginado;
+import utils.ConfiguracionPaginado;
 
 /**
  *
@@ -23,5 +23,5 @@ public interface ICuentasBancariasDAO {
 
     CuentaBancaria eliminar(Integer id);
 
-    List<CuentaBancaria> consultar(ConfigPaginado configPaginado,int idCliente) throws PersistenciaException;
+    List<CuentaBancaria> consultar(ConfiguracionPaginado configPaginado,int idCliente) throws PersistenciaException;
 }

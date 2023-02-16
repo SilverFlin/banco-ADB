@@ -9,12 +9,12 @@ package utils;
  *
  * @author Toled
  */
-public class ConfigPaginado {
+public class ConfiguracionPaginado {
     int limite;
     int numPagina;
     int offset;
 
-    public ConfigPaginado() {
+    public ConfiguracionPaginado() {
         this.numPagina = 0;
         this.limite = 5;
         this.calcOffset();
@@ -22,7 +22,7 @@ public class ConfigPaginado {
 
     
     
-    public ConfigPaginado(int limite, int numPagina) {
+    public ConfiguracionPaginado(int limite, int numPagina) {
         this.limite = limite;
         this.numPagina = numPagina;
         this.calcOffset();

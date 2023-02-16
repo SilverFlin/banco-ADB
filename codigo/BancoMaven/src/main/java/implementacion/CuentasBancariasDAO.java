@@ -20,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import utils.ConfigPaginado;
+import utils.ConfiguracionPaginado;
 
 /**
  *
@@ -154,7 +154,7 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
     }
 
     @Override
-    public List<CuentaBancaria> consultar(ConfigPaginado configPaginado,int idCliente) throws PersistenciaException {
+    public List<CuentaBancaria> consultar(ConfiguracionPaginado configPaginado,int idCliente) throws PersistenciaException {
         try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion()) {
             /* Consultas */
             String query

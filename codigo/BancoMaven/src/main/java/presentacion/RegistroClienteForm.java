@@ -245,12 +245,12 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         String calle = txtCorreo.getText();
         String colonia = txtColonia.getText();
         String codigoPostal = txtCodigoPostal.getText();
-        String contraseña = txtContrasena.getText();
+        String contrasenha = txtContrasena.getText();
 
         return !nombre.isEmpty() && !apellidoP.isEmpty()
                 && !apellidoM.isEmpty() && dtFechaNacimiento == null
                 && !calle.isEmpty() && !colonia.isEmpty()
-                && !codigoPostal.isEmpty() && !contraseña.isEmpty()
+                && !codigoPostal.isEmpty() && !contrasenha.isEmpty()
                 && (!correo.isEmpty() && validarEmail(correo));
     }
 
