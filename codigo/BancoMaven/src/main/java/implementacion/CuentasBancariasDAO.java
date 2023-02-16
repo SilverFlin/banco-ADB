@@ -30,6 +30,7 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
     private static final Logger LOG = Logger.getLogger(CuentasBancariasDAO.class.getName());
     private final IConexionBD GENERADOR_CONEXIONES;
 
+    private final String NOMBRE_TABLA = "cuentasBancarias";
     private final String ESTADO_CUENTA_ACTIVO = "Activo";
     private final String ESTADO_CUENTA_INACTIVO = "Inactivo";
 
@@ -50,7 +51,7 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
         String query
                 = "SELECT id, noCuenta, fechaApertura, saldoMXN, "
                 + " estadoCuenta, idCliente "
-                + "FROM cuentasBancarias WHERE id = ?;";
+                + "FROM "+NOMBRE_TABLA+" WHERE id = ?;";
         try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement updateClientes = con.prepareStatement(query);) {
 
 
@@ -96,18 +97,19 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
 
     /**
      * Inserta una cuenta bancaria, relacionandose con el id de un cliente.
+     *
      * @param cuentaBancaria
      * @param cliente
      * @return la cuenta bancaria, pero con el id asignado por la base de datos.
-     * @throws PersistenciaException 
+     * @throws PersistenciaException
      */
     @Override
-    public CuentaBancaria insertar(CuentaBancaria cuentaBancaria,Cliente cliente) throws PersistenciaException {
+    public CuentaBancaria insertar(CuentaBancaria cuentaBancaria, Cliente cliente) throws PersistenciaException {
 
         /* Consultas */
-        String insertStatement = "INSERT INTO cuentasBancarias (noCuenta, idCliente)"
+        String insertStatement = "INSERT INTO "+NOMBRE_TABLA+" (noCuenta, idCliente)"
                 + "VALUES (?,?)";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement insertCuenta = con.prepareStatement(insertStatement,Statement.RETURN_GENERATED_KEYS);) {
+        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement insertCuenta = con.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);) {
 
             /* Asignar valores a consulta INSERT*/
             insertCuenta.setString(1, cuentaBancaria.getNoCuenta());
@@ -115,7 +117,7 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
 
             /* Ejecutar las consultas */
             insertCuenta.executeUpdate();
-            
+
             ResultSet llavesGeneradas = insertCuenta.getGeneratedKeys();
             /* Validar consultas*/
             if (llavesGeneradas.next()) {
@@ -123,18 +125,51 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
                 return cuentaBancaria;
             }
 
-            throw new PersistenciaException("Error al insertar cuenta"); 
+            throw new PersistenciaException("Error al insertar cuenta");
 
         } catch (SQLException e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            throw new PersistenciaException("Error en la conexión"); 
+            throw new PersistenciaException("Error en la conexión");
         }
 
     }
 
+    /**
+     * Elimina la cuenta bancaria de la base de datos, usando su id
+     * @param id
+     * @return la cuenta bancaria eliminada o null si no existia
+     */
     @Override
     public CuentaBancaria eliminar(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        /* Consultas */
+        String deleteStatement = "DELETE FROM "+NOMBRE_TABLA+" WHERE id = ?;";
+        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement deleteClientes = con.prepareStatement(deleteStatement);) {
+
+
+            /* Verificar si la cuenta existe*/
+            CuentaBancaria cuentaBancaria = null;
+            try {
+                cuentaBancaria = this.consultar(id); // Remover
+            } catch (PersistenciaException ex) {
+                LOG.log(Level.SEVERE, ex.getMessage());
+            }
+
+            if (cuentaBancaria == null) {
+                return null;
+            }
+
+            /* Asignar valores a consulta INSERT*/
+            deleteClientes.setInt(1, id);
+
+            /* Ejecutar las consultas */
+            deleteClientes.executeUpdate(); // Regresa las lineas alteradas
+
+            return cuentaBancaria;
+        } catch (SQLException e) {
+            LOG.log(Level.SEVERE, e.getMessage());
+            return null;
+        }
+
     }
 
     @Override
