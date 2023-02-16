@@ -12,6 +12,7 @@ import interfaces.ICuentasBancariasDAO;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import utils.ConfiguracionPaginado;
 
@@ -28,6 +29,7 @@ public class CuentasForm extends javax.swing.JFrame {
     private final ICuentasBancariasDAO cuentasBancariasDAO;
     private ConfiguracionPaginado configPaginado;
     private ClienteBorrar cliente;
+
     public CuentasForm(ICuentasBancariasDAO cuentasBancariasDAO, ClienteBorrar cliente) {
         this.cuentasBancariasDAO = cuentasBancariasDAO;
         this.configPaginado = new ConfiguracionPaginado();
@@ -51,7 +53,7 @@ public class CuentasForm extends javax.swing.JFrame {
         panelTablaCuentas = new javax.swing.JScrollPane();
         tablaCuentas = new javax.swing.JTable();
         btnRegresar = new javax.swing.JButton();
-        btnBorrarCuenta = new javax.swing.JButton();
+        brnDesactivarCuenta = new javax.swing.JButton();
         btnRetiroSinTarjeta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -129,18 +131,18 @@ public class CuentasForm extends javax.swing.JFrame {
         });
         background3.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 90, 20));
 
-        btnBorrarCuenta.setBackground(new java.awt.Color(0, 102, 255));
-        btnBorrarCuenta.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
-        btnBorrarCuenta.setForeground(new java.awt.Color(255, 255, 255));
-        btnBorrarCuenta.setText("Borrar Cuenta");
-        btnBorrarCuenta.setBorder(null);
-        btnBorrarCuenta.setBorderPainted(false);
-        btnBorrarCuenta.addActionListener(new java.awt.event.ActionListener() {
+        brnDesactivarCuenta.setBackground(new java.awt.Color(0, 102, 255));
+        brnDesactivarCuenta.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        brnDesactivarCuenta.setForeground(new java.awt.Color(255, 255, 255));
+        brnDesactivarCuenta.setText("Desactivar Cuenta");
+        brnDesactivarCuenta.setBorder(null);
+        brnDesactivarCuenta.setBorderPainted(false);
+        brnDesactivarCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBorrarCuentaActionPerformed(evt);
+                brnDesactivarCuentaActionPerformed(evt);
             }
         });
-        background3.add(btnBorrarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 100, 40));
+        background3.add(brnDesactivarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 130, 40));
 
         btnRetiroSinTarjeta.setBackground(new java.awt.Color(0, 102, 255));
         btnRetiroSinTarjeta.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
@@ -176,17 +178,17 @@ public class CuentasForm extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void btnBorrarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarCuentaActionPerformed
-    }//GEN-LAST:event_btnBorrarCuentaActionPerformed
+    private void brnDesactivarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brnDesactivarCuentaActionPerformed
+        this.desactivar();
+    }//GEN-LAST:event_brnDesactivarCuentaActionPerformed
 
     private void btnRetiroSinTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinTarjetaActionPerformed
     }//GEN-LAST:event_btnRetiroSinTarjetaActionPerformed
 
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background3;
-    private javax.swing.JButton btnBorrarCuenta;
+    private javax.swing.JButton brnDesactivarCuenta;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnRetiroSinTarjeta;
     private javax.swing.JPanel head3;
@@ -196,12 +198,12 @@ public class CuentasForm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void llenarTablaCuentas() {
-         try {
+        try {
 
-            List<CuentaBancaria> listaCuentas = this.cuentasBancariasDAO.consultar(this.configPaginado,this.cliente.getId());
-            DefaultTableModel modeloTabla = (DefaultTableModel)this.tablaCuentas.getModel();
+            List<CuentaBancaria> listaCuentas = this.cuentasBancariasDAO.consultar(this.configPaginado, this.cliente.getId());
+            DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaCuentas.getModel();
             modeloTabla.setRowCount(0);
-            
+
             for (CuentaBancaria cuenta : listaCuentas) {
                 Object[] fila = {
                     cuenta.getNoCuenta(),
@@ -210,11 +212,38 @@ public class CuentasForm extends javax.swing.JFrame {
                     cuenta.getEstadoCuenta()
                 };
                 modeloTabla.addRow(fila);
-                
+
             }
-            
+
         } catch (PersistenciaException e) {
-            LOG.log(Level.SEVERE,e.getMessage());
+            LOG.log(Level.SEVERE, e.getMessage());
         }
     }
+
+    private void desactivar() {
+
+        String input = this.pedirInputUsuario("Desactivar Cuenta", "Ingresa el numero de cuenta");
+        try {
+            CuentaBancaria cuentaBancaria = this.cuentasBancariasDAO.consultar(input);
+            cuentaBancaria.desactivarCuenta();
+            this.cuentasBancariasDAO.actualizar(cuentaBancaria);
+            this.llenarTablaCuentas();
+        } catch (PersistenciaException e) {
+            LOG.log(Level.SEVERE, e.getMessage());
+            this.mostrarMensajeError("Ingresa un Numero de Cuenta valido");
+        }
+    }
+
+    private void mostrarMensajeError(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void mostrarMensajeExito(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Exito", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private String pedirInputUsuario(String titulo, String texto) {
+        return (String) JOptionPane.showInputDialog(this, texto, titulo, JOptionPane.QUESTION_MESSAGE);
+    }
+
 }
