@@ -53,7 +53,7 @@ CREATE TABLE operaciones(
 CREATE TABLE transferencias(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     monto DECIMAL(8,4) NOT NULL,
-    fechaHora DATETIME NOT NULL,
+    fechaHora DATETIME NOT NULL DEFAULT(CURRENT_TIMESTAMP) NOT NULL,
     idCuentaOrigen INT NOT NULL,
     idCuentaDestino INT NOT NULL,
     FOREIGN KEY (idCuentaOrigen) REFERENCES cuentasBancarias (id),
