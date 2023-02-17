@@ -13,8 +13,8 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
 
 
 ### Entregables obligatorios
-- [ ] Protitpos de Interfaz gráfica
-    - [ ] Establecer interfaces necesarias
+- [X] Protitpos de Interfaz gráfica
+    - [X] Establecer interfaces necesarias
     - [X] ClienteForm
         - [X] Nuevo
         - [X] Editar
@@ -40,19 +40,19 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
 
 ### Requerimientos Funcionales
 - [ ] Permite Gestionar las transacciones
-- [ ] Puede tener diferentes cuentas asociadas
-- [ ] Posibilidad de registro de usuario
-- [ ] Posibilidad de actualizar datos de usuario
-- [ ] Posibilidad de cancelar cuenta
+- [X] Puede tener diferentes cuentas asociadas
+- [X] Posibilidad de registro de usuario
+- [X] Posibilidad de actualizar datos de usuario
+- [X] Posibilidad de cancelar cuenta
 - [ ] Un usuario puede transferir a otras cuentas (suyas o no)
 - [ ] Realizar retiros sin ser clientes
 - [ ] Historial de operaciones con rango de fechas
-- [ ] Diferentes cuentas por usuario.
+- [X] Diferentes cuentas por usuario.
 
 
 
 ### Requerimientos No Funcionales
-- [ ] Encriptación de contraseças al almacenarlas
+- [ ] Encriptación de contraseñas al almacenarlas
 - [ ] Retiros sin tarjeta pasan a no cobrado depsués de 10 min sin retirar dinero.
 - [ ] Validaciones 
     - [ ] Datos de entrada (e.g. formato / campos vacíos)
@@ -65,18 +65,23 @@ Pequeño sistema de gestión de transacciones bancarias escrito en Java y utiliz
 ### Triggers
 1. Entradas a la tabla `operaciones`
     1. esta tabla va a guardar diferentes tipos de operaciones, entre estos se encuentran: "actualizacion", "transferencia", y "retiro". 
-        a. -Las actualizaciones se refiere a cambios en la información del usuario, estos se van a ver efectuadas mediante `UPDATE`'s, un trigger en los updates a la tabla `clientes` podría alimentar esos registros.-
-        b. Las operacion "transferencia" indica la creación de un registro en la tabla `transferencias`, otro trigger podría estar en todos los `INSERT INTO` de esta tabla.
-        c. En la última operación "retiro", un trigger podría ser aplicado al hacer `UPDATE` en la tabla de `CuentasBancarias`, el único campo a actualizar es el saldo.
+        a. <s>Las actualizaciones se refiere a cambios en la información del usuario, estos se van a ver efectuadas mediante `UPDATE`'s, un trigger en los updates a la tabla `clientes` podría alimentar esos registros.</s>
+        b. <s>Las operacion "transferencia" indica la creación de un registro en la tabla `transferencias`, otro trigger podría estar en todos los `INSERT INTO` de esta tabla.</s>
+        c. <s>En la última operación "retiro", un trigger podría ser aplicado al hacer `UPDATE` en la tabla de `CuentasBancarias`, el único campo a actualizar es el saldo.</s>
     <p style="color:red;"> TODO Agregar depósito o englobar en un solo tipo de operación el retiro y depósito a la cuenta</p>
-2. Propuesta de alteración a `operaciones`: esta también podría almacenar la creación de cuentas bancarias, agregando un trigger en los `INSERT INTO` de CuentasBancarias, esto podría no ser del todo necesario ya que cada cuenta bancaria tiene una fecha de apertura que contendría esta operación.
+2. <s>Propuesta de alteración a `operaciones`: esta también podría almacenar la creación de cuentas bancarias, agregando un trigger en los `INSERT INTO` de CuentasBancarias, esto podría no ser del todo necesario ya que cada cuenta bancaria tiene una fecha de apertura que contendría esta operación.</s>
+3. Para asegurar que no se guarden montos de dinero negativos, se podría aplicar un trigger en todos los cambios que manejen este tipo de atributo, verificando antes de insertar que el valor sea mayor a 0. Esto aplicaría a: Monto de RetiroSinCuenta, SaldoMXN de CuentasBancarias, y Monto de Transferencias.
+4. Hay ingresos de fechas que no tendrían sentido, y sería lógico meter algunas validaciones mediante triggers. Esto podría aplicar a la FechaNacimiento de Clientes, que no sea mayor a la fecha actual; que FechaFin no sea menor a FechaInicio en RetirosSinCuenta; FechaApertura de CuentasBancarias tampoco debería ser mayor a la fecha actual.
 
 ### Transacciones
 1. La transferencia de dinero de una cuenta a otra require el uso de transacciones para asegurar la integridad de la operación.
+
 2. Se podría aplicar transferencia en ambas, retiro y depósito, a cuentas bancarias, siendo este aparentemente no tan necesario podría asegurar que los movimientos se reflejen de manera correcta.
 
 ### Stored Procedures
-Se pueden simplificar operaciones CRUD para realizar conjuntos de consultas en una sola desde el código, por ejemplo, se puede crear un procedimiento almacenado que maneje las transferencias, recibiendo una referencia de cada cuenta con el monto, y que se encargue de crear el registro de la misma transferencia y los cambios en el dinero de ambas cuentas
+1. Se pueden simplificar operaciones CRUD para realizar conjuntos de consultas en una sola desde el código, por ejemplo, se puede crear un procedimiento almacenado que maneje las transferencias, recibiendo una referencia de cada cuenta con el monto, y que se encargue de crear el registro de la misma transferencia y los cambios en el dinero de ambas cuentas
+
+2. Podría aplicarse un procedimiento almacenado que reciba un tiempo en el cual el retiro pasará a un estado en el que no pueda ser retirado, calculando dentro de aquí la fecha de FechaFin.
 
 ## Avances
 
@@ -97,6 +102,10 @@ Se pueden simplificar operaciones CRUD para realizar conjuntos de consultas en u
 BD, DAO, Formulario, clases de Dominio, validaciones, etc.
 - [X] URL del repositorio público de Github con el código del proyecto actualizado
 hasta ese momento.
+
+## TODOS
+- [ ] Encriptacion contraseña
+- [ ] [Validaciones](README.md#requerimientos-no-funcionales)
 
 
 
