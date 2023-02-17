@@ -8,7 +8,7 @@ package presentacion;
 import dominio.ClienteBorrar;
 import dominio.CuentaBancaria;
 import excepciones.PersistenciaException;
-import implementacion.CuentasBancariasDAO;
+import implementaciones.CuentasBancariasDAO;
 import interfaces.ICuentasBancariasDAO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
