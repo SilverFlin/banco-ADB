@@ -27,7 +27,7 @@ CREATE TABLE clientes(
     apellidoMaterno VARCHAR(50),
     fechaNacimiento DATE NOT NULL,
     correo VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(50) NOT NULL,
+    password VARCHAR(60) NOT NULL,
     idDomicilio INT NOT NULL,
     FOREIGN KEY (idDomicilio) REFERENCES domicilios (id)  
 );

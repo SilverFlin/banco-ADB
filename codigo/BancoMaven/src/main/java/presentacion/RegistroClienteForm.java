@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -39,17 +40,21 @@ public class RegistroClienteForm extends javax.swing.JFrame {
     }
 
     private void registrar() {
-        if (validarCampos()) {
-            try {
-                Domicilio id = domiciliosDAO.insertar(extraerDomicilio());
-                Cliente cliente = extraerCliente();
-                cliente.setIdDomicilio(id.getId());
-                clientesDAO.insertar(cliente);
-            } catch (PersistenciaException ex) {
-                ex.printStackTrace();
-                Logger.getLogger(RegistroClienteForm.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        if (!validarCampos()) return;
+        
+        
+        try {
+            // TODO transaccion
+            Domicilio id = domiciliosDAO.insertar(extraerDomicilio());
+            Cliente cliente = extraerCliente();
+            cliente.setIdDomicilio(id.getId());
+            clientesDAO.insertar(cliente);
+        } catch (PersistenciaException ex) {
+//            ex.printStackTrace();
+            //TODO agregar LOG bien
+            Logger.getLogger(RegistroClienteForm.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -271,7 +276,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAtrasMousePressed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        registrar();
+        this.registrar();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private boolean validarCampos() {
@@ -313,8 +318,9 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         java.sql.Date fechaNacimiento = new java.sql.Date(dtFechaNacimiento.getDate().getTime());
         String correo = txtCorreo.getText();
         System.out.println(dtFechaNacimiento.getDate());
-        String contrasena = new String(txtContrasena.getPassword());
-
+        String contrasena = BCrypt.hashpw(new String(txtContrasena.getPassword()), BCrypt.gensalt());
+        System.out.println(contrasena);
+        System.out.println(contrasena.length());
         Cliente cliente = new Cliente(nombre, apellidoP, apellidoM, fechaNacimiento.toString(), 0);
         cliente.setCorreo(correo);
         cliente.setContrasenia(contrasena);

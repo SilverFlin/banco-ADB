@@ -13,6 +13,7 @@ import interfaces.IConexionBD;
 import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -59,7 +60,7 @@ public class ClienteForm extends javax.swing.JFrame {
 
     private boolean validarCampos() {
         String correo = txtUsuario.getText();
-        String contraseña = txtContraseña.getText();
+        String contraseña = new String(txtContraseña.getPassword());
 
         return correo.length() > 0 && contraseña.length() > 0;
 
@@ -69,22 +70,17 @@ public class ClienteForm extends javax.swing.JFrame {
         Cliente cliente = clientesDAO.consultar(txtUsuario.getText());
 
         if (cliente != null) {
-            return validarContraseña(cliente.getContrasenia());
+            return validarPassword(cliente.getContrasenia());
         }else{
             return false;
         }
     }
     
-    private boolean validarContraseña(String contraseña){
-        if(txtContraseña.getPassword().length == contraseña.length()){
-            for(int i = 0;i<txtContraseña.getPassword().length; i++){
-                if(txtContraseña.getPassword()[i] != contraseña.toCharArray()[i]){
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
+    private boolean validarPassword(String password){
+        String passwordCandidato = new String(txtContraseña.getPassword());
+        System.out.println(passwordCandidato);
+        System.out.println(password);
+	return BCrypt.checkpw(passwordCandidato, password);
     }
     
     @SuppressWarnings("unchecked")
@@ -219,7 +215,7 @@ public class ClienteForm extends javax.swing.JFrame {
     }//GEN-LAST:event_lblRegistrarMousePressed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        login();
+        this.login();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void lblRetiroSinTarjetaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRetiroSinTarjetaMousePressed

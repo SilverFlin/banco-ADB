@@ -34,7 +34,7 @@ public class ClientesDAO implements IClientesDAO {
 
     @Override
     public Cliente consultar(String correo) {
-        String SQLQuery = "SELECT id, nombres, apellidoPaterno,apellidoMaterno, fechaNacimiento,idDomicilio,contraseña FROM CLIENTES WHERE correo=?;";
+        String SQLQuery = "SELECT id, nombres, apellidoPaterno,apellidoMaterno, fechaNacimiento,idDomicilio,password FROM CLIENTES WHERE correo=?;";
 
         try (
                 Connection conexion = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement comando = conexion.prepareStatement(SQLQuery);) {
@@ -51,7 +51,7 @@ public class ClientesDAO implements IClientesDAO {
                 String fechaNacimiento = resultado.getString("fechaNacimiento");
                 Integer idDireccion = resultado.getInt("idDomicilio");
                 cliente = new Cliente(id, nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, idDireccion);
-                cliente.setContrasenia(resultado.getString("contraseña"));
+                cliente.setContrasenia(resultado.getString("password"));
             }
 
             return cliente;
@@ -64,7 +64,7 @@ public class ClientesDAO implements IClientesDAO {
 
     @Override
     public Cliente insertar(Cliente cliente) throws PersistenciaException {
-        String SQLQuery = "INSERT INTO clientes(nombres,apellidoPaterno, apellidoMaterno, fechaNacimiento, idDomicilio, correo, contrasenia) VALUES (?,?,?,?,?,?,?)";
+        String SQLQuery = "INSERT INTO clientes(nombres,apellidoPaterno, apellidoMaterno, fechaNacimiento, idDomicilio, correo, password) VALUES (?,?,?,?,?,?,?)";
 
         try (Connection conexion = GENERADOR_CONEXIONES.crearConexion(); 
                 PreparedStatement comando = conexion.prepareStatement(SQLQuery, Statement.RETURN_GENERATED_KEYS);
@@ -98,7 +98,7 @@ public class ClientesDAO implements IClientesDAO {
 
     @Override
     public Cliente editar(Cliente cliente) throws PersistenciaException {
-        String SQLQuery = "UPDATE clientes SET contraseÃ±a = ? WHERE id = ?";
+        String SQLQuery = "UPDATE clientes SET password = ? WHERE id = ?";
 
         try (Connection conexion = GENERADOR_CONEXIONES.crearConexion(); PreparedStatement comando = conexion.prepareStatement(SQLQuery);) {
 
