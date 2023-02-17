@@ -17,7 +17,8 @@
     - ApellidoPaterno: texto(50)
     - ApellidoMaterno: texto(50) opcional
     - FechaNacimiento:fecha
-    - Correo: texto(100)
+    - Correo: texto(100),
+    - password: texto(50)
     - IdDomicilio: entero
 )
 > IdDomicilio, que viene de Domicilios.
