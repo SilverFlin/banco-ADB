@@ -65,7 +65,7 @@ CREATE TABLE retirosSinCuenta(
     password VARCHAR(100) NOT NULL,
     monto DECIMAL(8,4) NOT NULL,
     folio VARCHAR(50) NOT NULL,
-    Estado ENUM("Cobrado","Pendiente","Expirado") DEFAULT("Pendiente"),
+    estado ENUM("Cobrado","Pendiente","Expirado") DEFAULT("Pendiente"),
     fechaInicio DATETIME NOT NULL,
     fechaFin DATETIME NOT NULL,
     idCuentaBancaria INT NOT NULL,

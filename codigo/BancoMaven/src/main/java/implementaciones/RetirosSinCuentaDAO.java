@@ -45,7 +45,7 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
         /* Consultas */
         String query
                 = "SELECT id, password, monto, folio, "
-                + " Estado, fechaInicio, fechaFin, idCuentaBancaria "
+                + " estado, fechaInicio, fechaFin, idCuentaBancaria "
                 + "FROM " + NOMBRE_TABLA + " WHERE id = ?;";
         try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement updateClientes = con.prepareStatement(query);) {
 
@@ -72,7 +72,7 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
         /* Consultas */
         String query
                 = "SELECT id, password, monto, folio, "
-                + " Estado, fechaInicio, fechaFin, idCuentaBancaria "
+                + " estado, fechaInicio, fechaFin, idCuentaBancaria "
                 + "FROM " + NOMBRE_TABLA + " WHERE folio = ?;";
         try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement updateClientes = con.prepareStatement(query);) {
 
@@ -100,7 +100,7 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
             /* Consultas */
             String query
                     = "SELECT id, password, monto, folio, "
-                    + " Estado, fechaInicio, fechaFin, idCuentaBancaria "
+                    + " estado, fechaInicio, fechaFin, idCuentaBancaria "
                     + "FROM " + NOMBRE_TABLA + " WHERE idCuentaBancaria = ? "
                     + " LIMIT ? OFFSET ?;";
             /* Crear Consultas */
@@ -127,8 +127,8 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
     public RetiroSinCuenta insertar(RetiroSinCuenta retiroSinCuenta, CuentaBancaria cuentaBancaria) throws PersistenciaException {
         /* Consultas */
         String insertStatement = "INSERT INTO " + NOMBRE_TABLA
-                + " (password, monto, folio, Estado, fechaInicio, fechaFin, "
-                + "idCuentaBancaria) VALUES (?,?,?,?,?,?)";
+                + " (password, monto, folio, estado, fechaInicio, fechaFin, "
+                + "idCuentaBancaria) VALUES (?,?,?,?,?,?,?);";
         try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement insertRetiro = con.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);) {
 
             /* Asignar valores a consulta INSERT*/
@@ -146,11 +146,11 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
                     estado = ESTADO_RETIRO_EXPIRADO;
                     break;
             }
-            insertRetiro.setString(3, estado);
-            insertRetiro.setString(4, retiroSinCuenta.getFechaInicio());
-            insertRetiro.setString(5, retiroSinCuenta.getFechaFin());
-            insertRetiro.setInt(6, retiroSinCuenta.getId());
-
+            insertRetiro.setString(3, retiroSinCuenta.getFolio());
+            insertRetiro.setString(4, estado);
+            insertRetiro.setString(5, retiroSinCuenta.getFechaInicio());
+            insertRetiro.setString(6, retiroSinCuenta.getFechaFin());
+            insertRetiro.setInt(7, cuentaBancaria.getId());
             /* Ejecutar las consultas */
             insertRetiro.executeUpdate();
 
@@ -201,7 +201,38 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
 
     @Override
     public RetiroSinCuenta actualizar(RetiroSinCuenta retiroSinCuenta) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        /* Consultas */
+        String updateStatement = "UPDATE " + NOMBRE_TABLA + " SET "
+                + "estado = ? "
+                + "WHERE id = ?";
+        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement updateRetiro = con.prepareStatement(updateStatement, Statement.RETURN_GENERATED_KEYS);) {
+
+            /* Asignar valores a consulta INSERT*/
+            // TODO Mover
+            String estado;
+            switch (retiroSinCuenta.getEstado()) {
+                case COBRADO:
+                    estado = ESTADO_RETIRO_COBRADO;
+                    break;
+                case PENDIENTE:
+                    estado = ESTADO_RETIRO_PENDIENTE;
+                    break;
+                default:
+                    estado = ESTADO_RETIRO_EXPIRADO;
+                    break;
+            }
+            updateRetiro.setString(1, estado);
+            updateRetiro.setInt(2, retiroSinCuenta.getId());
+
+            /* Ejecutar las consultas */
+            updateRetiro.executeUpdate();
+
+            return retiroSinCuenta;
+        } catch (SQLException e) {
+            LOG.log(Level.SEVERE, e.getMessage());
+            throw new PersistenciaException("Error en la conexión");
+        }
     }
 
     private RetiroSinCuenta crearRetiroSinCuenta(ResultSet result) throws SQLException {
@@ -210,7 +241,7 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
         String password = result.getString("password");
         Double monto = result.getDouble("monto");
         String folio = result.getString("folio");
-        String estadoTransferencia = result.getString("Estado");
+        String estadoTransferencia = result.getString("estado");
         String fechaInicio = result.getString("fechaInicio");
         String fechaFin = result.getString("fechaFin");
         Integer idCuenta = result.getInt("idCuentaBancaria");
