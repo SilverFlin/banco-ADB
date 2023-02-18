@@ -20,11 +20,7 @@ public class CuentaBancaria {
     private Double saldoMXN;
     private Integer idCliente;
     private EstadoCuenta estadoCuenta;
-
-    public enum EstadoCuenta {
-        ACTIVO, INACTIVO
-    };
-
+    
     public CuentaBancaria() {
         generarNoCuenta();
         this.saldoMXN = 0.0;

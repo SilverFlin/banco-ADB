@@ -7,6 +7,7 @@ package implementaciones;
 
 import dominio.ClienteBorrar;
 import dominio.CuentaBancaria;
+import dominio.EstadoCuenta;
 import excepciones.PersistenciaException;
 import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
@@ -221,11 +222,11 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
         Integer idCliente = result.getInt("idCliente");
 
         /* Crear CuentaBancaria*/
-        CuentaBancaria.EstadoCuenta enumEstadoCuenta;
+        EstadoCuenta enumEstadoCuenta;
         if (estadoCuenta.equals(ESTADO_CUENTA_ACTIVO)) {
-            enumEstadoCuenta = CuentaBancaria.EstadoCuenta.ACTIVO;
+            enumEstadoCuenta = EstadoCuenta.ACTIVO;
         } else {
-            enumEstadoCuenta = CuentaBancaria.EstadoCuenta.INACTIVO;
+            enumEstadoCuenta = EstadoCuenta.INACTIVO;
         }
         CuentaBancaria cuentaBancaria;
         cuentaBancaria = new CuentaBancaria(
