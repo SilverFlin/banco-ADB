@@ -6,5 +6,6 @@ package dominio;
  */
 public enum EstadoRetiroSinCuenta {
     COBRADO,
-    PENDIENTE
+    PENDIENTE,
+    EXPIRADO
 }

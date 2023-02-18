@@ -34,6 +34,7 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
     private final String NOMBRE_TABLA = "retirosSinCuenta";
     private final String ESTADO_RETIRO_COBRADO = "Cobrado";
     private final String ESTADO_RETIRO_PENDIENTE = "Pendiente";
+    private final String ESTADO_RETIRO_EXPIRADO = "Expirado";
 
     public RetirosSinCuentaDAO(IConexionBD GENERADOR_CONEXIONES) {
         this.GENERADOR_CONEXIONES = GENERADOR_CONEXIONES;
@@ -133,7 +134,18 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
             /* Asignar valores a consulta INSERT*/
             insertRetiro.setString(1, retiroSinCuenta.getPassword());
             insertRetiro.setDouble(2, retiroSinCuenta.getMonto());
-            String estado = retiroSinCuenta.getEstado() == EstadoRetiroSinCuenta.COBRADO ? ESTADO_RETIRO_COBRADO : ESTADO_RETIRO_PENDIENTE;
+            String estado;
+            switch (retiroSinCuenta.getEstado()) {
+                case COBRADO:
+                    estado = ESTADO_RETIRO_COBRADO;
+                    break;
+                case PENDIENTE:
+                    estado = ESTADO_RETIRO_PENDIENTE;
+                    break;
+                default:
+                    estado = ESTADO_RETIRO_EXPIRADO;
+                    break;
+            }
             insertRetiro.setString(3, estado);
             insertRetiro.setString(4, retiroSinCuenta.getFechaInicio());
             insertRetiro.setString(5, retiroSinCuenta.getFechaFin());
@@ -207,8 +219,10 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
         EstadoRetiroSinCuenta enumEstadoCuenta;
         if (estadoTransferencia.equals(ESTADO_RETIRO_COBRADO)) {
             enumEstadoCuenta = EstadoRetiroSinCuenta.COBRADO;
-        } else {
+        } else if (estadoTransferencia.equals(ESTADO_RETIRO_PENDIENTE)) {
             enumEstadoCuenta = EstadoRetiroSinCuenta.PENDIENTE;
+        } else {
+            enumEstadoCuenta = EstadoRetiroSinCuenta.EXPIRADO;
         }
         RetiroSinCuenta retiroSinCuenta;
         retiroSinCuenta = new RetiroSinCuenta(fechaInicio, fechaFin, enumEstadoCuenta, monto, password, folio, idCuenta);
