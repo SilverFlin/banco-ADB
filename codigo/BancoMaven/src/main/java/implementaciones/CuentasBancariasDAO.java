@@ -179,7 +179,6 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
             LOG.log(Level.SEVERE, e.getMessage());
             return null;
         }
-
     }
 
     @Override
