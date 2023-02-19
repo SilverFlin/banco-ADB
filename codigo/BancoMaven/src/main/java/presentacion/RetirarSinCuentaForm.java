@@ -6,11 +6,18 @@
 package presentacion;
 
 import dominio.Cliente;
+import dominio.EstadoRetiroSinCuenta;
+import dominio.RetiroSinCuenta;
+import excepciones.PersistenciaException;
 import implementaciones.ClientesDAO;
 import implementaciones.ConexionBD;
+import implementaciones.RetirosSinCuentaDAO;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
+import interfaces.IRetirosSinCuentaDAO;
 import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.mindrot.jbcrypt.BCrypt;
@@ -19,68 +26,16 @@ import org.mindrot.jbcrypt.BCrypt;
  *
  * @author Elkur
  */
-public class ClienteForm extends javax.swing.JFrame {
+public class RetirarSinCuentaForm extends javax.swing.JFrame {
 
-    private final static int INGRESAR = 1;
-
-    private final static int REGISTRAR = 2;
-    private final RegistroClienteForm regClnFrm;
-    private final IClientesDAO clientesDAO;
-
-    public ClienteForm(IConexionBD conBD) {
-        initComponents();
-        regClnFrm = new RegistroClienteForm(this,conBD);
-        this.clientesDAO = new ClientesDAO(conBD);
-    }
-
-    private void openNewWindow(int type) {
-        switch (type) {
-            case INGRESAR:
-                this.setVisible(false);
-                regClnFrm.setVisible(true);
-                break;
-            case REGISTRAR:
-                this.setVisible(false);
-                regClnFrm.setVisible(true);
-                break;
-        }
-    }
-
-    private void login() {
-        if (validarCampos()) {
-            if (validarCredenciales()) {
-                openNewWindow(INGRESAR);
-            } else {
-                JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Credenciales no validas", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private boolean validarCampos() {
-        String correo = txtUsuario.getText();
-        String contraseña = new String(txtContraseña.getPassword());
-
-        return correo.length() > 0 && contraseña.length() > 0;
-
-    }
-
-    private boolean validarCredenciales() {
-        Cliente cliente = clientesDAO.consultar(txtUsuario.getText());
-
-        if (cliente != null) {
-            return validarPassword(cliente.getContrasenia());
-        }else{
-            return false;
-        }
-    }
     
-    private boolean validarPassword(String password){
-        String passwordCandidato = new String(txtContraseña.getPassword());
-        System.out.println(passwordCandidato);
-        System.out.println(password);
-	return BCrypt.checkpw(passwordCandidato, password);
+    private final IRetirosSinCuentaDAO retirosSinCuentaDAO;
+    private ClienteForm clienteForm;
+
+    public RetirarSinCuentaForm(IConexionBD conBD) {
+        initComponents();
+        this.retirosSinCuentaDAO = new RetirosSinCuentaDAO(conBD);
+        this.clienteForm = new ClienteForm(conBD);
     }
     
     @SuppressWarnings("unchecked")
@@ -90,17 +45,16 @@ public class ClienteForm extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         Background = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        lblBienvenido = new javax.swing.JLabel();
-        txtUsuario = new javax.swing.JTextField();
+        lblTitulo = new javax.swing.JLabel();
+        txtFolio = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        lblUsuario = new javax.swing.JLabel();
+        lblFolio = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         lblContraseña = new javax.swing.JLabel();
         txtContraseña = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
         txtIniciarSesion = new javax.swing.JLabel();
-        lblRegistrar = new javax.swing.JLabel();
-        lblRetiroSinTarjeta = new javax.swing.JLabel();
+        btnRetirar = new javax.swing.JButton();
 
         jButton2.setText("jButton2");
 
@@ -114,38 +68,38 @@ public class ClienteForm extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(0, 102, 255));
 
-        lblBienvenido.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 24)); // NOI18N
-        lblBienvenido.setForeground(new java.awt.Color(255, 255, 255));
-        lblBienvenido.setText("Bienvenido");
+        lblTitulo.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 24)); // NOI18N
+        lblTitulo.setForeground(new java.awt.Color(255, 255, 255));
+        lblTitulo.setText("Retiro Sin Cuenta");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(245, Short.MAX_VALUE)
-                .addComponent(lblBienvenido)
-                .addGap(243, 243, 243))
+                .addContainerGap(214, Short.MAX_VALUE)
+                .addComponent(lblTitulo)
+                .addGap(208, 208, 208))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(lblBienvenido)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addComponent(lblTitulo)
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         Background.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 90));
 
-        txtUsuario.setForeground(new java.awt.Color(51, 51, 51));
-        txtUsuario.setToolTipText("");
-        txtUsuario.setBorder(null);
-        Background.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 180, 190, 20));
+        txtFolio.setForeground(new java.awt.Color(51, 51, 51));
+        txtFolio.setToolTipText("");
+        txtFolio.setBorder(null);
+        Background.add(txtFolio, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 180, 190, 20));
         Background.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 200, 190, 10));
 
-        lblUsuario.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
-        lblUsuario.setText("Usuario");
-        Background.add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 180, 20));
+        lblFolio.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
+        lblFolio.setText("Folio");
+        Background.add(lblFolio, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 180, 20));
         Background.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 190, 10));
 
         lblContraseña.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
@@ -155,45 +109,36 @@ public class ClienteForm extends javax.swing.JFrame {
         txtContraseña.setBorder(null);
         Background.add(txtContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 260, 190, 20));
 
-        jButton1.setBackground(new java.awt.Color(0, 102, 204));
-        jButton1.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Ingresar");
-        jButton1.setBorder(null);
-        jButton1.setBorderPainted(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnRegresar.setBackground(new java.awt.Color(0, 102, 204));
+        btnRegresar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 12)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresar.setText("Regresar");
+        btnRegresar.setBorder(null);
+        btnRegresar.setBorderPainted(false);
+        btnRegresar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnRegresarActionPerformed(evt);
             }
         });
-        Background.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 310, 70, 30));
+        Background.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 70, 30));
 
         txtIniciarSesion.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 16)); // NOI18N
-        txtIniciarSesion.setText("Iniciar sesion");
-        Background.add(txtIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, -1, -1));
+        Background.add(txtIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 110, -1, -1));
 
-        lblRegistrar.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
-        lblRegistrar.setForeground(new java.awt.Color(0, 153, 255));
-        lblRegistrar.setText("Registrarse");
-        lblRegistrar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        lblRegistrar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                lblRegistrarMousePressed(evt);
+        btnRetirar.setBackground(new java.awt.Color(0, 102, 204));
+        btnRetirar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 12)); // NOI18N
+        btnRetirar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRetirar.setText("Retirar");
+        btnRetirar.setBorder(null);
+        btnRetirar.setBorderPainted(false);
+        btnRetirar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnRetirar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRetirarActionPerformed(evt);
             }
         });
-        Background.add(lblRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 350, -1, -1));
-
-        lblRetiroSinTarjeta.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
-        lblRetiroSinTarjeta.setForeground(new java.awt.Color(0, 153, 255));
-        lblRetiroSinTarjeta.setText("Retiro sin tarjeta");
-        lblRetiroSinTarjeta.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        lblRetiroSinTarjeta.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                lblRetiroSinTarjetaMousePressed(evt);
-            }
-        });
-        Background.add(lblRetiroSinTarjeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 350, -1, -1));
+        Background.add(btnRetirar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 310, 70, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -210,34 +155,70 @@ public class ClienteForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void lblRegistrarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRegistrarMousePressed
-        openNewWindow(REGISTRAR);
-    }//GEN-LAST:event_lblRegistrarMousePressed
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        this.clienteForm.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.login();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void lblRetiroSinTarjetaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRetiroSinTarjetaMousePressed
-        JOptionPane.showMessageDialog(this, "Retiro sin tarjeta");
-    }//GEN-LAST:event_lblRetiroSinTarjetaMousePressed
+    private void btnRetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetirarActionPerformed
+       this.retirar();
+    }//GEN-LAST:event_btnRetirarActionPerformed
 
  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Background;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnRetirar;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JLabel lblBienvenido;
     private javax.swing.JLabel lblContraseña;
-    private javax.swing.JLabel lblRegistrar;
-    private javax.swing.JLabel lblRetiroSinTarjeta;
-    private javax.swing.JLabel lblUsuario;
+    private javax.swing.JLabel lblFolio;
+    private javax.swing.JLabel lblTitulo;
     private javax.swing.JPasswordField txtContraseña;
+    private javax.swing.JTextField txtFolio;
     private javax.swing.JLabel txtIniciarSesion;
-    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
+
+    private void retirar() {
+            // TODO Validar Folio
+            // TODO Checar status
+            // TODO Validar password
+            // TODO agregar ventanas
+        
+        try {
+            RetiroSinCuenta retiroSinCuenta = consultarRetiro();
+            if(retiroSinCuenta.getEstado() == EstadoRetiroSinCuenta.COBRADO){
+                // Agregar ventana cobrado
+                return;
+            }
+            if(retiroSinCuenta.getEstado() == EstadoRetiroSinCuenta.EXPIRADO){
+                // Agregar ventana EXPIRADO
+                return;
+            }
+            if(retiroSinCuenta.getEstado() == EstadoRetiroSinCuenta.PENDIENTE){
+                if(validarPassword(retiroSinCuenta.getPassword())){
+                    System.out.println("Retirado");
+                }
+            }
+
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(RetirarSinCuentaForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    // TODO mover a utils/Validaciones
+    private RetiroSinCuenta consultarRetiro() throws PersistenciaException {
+        return retirosSinCuentaDAO.consultar(txtFolio.getText());
+        
+    }
+    
+    private boolean validarPassword(String password){
+        String passwordCandidato = new String(txtContraseña.getPassword());
+        System.out.println(passwordCandidato);
+        System.out.println(password);
+	return BCrypt.checkpw(passwordCandidato, password);
+    }
 }
