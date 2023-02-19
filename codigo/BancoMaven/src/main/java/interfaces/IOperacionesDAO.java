@@ -19,6 +19,6 @@ public interface IOperacionesDAO {
 
     public Operacion insertar(Operacion operacion) throws PersistenciaException;
 
-    List<Operacion> consultar(ConfiguracionPaginado configPaginado) throws PersistenciaException;
+    List<Operacion> consultar(ConfiguracionPaginado configPaginado, int idCuentaBancaria) throws PersistenciaException;
 
 }
