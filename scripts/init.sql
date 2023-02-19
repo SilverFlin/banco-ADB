@@ -186,7 +186,24 @@ CREATE TRIGGER FechaFinMayorAInicio
           IF NEW.fechaInicio < new.fechaInicio
           THEN
               SIGNAL SQLSTATE '45000'
-                    SET MESSAGE_TEXT = 'fechaFin no puede ser menor a fechaInicio..';
+                    SET MESSAGE_TEXT = 'fechaFin no puede ser menor a fechaInicio.';
+          END IF;
+     END;
+$$
+
+DELIMITER ;
+
+###
+
+DELIMITER $$
+
+CREATE TRIGGER TransferenciaDiferenteCuenta
+     BEFORE INSERT ON Transferencias FOR EACH ROW
+     BEGIN
+          IF NEW.idCuentaOrigen = new.idCuentaDestino
+          THEN
+              SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'No se puede transferir a la misma cuenta.';
           END IF;
      END;
 $$
