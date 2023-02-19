@@ -65,7 +65,7 @@ CREATE TABLE retirosSinCuenta(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     password VARCHAR(100) NOT NULL,
     monto DECIMAL(8,4) NOT NULL,
-    folio VARCHAR(50) NOT NULL,
+    folio VARCHAR(50) NOT NULL UNIQUE,
     estado ENUM("Cobrado","Pendiente","Expirado") DEFAULT("Pendiente"),
     fechaInicio DATETIME DEFAULT(CURRENT_TIMESTAMP()) NOT NULL,
     fechaFin DATETIME NOT NULL,
@@ -203,18 +203,25 @@ CREATE PROCEDURE ReflejarTransferencia(
     IN idCuentaDestino int
 )
 BEGIN
+	# Crear Transferencia
     INSERT INTO transferencias(monto,idCuentaOrigen,idCuentaDestino) 
     VALUES(monto,idCuentaOrigen,idCuentaDestino);
     
-    UPDATE CuentasBancarias SET 
-    saldoMXN = saldoMXN - monto  
+    # Retirar Cuenta Origen
+    UPDATE CuentasBancarias 
+    SET 
+		saldoMXN = saldoMXN - monto  
     WHERE id = idCuentaOrigen;
     
-    UPDATE CuentasBancarias SET 
-    saldoMXN = saldoMXN + monto  
+    # Depositar Cuenta Destino
+    UPDATE CuentasBancarias 
+    SET 
+		saldoMXN = saldoMXN + monto  
     WHERE id = idCuentaDestino;
 END //
 DELIMITER ;
+
+### 
 
 DELIMITER //
 CREATE PROCEDURE CustomExpiracionRetiroSinCuenta(
@@ -222,7 +229,7 @@ CREATE PROCEDURE CustomExpiracionRetiroSinCuenta(
     IN monto DECIMAL(8,4),
     IN folio VARCHAR(50),
     IN tiempoExpiracion TIME,
-    idCuentaBancaria INT
+    IN idCuentaBancaria INT
 )
 BEGIN
     INSERT INTO RetirosSinCuenta(password,monto,folio,fechaFin,idCuentaBancaria) 
@@ -232,6 +239,30 @@ BEGIN
         folio,
         CURRENT_TIMESTAMP() + tiempoExpiracion,
         idCuentaBancaria);
+    
+END //
+DELIMITER ;
+
+###
+
+DELIMITER //
+CREATE PROCEDURE CobrarRetiroSinCuenta(
+    IN folioRetiro VARCHAR(50),
+    IN idCuentaBancaria INT,
+    IN monto DECIMAL(8,4)
+)
+BEGIN
+    ## Reducir monto
+    UPDATE CuentasBancarias 
+    SET 
+		saldoMXN = saldoMXN - monto  
+    WHERE id = idCuentaBancaria;
+    
+    ## Actualizar Estado Retiro
+    UPDATE RetirosSinCuenta 
+    SET
+		estado = "Cobrado"
+	WHERE folio = folioRetiro;
     
 END //
 DELIMITER ;
