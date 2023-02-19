@@ -5,6 +5,7 @@
  */
 package implementaciones;
 
+import dominio.Cliente;
 import dominio.ClienteBorrar;
 import dominio.CuentaBancaria;
 import dominio.EstadoCuenta;
@@ -112,7 +113,7 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
      * @throws PersistenciaException
      */
     @Override
-    public CuentaBancaria insertar(CuentaBancaria cuentaBancaria, ClienteBorrar cliente) throws PersistenciaException {
+    public CuentaBancaria insertar(CuentaBancaria cuentaBancaria, Cliente cliente) throws PersistenciaException {
 
         /* Consultas */
         String insertStatement = "INSERT INTO " + NOMBRE_TABLA + " (noCuenta, saldoMXN, idCliente) "
