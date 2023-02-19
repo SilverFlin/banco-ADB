@@ -14,13 +14,16 @@ import implementaciones.DomiciliosDAO;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
 import interfaces.IDomiciliosDAO;
+import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import org.mindrot.jbcrypt.BCrypt;
+import utils.Validaciones;
 
 /**
  *
@@ -28,7 +31,7 @@ import org.mindrot.jbcrypt.BCrypt;
  */
 public class RegistroClienteForm extends javax.swing.JFrame {
 
-    ClienteForm clnFrm;
+    private ClienteForm clnFrm;
     private final IClientesDAO clientesDAO;
     private final IDomiciliosDAO domiciliosDAO;
 
@@ -40,21 +43,57 @@ public class RegistroClienteForm extends javax.swing.JFrame {
     }
 
     private void registrar() {
-        if (!validarCampos()) return;
-        
-        
+        if (!validarFormulario()) {
+            return;
+        }
+
         try {
             // TODO transaccion
             Domicilio id = domiciliosDAO.insertar(extraerDomicilio());
             Cliente cliente = extraerCliente();
             cliente.setIdDomicilio(id.getId());
             clientesDAO.insertar(cliente);
+            
+            JOptionPane.showMessageDialog(this, "Cliente registrado");
+            
+            cambiarVentana();
+            limpiarCampos();
+            
         } catch (PersistenciaException ex) {
-//            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "No fue posible registrar al cliente", "Error", JOptionPane.ERROR_MESSAGE);
             //TODO agregar LOG bien
             Logger.getLogger(RegistroClienteForm.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    private boolean validarFormulario() {
+        if (!validarCamposVacios()) {
+            JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacios");
+            return false;
+        }
+
+        if (!validarFormatos()) {
+            JOptionPane.showMessageDialog(this, "Campos ingresados incorrectos");
+            return false;
+        }
+        return true;
+    }
+
+    private void cambiarVentana() {
+        this.setVisible(false);
+        clnFrm.setVisible(true);
+    }
+
+    private void limpiarCampos() {
+        txtApellidoM.setText("");
+        txtApellidoP.setText("");
+        txtCalle.setText("");
+        txtCodigoPostal.setText("");
+        txtColonia.setText("");
+        txtContrasena.setText("");
+        txtCorreo.setText("");
+        txtNombre.setText("");
     }
 
     @SuppressWarnings("unchecked")
@@ -63,7 +102,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
 
         background3 = new javax.swing.JPanel();
         head3 = new javax.swing.JPanel();
-        txtRegistar = new javax.swing.JLabel();
+        lblRegistar = new javax.swing.JLabel();
         btnAtras = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         txtNombre = new javax.swing.JTextField();
@@ -110,9 +149,9 @@ public class RegistroClienteForm extends javax.swing.JFrame {
 
         head3.setBackground(new java.awt.Color(0, 102, 255));
 
-        txtRegistar.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 24)); // NOI18N
-        txtRegistar.setForeground(new java.awt.Color(255, 255, 255));
-        txtRegistar.setText("Registrar");
+        lblRegistar.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 24)); // NOI18N
+        lblRegistar.setForeground(new java.awt.Color(255, 255, 255));
+        lblRegistar.setText("Registrar");
 
         btnAtras.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -128,7 +167,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 194, Short.MAX_VALUE)
-                .addComponent(txtRegistar)
+                .addComponent(lblRegistar)
                 .addGap(248, 248, 248))
         );
         head3Layout.setVerticalGroup(
@@ -136,7 +175,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, head3Layout.createSequentialGroup()
                 .addContainerGap(31, Short.MAX_VALUE)
                 .addGroup(head3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtRegistar)
+                    .addComponent(lblRegistar)
                     .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27))
         );
@@ -147,6 +186,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         txtNombre.setForeground(new java.awt.Color(51, 51, 51));
         txtNombre.setToolTipText("");
         txtNombre.setBorder(null);
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
         background3.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 190, 20));
 
         lblNombre.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
@@ -157,6 +201,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         txtApellidoP.setForeground(new java.awt.Color(51, 51, 51));
         txtApellidoP.setToolTipText("");
         txtApellidoP.setBorder(null);
+        txtApellidoP.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidoPKeyTyped(evt);
+            }
+        });
         background3.add(txtApellidoP, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 210, 190, 20));
 
         lblApellidoP.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
@@ -167,6 +216,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         txtApellidoM.setForeground(new java.awt.Color(51, 51, 51));
         txtApellidoM.setToolTipText("");
         txtApellidoM.setBorder(null);
+        txtApellidoM.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidoMKeyTyped(evt);
+            }
+        });
         background3.add(txtApellidoM, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 270, 190, 20));
 
         lblApellidoM.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
@@ -181,6 +235,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         txtCorreo.setForeground(new java.awt.Color(51, 51, 51));
         txtCorreo.setToolTipText("");
         txtCorreo.setBorder(null);
+        txtCorreo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCorreoKeyTyped(evt);
+            }
+        });
         background3.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, 210, 20));
         background3.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 170, 210, 10));
 
@@ -191,6 +250,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         txtColonia.setForeground(new java.awt.Color(51, 51, 51));
         txtColonia.setToolTipText("");
         txtColonia.setBorder(null);
+        txtColonia.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtColoniaKeyTyped(evt);
+            }
+        });
         background3.add(txtColonia, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 250, 100, 20));
         background3.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 270, 100, 10));
 
@@ -201,6 +265,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         txtNumero.setForeground(new java.awt.Color(51, 51, 51));
         txtNumero.setToolTipText("");
         txtNumero.setBorder(null);
+        txtNumero.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNumeroKeyTyped(evt);
+            }
+        });
         background3.add(txtNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 110, 100, 20));
         background3.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 130, 100, 10));
 
@@ -226,6 +295,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         background3.add(lblColonia1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 230, 50, 20));
 
         txtContrasena.setBorder(null);
+        txtContrasena.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtContrasenaKeyTyped(evt);
+            }
+        });
         background3.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 300, 210, 20));
         background3.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 290, 190, 10));
 
@@ -248,6 +322,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         txtCodigoPostal.setForeground(new java.awt.Color(51, 51, 51));
         txtCodigoPostal.setToolTipText("");
         txtCodigoPostal.setBorder(null);
+        txtCodigoPostal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoPostalKeyTyped(evt);
+            }
+        });
         background3.add(txtCodigoPostal, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 250, 100, 20));
 
         lblCodigoPostal1.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
@@ -271,44 +350,75 @@ public class RegistroClienteForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAtrasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtrasMousePressed
-        this.setVisible(false);
-        clnFrm.setVisible(true);
+        cambiarVentana();
+        limpiarCampos();
+
     }//GEN-LAST:event_btnAtrasMousePressed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         this.registrar();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
-    private boolean validarCampos() {
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        Validaciones.restringirCaracteres(evt, 50, txtNombre, Validaciones.NOMBRE);
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtApellidoPKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoPKeyTyped
+        Validaciones.restringirCaracteres(evt, 50, txtApellidoP, Validaciones.NOMBRE);
+    }//GEN-LAST:event_txtApellidoPKeyTyped
+
+    private void txtApellidoMKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoMKeyTyped
+        Validaciones.restringirCaracteres(evt, 50, txtApellidoM, Validaciones.NOMBRE);
+    }//GEN-LAST:event_txtApellidoMKeyTyped
+
+    private void txtNumeroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumeroKeyTyped
+        Validaciones.restringirCaracteres(evt, 50, txtNumero, Validaciones.DIRECCION);
+    }//GEN-LAST:event_txtNumeroKeyTyped
+
+    private void txtCorreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoKeyTyped
+        Validaciones.restringirLargoCaracteres(evt, 100, txtCorreo);
+    }//GEN-LAST:event_txtCorreoKeyTyped
+
+    private void txtColoniaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtColoniaKeyTyped
+        Validaciones.restringirCaracteres(evt, 50, txtColonia, Validaciones.DIRECCION);
+    }//GEN-LAST:event_txtColoniaKeyTyped
+
+    private void txtCodigoPostalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoPostalKeyTyped
+        Validaciones.restringirCaracteres(evt, 10, txtCodigoPostal, Validaciones.CODIGOPOSTAL);
+    }//GEN-LAST:event_txtCodigoPostalKeyTyped
+
+    private void txtContrasenaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContrasenaKeyTyped
+        Validaciones.restringirLargoCaracteres(evt, 60, txtContrasena);
+    }//GEN-LAST:event_txtContrasenaKeyTyped
+
+    private boolean validarCamposVacios() {
         String nombre = txtNombre.getText();
         String apellidoP = txtApellidoP.getText();
         String apellidoM = txtApellidoM.getText();
         Date fechaNacimiento = dtFechaNacimiento.getDate();
         String correo = txtCorreo.getText();
-        String calle = txtCorreo.getText();
+        String calle = txtCalle.getText();
         String colonia = txtColonia.getText();
         String codigoPostal = txtNumero.getText();
         String contrasenha = txtContrasena.getText();
-        
-        System.out.println(!nombre.isEmpty());
-        System.out.println(validarEmail(correo));
-        
+
         return !nombre.isEmpty() && !apellidoP.isEmpty()
-                && !apellidoM.isEmpty() && dtFechaNacimiento != null
+                && !apellidoM.isEmpty() && dtFechaNacimiento.getDate() != null
                 && !calle.isEmpty() && !colonia.isEmpty()
-                && !codigoPostal.isEmpty() && !contrasenha.isEmpty()
-                && validarEmail(correo);
+                && !codigoPostal.isEmpty() && !contrasenha.isEmpty();
+
     }
 
-    public boolean validarEmail(String texto) {
+    private boolean validarFormatos() {
+        String nombre = txtNombre.getText();
+        String apellidoP = txtApellidoP.getText();
+        String apellidoM = txtApellidoM.getText();
+        String correo = txtCorreo.getText();
+        String contrasenha = txtContrasena.getText();
 
-        String patron = "[\\w-\\.]{1,20}+@[a-zA-Z0-9]{1,20}+\\.([a-zA-Z]{2,4})";
-
-        Pattern pattern = Pattern.compile(patron);
-
-        Matcher matcher = pattern.matcher(texto);
-
-        return matcher.matches();
+        return Validaciones.validarEmail(correo)
+                && Validaciones.validarContrasena(contrasenha)
+                && Validaciones.validarNombreCompleto(nombre, apellidoP, apellidoM);
     }
 
     private Cliente extraerCliente() {
@@ -317,10 +427,8 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         String apellidoM = txtApellidoM.getText();
         java.sql.Date fechaNacimiento = new java.sql.Date(dtFechaNacimiento.getDate().getTime());
         String correo = txtCorreo.getText();
-        System.out.println(dtFechaNacimiento.getDate());
         String contrasena = BCrypt.hashpw(new String(txtContrasena.getPassword()), BCrypt.gensalt());
-        System.out.println(contrasena);
-        System.out.println(contrasena.length());
+
         Cliente cliente = new Cliente(nombre, apellidoP, apellidoM, fechaNacimiento.toString(), 0);
         cliente.setCorreo(correo);
         cliente.setContrasenia(contrasena);
@@ -332,8 +440,8 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         String colonia = txtColonia.getText();
         String codigoPostal = txtNumero.getText();
         String numero = txtNumero.getText();
-        
-        Domicilio domicilio = new Domicilio(0,calle, numero, colonia, codigoPostal);
+
+        Domicilio domicilio = new Domicilio(0, calle, numero, colonia, codigoPostal);
         return domicilio;
     }
 
@@ -364,6 +472,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblCorreo;
     private javax.swing.JLabel lblFechaNacimiento;
     private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblRegistar;
     private javax.swing.JTextField txtApellidoM;
     private javax.swing.JTextField txtApellidoP;
     private javax.swing.JTextField txtCalle;
@@ -373,6 +482,5 @@ public class RegistroClienteForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtNumero;
-    private javax.swing.JLabel txtRegistar;
     // End of variables declaration//GEN-END:variables
 }
