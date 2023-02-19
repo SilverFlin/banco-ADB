@@ -36,7 +36,7 @@ CREATE TABLE clientes(
 CREATE TABLE cuentasBancarias(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     noCuenta VARCHAR(20) NOT NULL UNIQUE,
-    fechaApertura DATETIME DEFAULT(CURRENT_TIMESTAMP()) NOT NULL,
+    fechaApertura DATETIME DEFAULT(CURRENT_TIMESTAMP) NOT NULL,
     saldoMXN DECIMAL(8,4) NOT NULL DEFAULT 0,
     idCliente INT NOT NULL,
     estadoCuenta ENUM("Activa","Inactiva") DEFAULT ("Activa") NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE cuentasBancarias(
 
 CREATE TABLE operaciones(
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    fechaHora DATETIME DEFAULT(CURRENT_TIMESTAMP()),
+    fechaHora DATETIME DEFAULT(CURRENT_TIMESTAMP),
     detalles VARCHAR(250),
     idCuentaBancaria INT NOT NULL,
     FOREIGN KEY (idCuentaBancaria) REFERENCES cuentasBancarias (id)
@@ -54,7 +54,7 @@ CREATE TABLE operaciones(
 CREATE TABLE transferencias(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     monto DECIMAL(8,4) NOT NULL,
-    fechaHora DATETIME NOT NULL DEFAULT(CURRENT_TIMESTAMP()) NOT NULL,
+    fechaHora DATETIME NOT NULL DEFAULT(CURRENT_TIMESTAMP) NOT NULL,
     idCuentaOrigen INT NOT NULL,
     idCuentaDestino INT NOT NULL,
     FOREIGN KEY (idCuentaOrigen) REFERENCES cuentasBancarias (id),
@@ -65,9 +65,9 @@ CREATE TABLE retirosSinCuenta(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     password VARCHAR(100) NOT NULL,
     monto DECIMAL(8,4) NOT NULL,
-    folio VARCHAR(50) NOT NULL UNIQUE,
+    folio VARCHAR(50),
     estado ENUM("Cobrado","Pendiente","Expirado") DEFAULT("Pendiente"),
-    fechaInicio DATETIME DEFAULT(CURRENT_TIMESTAMP()) NOT NULL,
+    fechaInicio DATETIME DEFAULT(CURRENT_TIMESTAMP) NOT NULL,
     fechaFin DATETIME NOT NULL,
     idCuentaBancaria INT NOT NULL,
 	FOREIGN KEY (idCuentaBancaria ) REFERENCES cuentasBancarias (id)
@@ -210,6 +210,19 @@ $$
 
 DELIMITER ;
 
+###
+
+DELIMITER $$
+
+CREATE TRIGGER CalcularFolio
+     BEFORE INSERT ON RetirosSinCuenta FOR EACH ROW
+     BEGIN
+		SET new.folio = new.id + 10000;
+     END;
+$$
+
+DELIMITER ;
+
 
 -- Stored Procedures --
 
@@ -254,7 +267,7 @@ BEGIN
 		password,
 		monto,
         folio,
-        CURRENT_TIMESTAMP() + tiempoExpiracion,
+        CURRENT_TIMESTAMP + tiempoExpiracion,
         idCuentaBancaria);
     
 END //
