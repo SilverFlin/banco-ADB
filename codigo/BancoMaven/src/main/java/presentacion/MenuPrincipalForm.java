@@ -216,7 +216,7 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHistorialActividadActionPerformed
 
     private void btnCrearCuentaBancaria1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearCuentaBancaria1ActionPerformed
-        // TODO add your handling code here:
+        this.crearCuenta();
     }//GEN-LAST:event_btnCrearCuentaBancaria1ActionPerformed
 
     private void btnEditarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarCuentaActionPerformed
