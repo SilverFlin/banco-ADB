@@ -175,8 +175,7 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        this.cuentasForm.setVisible(true);
-        this.setVisible(false);
+        this.regresarACuentas();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnCrearRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearRetiroActionPerformed
@@ -223,8 +222,9 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
             RetiroSinCuenta retiroSinCuenta = this.crearRetiro(obtenerMonto(), passwordRetiro);
             System.out.println(retiroSinCuenta);
             System.out.println(passwordRetiro);
-            //TODO crear registro
-            // TODO mostrar password de retiro
+            this.mostrarFolioYPassword(passwordRetiro, retiroSinCuenta);
+            this.regresarACuentas();
+            // TODO mostrar password de retiro y folio y tiempo fin
             //
         } catch (PersistenciaException ex) {
             Logger.getLogger(CrearRetiroSinCuentaForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -291,5 +291,20 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
             noCuentasBancarias.add(cuenta.getNoCuenta());
         });
         return noCuentasBancarias;
+    }
+
+    private void mostrarFolioYPassword(String passwordRetiro, RetiroSinCuenta retiroSinCuenta) {
+        String msg
+                = "Retiro creado\n"
+                + " Folio: " + retiroSinCuenta.getFolio()
+                + "\nPassword: " + passwordRetiro
+                + "\n Caduca a las: " + retiroSinCuenta.getFechaFin();
+
+        JOptionPane.showMessageDialog(this, msg);
+    }
+
+    private void regresarACuentas() {
+        this.cuentasForm.setVisible(true);
+        this.setVisible(false);
     }
 }
