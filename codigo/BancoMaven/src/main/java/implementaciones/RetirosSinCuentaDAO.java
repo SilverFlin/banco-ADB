@@ -256,8 +256,9 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
             enumEstadoCuenta = EstadoRetiroSinCuenta.EXPIRADO;
         }
         RetiroSinCuenta retiroSinCuenta;
-        retiroSinCuenta = new RetiroSinCuenta(fechaInicio, fechaFin, enumEstadoCuenta, monto, password, folio, idCuenta);
+        retiroSinCuenta = new RetiroSinCuenta(fechaInicio, fechaFin, enumEstadoCuenta, monto, password, idCuenta);
         retiroSinCuenta.setId(resultId);
+        retiroSinCuenta.setFolio(folio);
         return retiroSinCuenta;
     }
 

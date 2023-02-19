@@ -271,7 +271,7 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
 
         String fechaInicio = new Timestamp(System.currentTimeMillis()).toString();
         String fechaFin = new Timestamp(System.currentTimeMillis() + TIEMPO_EXPIRACION).toString();
-        String passwordEncriptada = BCrypt.hashpw(new String(password), BCrypt.gensalt());
+        String passwordEncriptada = BCrypt.hashpw(password, BCrypt.gensalt());
 
         RetiroSinCuenta retiroSinCuenta = new RetiroSinCuenta(
                 fechaInicio,
@@ -279,7 +279,6 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
                 EstadoRetiroSinCuenta.PENDIENTE,
                 monto,
                 passwordEncriptada,
-                "removerFolioDominio",
                 this.cuentaBancaria.getId());
 
         return retirosSinCuentaDAO.insertar(retiroSinCuenta, this.cuentaBancaria);

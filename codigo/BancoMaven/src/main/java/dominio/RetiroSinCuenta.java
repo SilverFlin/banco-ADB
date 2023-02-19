@@ -29,13 +29,12 @@ public class RetiroSinCuenta {
         this.id = id;
     }
 
-    public RetiroSinCuenta(String fechaInicio, String fechaFin, EstadoRetiroSinCuenta estado, Double monto, String password, String folio, int idCuentaBancaria) {
+    public RetiroSinCuenta(String fechaInicio, String fechaFin, EstadoRetiroSinCuenta estado, Double monto, String password, int idCuentaBancaria) {
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.estado = estado;
         this.monto = monto;
         this.password = password;
-        this.folio = folio;
         this.idCuentaBancaria = idCuentaBancaria;
     }
 
