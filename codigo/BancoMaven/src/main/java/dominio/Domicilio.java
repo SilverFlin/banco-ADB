@@ -42,6 +42,7 @@ public class Domicilio {
     }
     
     public Domicilio(int id, String calle, String numero, String colonia, String codigoPostal) {
+        this.id = id;
         this.calle = calle;
         this.numero = numero;
         this.colonia = colonia;
@@ -132,6 +133,11 @@ public class Domicilio {
         }
         final Domicilio other = (Domicilio) obj;
         return this.id == other.id;
+    }
+
+    @Override
+    public String toString() {
+        return "Domicilio{" + "id=" + id + ", calle=" + calle + ", numero=" + numero + ", colonia=" + colonia + ", ciudad=" + ciudad + ", estado=" + estado + ", pais=" + pais + ", codigoPostal=" + codigoPostal + '}';
     }
     
     
