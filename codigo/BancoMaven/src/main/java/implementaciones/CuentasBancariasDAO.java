@@ -5,8 +5,10 @@
  */
 package implementaciones;
 
+import dominio.Cliente;
 import dominio.ClienteBorrar;
 import dominio.CuentaBancaria;
+import dominio.EstadoCuenta;
 import excepciones.PersistenciaException;
 import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
@@ -111,7 +113,7 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
      * @throws PersistenciaException
      */
     @Override
-    public CuentaBancaria insertar(CuentaBancaria cuentaBancaria, ClienteBorrar cliente) throws PersistenciaException {
+    public CuentaBancaria insertar(CuentaBancaria cuentaBancaria, Cliente cliente) throws PersistenciaException {
 
         /* Consultas */
         String insertStatement = "INSERT INTO " + NOMBRE_TABLA + " (noCuenta, saldoMXN, idCliente) "
@@ -178,7 +180,6 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
             LOG.log(Level.SEVERE, e.getMessage());
             return null;
         }
-
     }
 
     @Override
@@ -221,11 +222,11 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
         Integer idCliente = result.getInt("idCliente");
 
         /* Crear CuentaBancaria*/
-        CuentaBancaria.EstadoCuenta enumEstadoCuenta;
+        EstadoCuenta enumEstadoCuenta;
         if (estadoCuenta.equals(ESTADO_CUENTA_ACTIVO)) {
-            enumEstadoCuenta = CuentaBancaria.EstadoCuenta.ACTIVO;
+            enumEstadoCuenta = EstadoCuenta.ACTIVO;
         } else {
-            enumEstadoCuenta = CuentaBancaria.EstadoCuenta.INACTIVO;
+            enumEstadoCuenta = EstadoCuenta.INACTIVO;
         }
         CuentaBancaria cuentaBancaria;
         cuentaBancaria = new CuentaBancaria(

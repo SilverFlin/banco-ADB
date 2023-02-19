@@ -31,7 +31,10 @@ import utils.Validaciones;
  */
 public class RegistroClienteForm extends javax.swing.JFrame {
 
-    private ClienteForm clnFrm;
+
+    // TODO msg email repetido
+    
+    ClienteForm clnFrm;
     private final IClientesDAO clientesDAO;
     private final IDomiciliosDAO domiciliosDAO;
 
@@ -47,6 +50,8 @@ public class RegistroClienteForm extends javax.swing.JFrame {
             return;
         }
 
+        
+        // TODO regresar a inicio
         try {
             // TODO transaccion
             Domicilio id = domiciliosDAO.insertar(extraerDomicilio());

@@ -5,6 +5,7 @@
  */
 package interfaces;
 
+import dominio.Cliente;
 import dominio.ClienteBorrar;
 import dominio.CuentaBancaria;
 import excepciones.PersistenciaException;
@@ -23,7 +24,7 @@ public interface ICuentasBancariasDAO {
 
     List<CuentaBancaria> consultar(ConfiguracionPaginado configPaginado,int idCliente) throws PersistenciaException;
     
-    CuentaBancaria insertar(CuentaBancaria cuentaBancaria,ClienteBorrar cliente) throws PersistenciaException;
+    CuentaBancaria insertar(CuentaBancaria cuentaBancaria,Cliente cliente) throws PersistenciaException;
 
     CuentaBancaria eliminar(Integer id);
 

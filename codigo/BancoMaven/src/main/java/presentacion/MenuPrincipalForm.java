@@ -5,10 +5,12 @@
  */
 package presentacion;
 
+import dominio.Cliente;
 import dominio.ClienteBorrar;
 import dominio.CuentaBancaria;
 import excepciones.PersistenciaException;
 import implementaciones.CuentasBancariasDAO;
+import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,13 +28,15 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
      * Creates new form EditarClienteForm
      */
     private static final Logger LOG = Logger.getLogger(MenuPrincipalForm.class.getName());
-    private ClienteBorrar cliente;
+    private Cliente cliente;
     private final ICuentasBancariasDAO cuentasBancariasDAO;
 //    public MenuPrincipalForm(IClientesDAO clientesDAO) {
+    private final IConexionBD conBD;
 
-    public MenuPrincipalForm(ICuentasBancariasDAO cuentasBancariasDAO, ClienteBorrar cliente) {
+    public MenuPrincipalForm(IConexionBD conBD, Cliente cliente) {
         this.cliente = cliente;
-        this.cuentasBancariasDAO = cuentasBancariasDAO;
+        this.conBD = conBD;
+        this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
         initComponents();
         cargarMensajeBienvenida();
 
@@ -160,7 +164,7 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMisCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMisCuentasActionPerformed
-        CuentasForm cuentasForm = new CuentasForm(cuentasBancariasDAO, cliente);
+        CuentasForm cuentasForm = new CuentasForm(this.conBD, cliente);
         cuentasForm.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnMisCuentasActionPerformed
@@ -191,7 +195,7 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void cargarMensajeBienvenida() {
-        this.txtBienvenida.setText("Hola, " + this.cliente.getNombre() + "!");
+        this.txtBienvenida.setText("Hola, " + this.cliente.getNombres()+ "!");
     }
 
     /**

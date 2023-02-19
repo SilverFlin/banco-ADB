@@ -8,8 +8,10 @@ package presentacion;
 import dominio.Cliente;
 import implementaciones.ClientesDAO;
 import implementaciones.ConexionBD;
+import implementaciones.CuentasBancariasDAO;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
+import interfaces.ICuentasBancariasDAO;
 import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -22,26 +24,34 @@ import org.mindrot.jbcrypt.BCrypt;
 public class ClienteForm extends javax.swing.JFrame {
 
     private final static int INGRESAR = 1;
-
     private final static int REGISTRAR = 2;
-    private final RegistroClienteForm regClnFrm;
+    
+    private final RegistroClienteForm registroClienteForm;
+    private MenuPrincipalForm menuPrincipalForm;
+    private IConexionBD conBD;
     private final IClientesDAO clientesDAO;
+    private final ICuentasBancariasDAO cuentasBancariasDAO;
+    private Cliente cliente;
 
     public ClienteForm(IConexionBD conBD) {
         initComponents();
-        regClnFrm = new RegistroClienteForm(this,conBD);
+        this.conBD = conBD;
+        this.registroClienteForm = new RegistroClienteForm(this,conBD);
+        
         this.clientesDAO = new ClientesDAO(conBD);
+        this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
     }
 
     private void openNewWindow(int type) {
         switch (type) {
             case INGRESAR:
                 this.setVisible(false);
-                regClnFrm.setVisible(true);
+                this.menuPrincipalForm = new MenuPrincipalForm(this.conBD, cliente);
+                this.menuPrincipalForm.setVisible(true);
                 break;
             case REGISTRAR:
                 this.setVisible(false);
-                regClnFrm.setVisible(true);
+                registroClienteForm.setVisible(true);
                 break;
         }
     }
@@ -67,10 +77,11 @@ public class ClienteForm extends javax.swing.JFrame {
     }
 
     private boolean validarCredenciales() {
-        Cliente cliente = clientesDAO.consultar(txtUsuario.getText());
+        Cliente tempCliente = clientesDAO.consultar(txtUsuario.getText());
+        this.cliente = tempCliente;
 
-        if (cliente != null) {
-            return validarPassword(cliente.getContrasenia());
+        if (tempCliente != null) {
+            return validarPassword(tempCliente.getContrasenia());
         }else{
             return false;
         }
@@ -219,7 +230,9 @@ public class ClienteForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void lblRetiroSinTarjetaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRetiroSinTarjetaMousePressed
-        JOptionPane.showMessageDialog(this, "Retiro sin tarjeta");
+        RetirarSinCuentaForm retiroSinCuentaForm = new RetirarSinCuentaForm(this.conBD);
+        retiroSinCuentaForm.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_lblRetiroSinTarjetaMousePressed
 
  

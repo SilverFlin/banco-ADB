@@ -5,9 +5,12 @@
  */
 package presentacion;
 
+import dominio.Cliente;
 import dominio.ClienteBorrar;
 import dominio.CuentaBancaria;
 import excepciones.PersistenciaException;
+import implementaciones.CuentasBancariasDAO;
+import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,10 +31,12 @@ public class CuentasForm extends javax.swing.JFrame {
     private static final Logger LOG = Logger.getLogger(CuentasForm.class.getName());
     private final ICuentasBancariasDAO cuentasBancariasDAO;
     private ConfiguracionPaginado configPaginado;
-    private ClienteBorrar cliente;
+    private Cliente cliente;
+    private final IConexionBD conBD;
 
-    public CuentasForm(ICuentasBancariasDAO cuentasBancariasDAO, ClienteBorrar cliente) {
-        this.cuentasBancariasDAO = cuentasBancariasDAO;
+    public CuentasForm(IConexionBD conBD, Cliente cliente) {
+        this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
+        this.conBD = conBD;
         this.configPaginado = new ConfiguracionPaginado();
         this.cliente = cliente;
         initComponents();
@@ -173,7 +178,7 @@ public class CuentasForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        MenuPrincipalForm menuPrincipal = new MenuPrincipalForm(cuentasBancariasDAO, cliente);
+        MenuPrincipalForm menuPrincipal = new MenuPrincipalForm(this.conBD, cliente);
         menuPrincipal.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnRegresarActionPerformed
@@ -183,6 +188,9 @@ public class CuentasForm extends javax.swing.JFrame {
     }//GEN-LAST:event_brnDesactivarCuentaActionPerformed
 
     private void btnRetiroSinTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinTarjetaActionPerformed
+        CrearRetiroSinCuentaForm crearRetiroSinCuentaForm = new CrearRetiroSinCuentaForm(this.conBD, this);
+        crearRetiroSinCuentaForm.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnRetiroSinTarjetaActionPerformed
 
 
@@ -246,4 +254,4 @@ public class CuentasForm extends javax.swing.JFrame {
         return (String) JOptionPane.showInputDialog(this, texto, titulo, JOptionPane.QUESTION_MESSAGE);
     }
 
-}
+} 
