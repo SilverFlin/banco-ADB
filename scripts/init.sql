@@ -95,7 +95,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER SaldoPositivo
+CREATE TRIGGER NuevoSaldoPositivo
      BEFORE INSERT ON CuentasBancarias FOR EACH ROW
      BEGIN
           IF NEW.saldoMXN < 0
@@ -109,6 +109,23 @@ $$
 DELIMITER ;
 
 ### 
+
+DELIMITER $$
+
+CREATE TRIGGER SaldoPositivoRetiro
+     BEFORE UPDATE ON CuentasBancarias FOR EACH ROW
+     BEGIN
+          IF NEW.saldoMXN < 0
+          THEN
+              SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'Saldo no puede quedar negativo en retiro.';
+          END IF;
+     END;
+$$
+
+DELIMITER ;
+
+###
 
 DELIMITER $$
 
@@ -174,4 +191,27 @@ CREATE TRIGGER FechaFinMayorAInicio
      END;
 $$
 
+DELIMITER ;
+
+
+-- Stored Procedures --
+
+DELIMITER //
+CREATE PROCEDURE ReflejarTransferencia(
+    IN monto decimal(8,4),
+    IN idCuentaOrigen int,
+    IN idCuentaDestino int
+)
+BEGIN
+    INSERT INTO transferencias(monto,idCuentaOrigen,idCuentaDestino) 
+    VALUES(monto,idCuentaOrigen,idCuentaDestino);
+    
+    UPDATE CuentasBancarias SET 
+    saldoMXN = saldoMXN - monto  
+    WHERE id = idCuentaOrigen;
+    
+    UPDATE CuentasBancarias SET 
+    saldoMXN = saldoMXN + monto  
+    WHERE id = idCuentaDestino;
+END //
 DELIMITER ;
