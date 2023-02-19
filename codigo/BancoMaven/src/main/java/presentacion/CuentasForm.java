@@ -72,6 +72,8 @@ public class CuentasForm extends javax.swing.JFrame {
         btnRetiroSinTarjeta = new javax.swing.JButton();
         btnRetrocederPagina = new javax.swing.JButton();
         brnDesactivarCuenta1 = new javax.swing.JButton();
+        btnDepositar = new javax.swing.JButton();
+        btnRetirar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -199,7 +201,7 @@ public class CuentasForm extends javax.swing.JFrame {
                 btnOperacionesActionPerformed(evt);
             }
         });
-        background3.add(btnOperaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 350, 130, 40));
+        background3.add(btnOperaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 360, 120, 30));
 
         btnAvanzarPagina.setBackground(new java.awt.Color(0, 102, 255));
         btnAvanzarPagina.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
@@ -212,7 +214,7 @@ public class CuentasForm extends javax.swing.JFrame {
                 btnAvanzarPaginaActionPerformed(evt);
             }
         });
-        background3.add(btnAvanzarPagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 310, 30, 30));
+        background3.add(btnAvanzarPagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 310, 30, 30));
 
         btnRetiroSinTarjeta.setBackground(new java.awt.Color(0, 102, 255));
         btnRetiroSinTarjeta.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
@@ -225,7 +227,7 @@ public class CuentasForm extends javax.swing.JFrame {
                 btnRetiroSinTarjetaActionPerformed(evt);
             }
         });
-        background3.add(btnRetiroSinTarjeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 350, 120, 40));
+        background3.add(btnRetiroSinTarjeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 360, 120, 30));
 
         btnRetrocederPagina.setBackground(new java.awt.Color(0, 102, 255));
         btnRetrocederPagina.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
@@ -238,7 +240,7 @@ public class CuentasForm extends javax.swing.JFrame {
                 btnRetrocederPaginaActionPerformed(evt);
             }
         });
-        background3.add(btnRetrocederPagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 310, 30, 30));
+        background3.add(btnRetrocederPagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 310, 30, 30));
 
         brnDesactivarCuenta1.setBackground(new java.awt.Color(0, 102, 255));
         brnDesactivarCuenta1.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
@@ -251,7 +253,33 @@ public class CuentasForm extends javax.swing.JFrame {
                 brnDesactivarCuenta1ActionPerformed(evt);
             }
         });
-        background3.add(brnDesactivarCuenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 130, 40));
+        background3.add(brnDesactivarCuenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 320, 120, 30));
+
+        btnDepositar.setBackground(new java.awt.Color(0, 102, 255));
+        btnDepositar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnDepositar.setForeground(new java.awt.Color(255, 255, 255));
+        btnDepositar.setText("Depositar");
+        btnDepositar.setBorder(null);
+        btnDepositar.setBorderPainted(false);
+        btnDepositar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDepositarActionPerformed(evt);
+            }
+        });
+        background3.add(btnDepositar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 120, 30));
+
+        btnRetirar.setBackground(new java.awt.Color(0, 102, 255));
+        btnRetirar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnRetirar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRetirar.setText("Retirar");
+        btnRetirar.setBorder(null);
+        btnRetirar.setBorderPainted(false);
+        btnRetirar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRetirarActionPerformed(evt);
+            }
+        });
+        background3.add(btnRetirar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 120, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -308,15 +336,25 @@ public class CuentasForm extends javax.swing.JFrame {
         this.desactivar();
     }//GEN-LAST:event_brnDesactivarCuenta1ActionPerformed
 
+    private void btnDepositarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepositarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDepositarActionPerformed
+
+    private void btnRetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetirarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRetirarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background3;
     private javax.swing.JButton brnDesactivarCuenta1;
     private javax.swing.JButton btnAvanzarPagina;
     private javax.swing.JButton btnCerrarSesion;
+    private javax.swing.JButton btnDepositar;
     private javax.swing.JButton btnEditarCuenta;
     private javax.swing.JButton btnOperaciones;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnRetirar;
     private javax.swing.JButton btnRetiroSinTarjeta;
     private javax.swing.JButton btnRetrocederPagina;
     private javax.swing.JPanel head3;
@@ -411,7 +449,7 @@ public class CuentasForm extends javax.swing.JFrame {
     }
 
     private void cerrarSesion() {
-        ClienteForm clienteForm = new ClienteForm(conBD);
+        IniciarSesionForm clienteForm = new IniciarSesionForm(conBD);
         clienteForm.setVisible(true);
         this.setVisible(false);
     }

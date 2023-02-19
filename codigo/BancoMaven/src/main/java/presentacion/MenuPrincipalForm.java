@@ -207,7 +207,7 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     private void btnTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferenciaActionPerformed
-
+        this.cargarVentanaTransferencia();
 
     }//GEN-LAST:event_btnTransferenciaActionPerformed
 
@@ -288,7 +288,7 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     }
 
     private void cerrarSesion() {
-        ClienteForm clienteForm = new ClienteForm(conBD);
+        IniciarSesionForm clienteForm = new IniciarSesionForm(conBD);
         clienteForm.setVisible(true);
         this.setVisible(false);
     }
@@ -296,6 +296,12 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     private void editarCuenta() {
         EditarClienteForm editarClienteForm = new EditarClienteForm(this, this.conBD,this.cliente);
         editarClienteForm.setVisible(true);
+        this.setVisible(false);
+    }
+
+    private void cargarVentanaTransferencia() {
+        CrearTransferenciaForm crearTransferenciaForm = new CrearTransferenciaForm(conBD, this, cliente);
+        crearTransferenciaForm.setVisible(true);
         this.setVisible(false);
     }
 

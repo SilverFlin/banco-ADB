@@ -9,15 +9,18 @@ import dominio.Cliente;
 import dominio.CuentaBancaria;
 import dominio.EstadoRetiroSinCuenta;
 import dominio.RetiroSinCuenta;
+import dominio.Transferencia;
 import excepciones.PersistenciaException;
 import implementaciones.ClientesDAO;
 import implementaciones.ConexionBD;
 import implementaciones.CuentasBancariasDAO;
 import implementaciones.RetirosSinCuentaDAO;
+import implementaciones.TransferenciasDAO;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
 import interfaces.IRetirosSinCuentaDAO;
+import interfaces.ITransferenciasDAO;
 import java.awt.Color;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -41,21 +44,21 @@ import utils.Validaciones;
  *
  * @author Elkur
  */
-public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
+public class CrearTransferenciaForm extends javax.swing.JFrame {
 
-    private final IRetirosSinCuentaDAO retirosSinCuentaDAO;
+    private final ITransferenciasDAO transferenciasDAO;
     private final ICuentasBancariasDAO cuentasBancariasDAO;
-    private CuentasForm cuentasForm;
 
     private final long TIEMPO_EXPIRACION = 1000 * 60 * 10;
     private CuentaBancaria cuentaBancaria;
     private Cliente cliente;
+    private final MenuPrincipalForm menuPrincipalForm;
 
-    public CrearRetiroSinCuentaForm(IConexionBD conBD, CuentasForm cuentasForm, Cliente cliente) {
+    public CrearTransferenciaForm(IConexionBD conBD, MenuPrincipalForm menuPrincipalForm, Cliente cliente) {
         initComponents();
-        this.retirosSinCuentaDAO = new RetirosSinCuentaDAO(conBD);
+        this.transferenciasDAO = new TransferenciasDAO(conBD);
         this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
-        this.cuentasForm = cuentasForm;
+        this.menuPrincipalForm = menuPrincipalForm;
         this.cliente = cliente;
 
         this.llenarComboBox();
@@ -69,13 +72,16 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
         Background = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
-        txtMonto = new javax.swing.JTextField();
-        lblCuenta = new javax.swing.JLabel();
+        txtCuentaDestino = new javax.swing.JTextField();
+        lblCuentaOrigen = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
-        lblMonto = new javax.swing.JLabel();
+        lblCuentaDestino = new javax.swing.JLabel();
         btnRegresar = new javax.swing.JButton();
-        btnCrearRetiro = new javax.swing.JButton();
-        cBoxNoCuentas = new javax.swing.JComboBox<>();
+        btnTransferir = new javax.swing.JButton();
+        cBoxCuentasOrigen = new javax.swing.JComboBox<>();
+        lblMonto = new javax.swing.JLabel();
+        txtMonto = new javax.swing.JTextField();
+        jSeparator3 = new javax.swing.JSeparator();
 
         jButton2.setText("jButton2");
 
@@ -91,14 +97,14 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
 
         lblTitulo.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 24)); // NOI18N
         lblTitulo.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitulo.setText("Retiro Sin Cuenta");
+        lblTitulo.setText("Nueva Transferencia");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(214, Short.MAX_VALUE)
+                .addContainerGap(185, Short.MAX_VALUE)
                 .addComponent(lblTitulo)
                 .addGap(208, 208, 208))
         );
@@ -112,19 +118,19 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
 
         Background.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 90));
 
-        txtMonto.setForeground(new java.awt.Color(51, 51, 51));
-        txtMonto.setToolTipText("");
-        txtMonto.setBorder(null);
-        Background.add(txtMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 260, 190, 20));
+        txtCuentaDestino.setForeground(new java.awt.Color(51, 51, 51));
+        txtCuentaDestino.setToolTipText("");
+        txtCuentaDestino.setBorder(null);
+        Background.add(txtCuentaDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 190, 20));
 
-        lblCuenta.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
-        lblCuenta.setText("No. Cuenta");
-        Background.add(lblCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 180, 20));
-        Background.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 190, 10));
+        lblCuentaOrigen.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
+        lblCuentaOrigen.setText("Cuenta Origen");
+        Background.add(lblCuentaOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 120, 180, 20));
+        Background.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 230, 190, 10));
 
-        lblMonto.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
-        lblMonto.setText("Monto");
-        Background.add(lblMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 240, -1, -1));
+        lblCuentaDestino.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
+        lblCuentaDestino.setText("Cuenta Destino");
+        Background.add(lblCuentaDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 190, -1, -1));
 
         btnRegresar.setBackground(new java.awt.Color(0, 102, 204));
         btnRegresar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 12)); // NOI18N
@@ -140,27 +146,37 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
         });
         Background.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 70, 30));
 
-        btnCrearRetiro.setBackground(new java.awt.Color(0, 102, 204));
-        btnCrearRetiro.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 12)); // NOI18N
-        btnCrearRetiro.setForeground(new java.awt.Color(255, 255, 255));
-        btnCrearRetiro.setText("Crear");
-        btnCrearRetiro.setBorder(null);
-        btnCrearRetiro.setBorderPainted(false);
-        btnCrearRetiro.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        btnCrearRetiro.addActionListener(new java.awt.event.ActionListener() {
+        btnTransferir.setBackground(new java.awt.Color(0, 102, 204));
+        btnTransferir.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 12)); // NOI18N
+        btnTransferir.setForeground(new java.awt.Color(255, 255, 255));
+        btnTransferir.setText("Transferir");
+        btnTransferir.setBorder(null);
+        btnTransferir.setBorderPainted(false);
+        btnTransferir.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnTransferir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCrearRetiroActionPerformed(evt);
+                btnTransferirActionPerformed(evt);
             }
         });
-        Background.add(btnCrearRetiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 310, 70, 30));
+        Background.add(btnTransferir, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 310, 70, 30));
 
-        cBoxNoCuentas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cBoxNoCuentas.addActionListener(new java.awt.event.ActionListener() {
+        cBoxCuentasOrigen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cBoxCuentasOrigen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cBoxNoCuentasActionPerformed(evt);
+                cBoxCuentasOrigenActionPerformed(evt);
             }
         });
-        Background.add(cBoxNoCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 190, 190, -1));
+        Background.add(cBoxCuentasOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, 190, -1));
+
+        lblMonto.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
+        lblMonto.setText("Monto");
+        Background.add(lblMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 250, -1, -1));
+
+        txtMonto.setForeground(new java.awt.Color(51, 51, 51));
+        txtMonto.setToolTipText("");
+        txtMonto.setBorder(null);
+        Background.add(txtMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 270, 190, 20));
+        Background.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 290, 190, 10));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -178,119 +194,57 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        this.regresarACuentas();
+        this.regresarAMenu();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void btnCrearRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearRetiroActionPerformed
-        this.crearRetiro();
-    }//GEN-LAST:event_btnCrearRetiroActionPerformed
+    private void btnTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferirActionPerformed
+        this.crearTransferencia();
+    }//GEN-LAST:event_btnTransferirActionPerformed
 
-    private void cBoxNoCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cBoxNoCuentasActionPerformed
+    private void cBoxCuentasOrigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cBoxCuentasOrigenActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cBoxNoCuentasActionPerformed
+    }//GEN-LAST:event_cBoxCuentasOrigenActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Background;
-    private javax.swing.JButton btnCrearRetiro;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JComboBox<String> cBoxNoCuentas;
+    private javax.swing.JButton btnTransferir;
+    private javax.swing.JComboBox<String> cBoxCuentasOrigen;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JLabel lblCuenta;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JLabel lblCuentaDestino;
+    private javax.swing.JLabel lblCuentaOrigen;
     private javax.swing.JLabel lblMonto;
     private javax.swing.JLabel lblTitulo;
+    private javax.swing.JTextField txtCuentaDestino;
     private javax.swing.JTextField txtMonto;
     // End of variables declaration//GEN-END:variables
 
-    private void crearRetiro() {
-
-        try {
-            consultarCuenta();
-            if (this.cuentaBancaria == null) {
-                this.mostrarError("Cuenta no existente");
-                return;
-            }
-            if (!isValidMonto()) {
-                this.mostrarError("Monto invalido");
-                return;
-            }
-
-            if (!fondosSuficientes()) {
-                this.mostrarError("Fondos insuficientes");
-                return;
-            }
-
-            String password = pedirPassword();
-            if (!validarPassword(password)) {
-                this.mostrarError("Contraseña invalida");
-                return;
-            }
-            // TODO pedir password de cuenta
-            //TODO generar password de retiro
-            String passwordRetiro = this.generarPasswordRetiro(); // Mostrar
-            RetiroSinCuenta retiroSinCuenta = this.crearRetiro(obtenerMonto(), passwordRetiro);
-            System.out.println(retiroSinCuenta);
-            System.out.println(passwordRetiro);
-            this.mostrarFolioYPassword(passwordRetiro, retiroSinCuenta);
-            this.regresarACuentas();
-            // TODO mostrar password de retiro y folio y tiempo fin
-            //
-        } catch (PersistenciaException ex) {
-            Logger.getLogger(CrearRetiroSinCuentaForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    // TODO mover a utils/Validaciones
     private void consultarCuenta() throws PersistenciaException {
-        this.cuentaBancaria = this.cuentasBancariasDAO.consultar(String.valueOf(cBoxNoCuentas.getSelectedItem()));
+        this.cuentaBancaria = this.cuentasBancariasDAO.consultar(String.valueOf(cBoxCuentasOrigen.getSelectedItem()));
 
     }
 
-    private boolean isValidMonto() {
-        Double monto = obtenerMonto();
-        return !Validaciones.isNull(monto) && Validaciones.isPositivo(monto);
-    }
-
-    private Double obtenerMonto() {
-        return Conversiones.crearMontoDeTexto(this.txtMonto.getText());
-    }
-
-    private String generarPasswordRetiro() {
-
-        long longitud = 8L;
-        long limiteInferior = (long) Math.pow(10, longitud - 1);
-        long limiteSuperior = (long) (Math.pow(10, longitud) - 1.0);
-        long randomDigitNum = (long) (limiteInferior + Math.random() * limiteSuperior);
-        String password = Long.toString(randomDigitNum);
-        return password;
-    }
-
-    private RetiroSinCuenta crearRetiro(Double monto, String password) throws PersistenciaException {
-
-        String fechaInicio = new Timestamp(System.currentTimeMillis()).toString();
-        String fechaFin = new Timestamp(System.currentTimeMillis() + TIEMPO_EXPIRACION).toString();
-        String passwordEncriptada = BCrypt.hashpw(password, BCrypt.gensalt());
-
-        RetiroSinCuenta retiroSinCuenta = new RetiroSinCuenta(
-                fechaInicio,
-                fechaFin,
-                EstadoRetiroSinCuenta.PENDIENTE,
-                monto,
-                passwordEncriptada,
-                this.cuentaBancaria.getId());
-
-        return retirosSinCuentaDAO.insertar(retiroSinCuenta, this.cuentaBancaria);
+    private CuentaBancaria obtenerCuentaDestino() {
+        try {
+            return this.cuentasBancariasDAO.consultar(this.txtCuentaDestino.getText());
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(CrearTransferenciaForm.class.getName()).log(Level.SEVERE, null, ex);
+            this.mostrarError("La cuenta destino no existe.");
+            return null;
+        }
     }
 
     private void llenarComboBox() {
         try {
             List<CuentaBancaria> cuentasBancarias = cuentasBancariasDAO.consultar(new ConfiguracionPaginado(), this.cliente.getId());
             List<String> noCuentasBancarias = extraerNoCuenta(cuentasBancarias);
-            this.cBoxNoCuentas.setModel(new DefaultComboBoxModel<>(noCuentasBancarias.toArray(new String[0])));
+            this.cBoxCuentasOrigen.setModel(new DefaultComboBoxModel<>(noCuentasBancarias.toArray(new String[0])));
         } catch (PersistenciaException ex) {
-            Logger.getLogger(CrearRetiroSinCuentaForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CrearTransferenciaForm.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -303,24 +257,9 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
         return noCuentasBancarias;
     }
 
-    private void mostrarFolioYPassword(String passwordRetiro, RetiroSinCuenta retiroSinCuenta) {
-        String msg
-                = "Retiro creado"
-                + "\nFolio: " + retiroSinCuenta.getFolio()
-                + "\nPassword: " + passwordRetiro
-                + "\n Caduca a las: " + retiroSinCuenta.getFechaFin();
-
-        JOptionPane.showMessageDialog(this, msg);
-    }
-
-    private void regresarACuentas() {
-        this.cuentasForm.setVisible(true);
+    private void regresarAMenu() {
+        this.menuPrincipalForm.setVisible(true);
         this.setVisible(false);
-    }
-
-    private boolean fondosSuficientes() {
-        double saldo = this.cuentaBancaria.getSaldoMXN();
-        return saldo >= this.obtenerMonto();
     }
 
     private void mostrarError(String msg) {
@@ -346,8 +285,61 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
     }
 
     private boolean validarPassword(String passwordCandidato) {
-        System.out.println(passwordCandidato);
-        System.out.println(cliente.getContrasenia());
         return BCrypt.checkpw(passwordCandidato, cliente.getContrasenia());
+    }
+
+    private void crearTransferencia() {
+        try {
+            consultarCuenta();
+            if (this.cuentaBancaria == null) {
+                this.mostrarError("Cuenta Origen existente");
+                return;
+            }
+            CuentaBancaria cuentaDestino = this.obtenerCuentaDestino();
+
+            if (cuentaDestino == null) {
+                return;
+            }
+
+            if (!isValidMonto()) {
+                this.mostrarError("Monto invalido");
+                return;
+            }
+
+            if (!fondosSuficientes()) {
+                this.mostrarError("Fondos insuficientes");
+                return;
+            }
+
+            String password = pedirPassword();
+            if (!validarPassword(password)) {
+                this.mostrarError("Contraseña invalida");
+                return;
+            }
+            Transferencia transferencia = new Transferencia(obtenerMonto(), this.cuentaBancaria.getId(), cuentaDestino.getId());
+            System.out.println(this.transferenciasDAO.insertar(transferencia));
+            this.mostrarExito("Transferencia satisfactoria");
+            this.regresarAMenu();
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(CrearRetiroSinCuentaForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private boolean isValidMonto() {
+        Double monto = obtenerMonto();
+        return !Validaciones.isNull(monto) && Validaciones.isPositivo(monto);
+    }
+
+    private Double obtenerMonto() {
+        return Conversiones.crearMontoDeTexto(this.txtMonto.getText());
+    }
+
+    private boolean fondosSuficientes() {
+        double saldo = this.cuentaBancaria.getSaldoMXN();
+        return saldo >= this.obtenerMonto();
+    }
+
+    private void mostrarExito(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Exito", JOptionPane.INFORMATION_MESSAGE);
     }
 }

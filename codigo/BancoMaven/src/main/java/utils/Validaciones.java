@@ -27,7 +27,7 @@ public class Validaciones {
      * @return positivo, si el numero es mayor a 0
      */
     public static boolean isPositivo(Double monto) {
-        return !Validaciones.isNull(monto) && monto >= 0;
+        return !Validaciones.isNull(monto) && monto > 0;
     }
 
     public static <T> boolean isNull(T elemento) {

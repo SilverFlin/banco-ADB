@@ -54,7 +54,7 @@ CREATE TABLE operaciones(
 CREATE TABLE transferencias(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     monto DECIMAL(8,4) NOT NULL,
-    fechaHora DATETIME NOT NULL DEFAULT(CURRENT_TIMESTAMP) NOT NULL,
+    fechaHora DATETIME DEFAULT(CURRENT_TIMESTAMP),
     idCuentaOrigen INT NOT NULL,
     idCuentaDestino INT NOT NULL,
     FOREIGN KEY (idCuentaOrigen) REFERENCES cuentasBancarias (id),
@@ -230,7 +230,8 @@ DELIMITER //
 CREATE PROCEDURE ReflejarTransferencia(
     IN monto decimal(8,4),
     IN idCuentaOrigen int,
-    IN idCuentaDestino int
+    IN idCuentaDestino int,
+    OUT ultimoId int
 )
 BEGIN
 	# Crear Transferencia
@@ -248,6 +249,8 @@ BEGIN
     SET 
 		saldoMXN = saldoMXN + monto  
     WHERE id = idCuentaDestino;
+    
+    SELECT LAST_INSERT_ID() INTO ultimoId;
 END //
 DELIMITER ;
 

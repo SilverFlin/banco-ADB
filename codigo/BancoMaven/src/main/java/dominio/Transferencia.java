@@ -16,9 +16,7 @@ public class Transferencia {
 
     public Transferencia() {
     }
-
-    public Transferencia( String fechaHora, Double monto, int idCuentaOrigen, int idCuentaDestino) {
-        this.fechaHora = fechaHora;
+    public Transferencia( Double monto, int idCuentaOrigen, int idCuentaDestino) {
         this.monto = monto;
         this.idCuentaOrigen = idCuentaOrigen;
         this.idCuentaDestino = idCuentaDestino;
