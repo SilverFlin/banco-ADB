@@ -236,7 +236,7 @@ public class CuentasForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     private void btnEditarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarCuentaActionPerformed
-        // TODO add your handling code here:
+        this.editarCuenta();
     }//GEN-LAST:event_btnEditarCuentaActionPerformed
 
 
@@ -342,5 +342,11 @@ public class CuentasForm extends javax.swing.JFrame {
 
     private void cargarMensajeBienvenida() {
         this.txtBienvenida.setText("Hola, " + this.cliente.getNombres() + "!");
+    }
+
+    private void editarCuenta() {
+        EditarClienteForm editarClienteForm = new EditarClienteForm(this, this.conBD,this.cliente);
+        editarClienteForm.setVisible(true);
+        this.setVisible(false);
     }
 }

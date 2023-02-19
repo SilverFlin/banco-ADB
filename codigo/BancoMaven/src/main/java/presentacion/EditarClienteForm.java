@@ -1,21 +1,42 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package presentacion;
+
+import dominio.Cliente;
+import dominio.Domicilio;
+import excepciones.PersistenciaException;
+import implementaciones.ClientesDAO;
+import implementaciones.DomiciliosDAO;
+import interfaces.IClientesDAO;
+import interfaces.IConexionBD;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
- * @author Elkur
+ * @author Toled
  */
 public class EditarClienteForm extends javax.swing.JFrame {
 
     /**
      * Creates new form EditarClienteForm
      */
-    public EditarClienteForm() {
+    private static final Logger LOG = Logger.getLogger(CuentasForm.class.getName());
+    private final IClientesDAO clientesDAO;
+    private final IConexionBD conBD;
+    private final JFrame frameAnterior;
+    private final Cliente cliente;
+    private final DomiciliosDAO domiciliosDAO;
+
+    public EditarClienteForm(JFrame frame, IConexionBD conBD, Cliente cliente) {
         initComponents();
+        this.conBD = conBD;
+        this.frameAnterior = frame;
+        this.cliente = cliente;
+        this.clientesDAO = new ClientesDAO(conBD);
+        this.domiciliosDAO = new DomiciliosDAO(conBD);
+
     }
 
     /**
@@ -40,10 +61,13 @@ public class EditarClienteForm extends javax.swing.JFrame {
         txtCodigoPostal = new javax.swing.JTextField();
         jSeparator7 = new javax.swing.JSeparator();
         lblCodigoPostal = new javax.swing.JLabel();
-        btnCambiar = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
         lblColonia1 = new javax.swing.JLabel();
         txtContrasena = new javax.swing.JPasswordField();
         btnCancelar = new javax.swing.JButton();
+        lblNumero = new javax.swing.JLabel();
+        txtNumero = new javax.swing.JTextField();
+        jSeparator8 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,8 +106,8 @@ public class EditarClienteForm extends javax.swing.JFrame {
         txtCalle.setForeground(new java.awt.Color(51, 51, 51));
         txtCalle.setToolTipText("");
         txtCalle.setBorder(null);
-        background3.add(txtCalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, 210, 20));
-        background3.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 210, 10));
+        background3.add(txtCalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, 100, 20));
+        background3.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 100, 10));
 
         lblCalle.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
         lblCalle.setText("Calle");
@@ -109,18 +133,18 @@ public class EditarClienteForm extends javax.swing.JFrame {
         lblCodigoPostal.setText("Codigo postal");
         background3.add(lblCodigoPostal, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 180, 90, 20));
 
-        btnCambiar.setBackground(new java.awt.Color(0, 102, 255));
-        btnCambiar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
-        btnCambiar.setForeground(new java.awt.Color(255, 255, 255));
-        btnCambiar.setText("Guardar");
-        btnCambiar.setBorder(null);
-        btnCambiar.setBorderPainted(false);
-        btnCambiar.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar.setBackground(new java.awt.Color(0, 102, 255));
+        btnGuardar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
+        btnGuardar.setText("Guardar");
+        btnGuardar.setBorder(null);
+        btnGuardar.setBorderPainted(false);
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCambiarActionPerformed(evt);
+                btnGuardarActionPerformed(evt);
             }
         });
-        background3.add(btnCambiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 320, 80, 30));
+        background3.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 320, 80, 30));
 
         lblColonia1.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
         lblColonia1.setText("Colonia");
@@ -135,7 +159,22 @@ public class EditarClienteForm extends javax.swing.JFrame {
         btnCancelar.setText("Cancelar");
         btnCancelar.setBorder(null);
         btnCancelar.setBorderPainted(false);
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
         background3.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 320, 80, 30));
+
+        lblNumero.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
+        lblNumero.setText("Numero");
+        background3.add(lblNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 120, 90, 20));
+
+        txtNumero.setForeground(new java.awt.Color(51, 51, 51));
+        txtNumero.setToolTipText("");
+        txtNumero.setBorder(null);
+        background3.add(txtNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 140, 100, 20));
+        background3.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 100, 10));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -149,30 +188,100 @@ public class EditarClienteForm extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCambiarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        this.guardar();
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        this.regresar();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background3;
-    private javax.swing.JButton btnCambiar;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JPanel head3;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JSeparator jSeparator8;
     private javax.swing.JLabel lblCalle;
     private javax.swing.JLabel lblCodigoPostal;
     private javax.swing.JLabel lblColonia1;
     private javax.swing.JLabel lblContrasena;
+    private javax.swing.JLabel lblNumero;
     private javax.swing.JTextField txtCalle;
     private javax.swing.JTextField txtCodigoPostal;
     private javax.swing.JTextField txtColonia;
     private javax.swing.JPasswordField txtContrasena;
     private javax.swing.JLabel txtEditar;
+    private javax.swing.JTextField txtNumero;
     // End of variables declaration//GEN-END:variables
+
+    private void guardar() {
+
+        if (this.validarCampos()) {
+            System.out.println(this.cliente.getIdDomicilio());
+            Domicilio domicilio = new Domicilio(this.cliente.getIdDomicilio(), txtCalle.getText(), txtNumero.getText(), txtColonia.getText(), txtCodigoPostal.getText());
+            try {
+                System.out.println(domicilio);
+                System.out.println(domiciliosDAO.editar(domicilio));
+                this.mostrarMensajeExito("Datos Actualizados");
+                this.regresar();
+            } catch (PersistenciaException ex) {
+                this.mostrarError("Error al actualizar datos, intenta de nuevo.");
+                Logger.getLogger(EditarClienteForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+
+    private boolean validarCampos() {
+        if (!validarCamposVacios()) {
+            JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacios");
+            return false;
+        }
+
+        if (!validarPassword()) {
+            JOptionPane.showMessageDialog(this, "Password invalida");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validarCamposVacios() {
+        String calle = txtCalle.getText();
+        String colonia = txtColonia.getText();
+        String codigoPostal = txtCodigoPostal.getText();
+        String contrasenha = txtContrasena.getText();
+
+        return !calle.isEmpty()
+                && !colonia.isEmpty()
+                && !codigoPostal.isEmpty()
+                && !contrasenha.isEmpty();
+
+    }
+
+    private boolean validarPassword() {
+        return BCrypt.checkpw(new String(txtContrasena.getPassword()), this.cliente.getContrasenia());
+    }
+
+    private void mostrarError(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void mostrarMensajeExito(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Exito", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void regresar() {
+        this.frameAnterior.setVisible(true);
+        this.setVisible(false);
+    }
+
 }

@@ -220,7 +220,7 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCrearCuentaBancaria1ActionPerformed
 
     private void btnEditarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarCuentaActionPerformed
-        // TODO add your handling code here:
+        this.editarCuenta();
     }//GEN-LAST:event_btnEditarCuentaActionPerformed
 
 
@@ -292,4 +292,11 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         clienteForm.setVisible(true);
         this.setVisible(false);
     }
+
+    private void editarCuenta() {
+        EditarClienteForm editarClienteForm = new EditarClienteForm(this, this.conBD,this.cliente);
+        editarClienteForm.setVisible(true);
+        this.setVisible(false);
+    }
+
 }
