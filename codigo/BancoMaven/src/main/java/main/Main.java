@@ -43,7 +43,7 @@ public class Main {
      */
     public static void main(String[] args) {
         /*Pruebas, borrar*/
-        IConexionBD conexion = new ConexionBD("jdbc:mysql://localhost:3306/banco_transacciones", "root", System.getenv("MySQLpass"));
+        IConexionBD conexion = new ConexionBD("jdbc:mysql://localhost:3306/banco_transacciones", "root", System.getenv("passSQL"));
 
         /*Prueba Cuenta Bancaria*/
         ICuentasBancariasDAO cuentasBancariasDAO = new CuentasBancariasDAO(conexion);
