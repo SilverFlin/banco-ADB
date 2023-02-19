@@ -86,7 +86,7 @@ public class Operacion {
 
     @Override
     public String toString() {
-        return "Operacion{" + "id=" + id + ", monto=" + monto + ", fechaHora=" + fechaHora + ", detalles=" + detalles + ", idCuentaBancaria=" + idCuentaBancaria + '}';
+        return "Operacion{" + "id=" + id + ", monto=" + ", fechaHora=" + fechaHora + ", detalles=" + detalles + ", idCuentaBancaria=" + idCuentaBancaria + '}';
     }
     
      
