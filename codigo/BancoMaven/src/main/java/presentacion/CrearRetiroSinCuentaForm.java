@@ -21,11 +21,16 @@ import interfaces.IRetirosSinCuentaDAO;
 import java.awt.Color;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.mindrot.jbcrypt.BCrypt;
+import utils.ConfiguracionPaginado;
 import utils.Conversiones;
 import utils.Validaciones;
 
@@ -38,15 +43,19 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
     private final IRetirosSinCuentaDAO retirosSinCuentaDAO;
     private final ICuentasBancariasDAO cuentasBancariasDAO;
     private CuentasForm cuentasForm;
-    
+
     private final long TIEMPO_EXPIRACION = 1000 * 60 * 10;
     private CuentaBancaria cuentaBancaria;
+    private Cliente cliente;
 
-    public CrearRetiroSinCuentaForm(IConexionBD conBD, CuentasForm cuentasForm) {
+    public CrearRetiroSinCuentaForm(IConexionBD conBD, CuentasForm cuentasForm, Cliente cliente) {
         initComponents();
         this.retirosSinCuentaDAO = new RetirosSinCuentaDAO(conBD);
         this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
         this.cuentasForm = cuentasForm;
+        this.cliente = cliente;
+
+        this.llenarComboBox();
     }
 
     @SuppressWarnings("unchecked")
@@ -58,13 +67,12 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
         txtMonto = new javax.swing.JTextField();
-        jSeparator1 = new javax.swing.JSeparator();
         lblCuenta = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         lblMonto = new javax.swing.JLabel();
         btnRegresar = new javax.swing.JButton();
         btnCrearRetiro = new javax.swing.JButton();
-        txtNoCuenta = new javax.swing.JTextField();
+        cBoxNoCuentas = new javax.swing.JComboBox<>();
 
         jButton2.setText("jButton2");
 
@@ -105,7 +113,6 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
         txtMonto.setToolTipText("");
         txtMonto.setBorder(null);
         Background.add(txtMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 260, 190, 20));
-        Background.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 200, 190, 10));
 
         lblCuenta.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
         lblCuenta.setText("No. Cuenta");
@@ -144,10 +151,13 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
         });
         Background.add(btnCrearRetiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 310, 70, 30));
 
-        txtNoCuenta.setForeground(new java.awt.Color(51, 51, 51));
-        txtNoCuenta.setToolTipText("");
-        txtNoCuenta.setBorder(null);
-        Background.add(txtNoCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 180, 190, 20));
+        cBoxNoCuentas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cBoxNoCuentas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cBoxNoCuentasActionPerformed(evt);
+            }
+        });
+        Background.add(cBoxNoCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 190, 190, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -173,41 +183,44 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
         this.crearRetiro();
     }//GEN-LAST:event_btnCrearRetiroActionPerformed
 
+    private void cBoxNoCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cBoxNoCuentasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cBoxNoCuentasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Background;
     private javax.swing.JButton btnCrearRetiro;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JComboBox<String> cBoxNoCuentas;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lblCuenta;
     private javax.swing.JLabel lblMonto;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTextField txtMonto;
-    private javax.swing.JTextField txtNoCuenta;
     // End of variables declaration//GEN-END:variables
 
     private void crearRetiro() {
-        
+
         try {
             // TODO Consultar Cuenta
             consultarCuenta();
             // TODO Validar Monto
-            if(this.cuentaBancaria == null){
+            if (this.cuentaBancaria == null) {
                 // msg no existe
                 return;
             }
-            if(!isValidMonto()){
+            if (!isValidMonto()) {
                 //msg no existe
                 return;
             }
-            
+
             // TODO pedir password de cuenta
             //TODO generar password de retiro
             String passwordRetiro = this.generarPasswordRetiro(); // Mostrar
-            RetiroSinCuenta retiroSinCuenta = this.crearRetiro(obtenerMonto(),passwordRetiro);
+            RetiroSinCuenta retiroSinCuenta = this.crearRetiro(obtenerMonto(), passwordRetiro);
             System.out.println(retiroSinCuenta);
             System.out.println(passwordRetiro);
             //TODO crear registro
@@ -220,7 +233,7 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
 
     // TODO mover a utils/Validaciones
     private void consultarCuenta() throws PersistenciaException {
-        this.cuentaBancaria =  this.cuentasBancariasDAO.consultar(txtNoCuenta.getText());
+        this.cuentaBancaria = this.cuentasBancariasDAO.consultar(String.valueOf(cBoxNoCuentas.getSelectedItem()));
 
     }
 
@@ -228,11 +241,11 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
         Double monto = obtenerMonto();
         return !Validaciones.isNull(monto) && Validaciones.isPositivo(monto);
     }
-    
-    private Double obtenerMonto(){
+
+    private Double obtenerMonto() {
         return Conversiones.crearMontoDeTexto(this.txtMonto.getText());
     }
-    
+
     private String generarPasswordRetiro() {
 
         long longitud = 8L;
@@ -244,7 +257,7 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
     }
 
     private RetiroSinCuenta crearRetiro(Double monto, String password) throws PersistenciaException {
-        
+
         String fechaInicio = new Timestamp(System.currentTimeMillis()).toString();
         String fechaFin = new Timestamp(System.currentTimeMillis() + TIEMPO_EXPIRACION).toString();
         String passwordEncriptada = BCrypt.hashpw(new String(password), BCrypt.gensalt());
@@ -252,12 +265,31 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
         RetiroSinCuenta retiroSinCuenta = new RetiroSinCuenta(
                 fechaInicio,
                 fechaFin,
-                EstadoRetiroSinCuenta.PENDIENTE, 
-                monto, 
+                EstadoRetiroSinCuenta.PENDIENTE,
+                monto,
                 passwordEncriptada,
                 "removerFolioDominio",
                 this.cuentaBancaria.getId());
-        
+
         return retirosSinCuentaDAO.insertar(retiroSinCuenta, this.cuentaBancaria);
+    }
+
+    private void llenarComboBox() {
+        try {
+            List<CuentaBancaria> cuentasBancarias = cuentasBancariasDAO.consultar(new ConfiguracionPaginado(), this.cliente.getId());
+            List<String> noCuentasBancarias = extraerNoCuenta(cuentasBancarias);
+            this.cBoxNoCuentas.setModel(new DefaultComboBoxModel<>(noCuentasBancarias.toArray(new String[0])));
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(CrearRetiroSinCuentaForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private List<String> extraerNoCuenta(List<CuentaBancaria> cuentasBancarias) {
+        List<String> noCuentasBancarias = new ArrayList<>();
+        cuentasBancarias.forEach((cuenta) -> {
+            noCuentasBancarias.add(cuenta.getNoCuenta());
+        });
+        return noCuentasBancarias;
     }
 }

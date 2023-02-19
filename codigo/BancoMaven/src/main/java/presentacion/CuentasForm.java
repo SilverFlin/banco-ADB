@@ -188,7 +188,7 @@ public class CuentasForm extends javax.swing.JFrame {
     }//GEN-LAST:event_brnDesactivarCuentaActionPerformed
 
     private void btnRetiroSinTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinTarjetaActionPerformed
-        CrearRetiroSinCuentaForm crearRetiroSinCuentaForm = new CrearRetiroSinCuentaForm(this.conBD, this);
+        CrearRetiroSinCuentaForm crearRetiroSinCuentaForm = new CrearRetiroSinCuentaForm(this.conBD, this, this.cliente);
         crearRetiroSinCuentaForm.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnRetiroSinTarjetaActionPerformed
@@ -254,4 +254,4 @@ public class CuentasForm extends javax.swing.JFrame {
         return (String) JOptionPane.showInputDialog(this, texto, titulo, JOptionPane.QUESTION_MESSAGE);
     }
 
-} 
+}
