@@ -25,27 +25,33 @@ import utils.ConfiguracionPaginado;
 public class OperacionesForm extends javax.swing.JFrame {
 
     private IOperacionesDAO operacionesDAO;
-    private IConexionBD conexionBD;
     private ConfiguracionPaginado configPaginado;
     private static final Logger LOG = Logger.getLogger(OperacionesForm.class.getName());
     private int idCuentaBancaria;
+    private final Cliente cliente;
+    private final IConexionBD conBD;
     
-    public OperacionesForm(IConexionBD conexionBD,int idCuentaBancaria) {
+    public OperacionesForm(IConexionBD conBD,Cliente cliente) {
         initComponents();
-        this.idCuentaBancaria = idCuentaBancaria;
+        this.idCuentaBancaria = cliente.getId();
         this.lblNoCuenta.setText(idCuentaBancaria+"");
-        this.conexionBD = conexionBD;
-        operacionesDAO = new OperacionesDAO(conexionBD);
-        this.configPaginado = new ConfiguracionPaginado();
+        this.conBD = conBD;
+        this.cliente = cliente;
+        this.operacionesDAO = new OperacionesDAO(this.conBD);
+        this.configPaginado = new ConfiguracionPaginado(this.tblOperaciones.getModel().getRowCount(), 0);
         cargarTablaOperaciones();
     }
 
     private void cargarTablaOperaciones() {
         try {
-            List<Operacion> listaClientes = this.operacionesDAO.consultar(this.configPaginado,idCuentaBancaria);
+            List<Operacion> listaOperaciones = this.operacionesDAO.consultar(this.configPaginado,idCuentaBancaria);
+            if(listaOperaciones.isEmpty()){
+                this.configPaginado.retrocederPag();
+                return;
+            }
             DefaultTableModel modeloTabla = (DefaultTableModel) this.tblOperaciones.getModel();
             modeloTabla.setRowCount(0);
-            for (Operacion operacion : listaClientes) {
+            for (Operacion operacion : listaOperaciones) {
                 Object[] fila = {operacion.getId(), operacion.getFechaHora(), operacion.getDetalles()};
                 modeloTabla.addRow(fila);
             }
@@ -124,7 +130,16 @@ public class OperacionesForm extends javax.swing.JFrame {
 
         tblOperaciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
                 "ID", "Fecha", "Detalles"
@@ -147,23 +162,22 @@ public class OperacionesForm extends javax.swing.JFrame {
         });
         tblOperaciones.setColumnSelectionAllowed(true);
         panelTablaCuentas.setViewportView(tblOperaciones);
+        tblOperaciones.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-        Background.add(panelTablaCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 560, 200));
+        Background.add(panelTablaCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 560, 190));
 
         lblNoCuenta.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 16)); // NOI18N
-        lblNoCuenta.setForeground(new java.awt.Color(0, 0, 0));
         lblNoCuenta.setText("-");
         Background.add(lblNoCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 120, -1));
 
         lblCuenta.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 16)); // NOI18N
-        lblCuenta.setForeground(new java.awt.Color(0, 0, 0));
         lblCuenta.setText("No. Cuenta");
         Background.add(lblCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
 
         btnAdelante.setBackground(new java.awt.Color(0, 102, 255));
         btnAdelante.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
         btnAdelante.setForeground(new java.awt.Color(255, 255, 255));
-        btnAdelante.setText("Adelante");
+        btnAdelante.setText(">");
         btnAdelante.setBorder(null);
         btnAdelante.setBorderPainted(false);
         btnAdelante.addActionListener(new java.awt.event.ActionListener() {
@@ -171,12 +185,12 @@ public class OperacionesForm extends javax.swing.JFrame {
                 btnAdelanteActionPerformed(evt);
             }
         });
-        Background.add(btnAdelante, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 360, 130, 30));
+        Background.add(btnAdelante, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 340, 30, 30));
 
         btnRetroceder.setBackground(new java.awt.Color(0, 102, 255));
         btnRetroceder.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
         btnRetroceder.setForeground(new java.awt.Color(255, 255, 255));
-        btnRetroceder.setText("Atras");
+        btnRetroceder.setText("<");
         btnRetroceder.setBorder(null);
         btnRetroceder.setBorderPainted(false);
         btnRetroceder.addActionListener(new java.awt.event.ActionListener() {
@@ -184,7 +198,7 @@ public class OperacionesForm extends javax.swing.JFrame {
                 btnRetrocederActionPerformed(evt);
             }
         });
-        Background.add(btnRetroceder, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 130, 30));
+        Background.add(btnRetroceder, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 340, 30, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -202,15 +216,19 @@ public class OperacionesForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
+        CuentasForm cuentasForm = new CuentasForm(this.conBD, this.cliente);
+        cuentasForm.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnAtrasActionPerformed
 
     private void btnAdelanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdelanteActionPerformed
-        configPaginado.avanzarPag();
+        this.configPaginado.avanzarPag();
+        this.cargarTablaOperaciones();
     }//GEN-LAST:event_btnAdelanteActionPerformed
 
     private void btnRetrocederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetrocederActionPerformed
-        configPaginado.retrocederPag();
-
+        this.configPaginado.retrocederPag();
+        this.cargarTablaOperaciones();
     }//GEN-LAST:event_btnRetrocederActionPerformed
 
 

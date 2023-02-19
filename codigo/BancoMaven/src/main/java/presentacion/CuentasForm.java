@@ -19,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.ConfiguracionPaginado;
@@ -65,10 +67,11 @@ public class CuentasForm extends javax.swing.JFrame {
         panelTablaCuentas = new javax.swing.JScrollPane();
         tablaCuentas = new javax.swing.JTable();
         btnRegresar = new javax.swing.JButton();
-        brnDesactivarCuenta = new javax.swing.JButton();
+        btnOperaciones = new javax.swing.JButton();
         btnAvanzarPagina = new javax.swing.JButton();
         btnRetiroSinTarjeta = new javax.swing.JButton();
         btnRetrocederPagina = new javax.swing.JButton();
+        brnDesactivarCuenta1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -185,18 +188,18 @@ public class CuentasForm extends javax.swing.JFrame {
         });
         background3.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 90, 20));
 
-        brnDesactivarCuenta.setBackground(new java.awt.Color(0, 102, 255));
-        brnDesactivarCuenta.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
-        brnDesactivarCuenta.setForeground(new java.awt.Color(255, 255, 255));
-        brnDesactivarCuenta.setText("Desactivar Cuenta");
-        brnDesactivarCuenta.setBorder(null);
-        brnDesactivarCuenta.setBorderPainted(false);
-        brnDesactivarCuenta.addActionListener(new java.awt.event.ActionListener() {
+        btnOperaciones.setBackground(new java.awt.Color(0, 102, 255));
+        btnOperaciones.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnOperaciones.setForeground(new java.awt.Color(255, 255, 255));
+        btnOperaciones.setText("Operaciones");
+        btnOperaciones.setBorder(null);
+        btnOperaciones.setBorderPainted(false);
+        btnOperaciones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                brnDesactivarCuentaActionPerformed(evt);
+                btnOperacionesActionPerformed(evt);
             }
         });
-        background3.add(brnDesactivarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 130, 40));
+        background3.add(btnOperaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 350, 130, 40));
 
         btnAvanzarPagina.setBackground(new java.awt.Color(0, 102, 255));
         btnAvanzarPagina.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
@@ -237,6 +240,19 @@ public class CuentasForm extends javax.swing.JFrame {
         });
         background3.add(btnRetrocederPagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 310, 30, 30));
 
+        brnDesactivarCuenta1.setBackground(new java.awt.Color(0, 102, 255));
+        brnDesactivarCuenta1.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        brnDesactivarCuenta1.setForeground(new java.awt.Color(255, 255, 255));
+        brnDesactivarCuenta1.setText("Desactivar Cuenta");
+        brnDesactivarCuenta1.setBorder(null);
+        brnDesactivarCuenta1.setBorderPainted(false);
+        brnDesactivarCuenta1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                brnDesactivarCuenta1ActionPerformed(evt);
+            }
+        });
+        background3.add(brnDesactivarCuenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 130, 40));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -258,9 +274,11 @@ public class CuentasForm extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void brnDesactivarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brnDesactivarCuentaActionPerformed
-        this.desactivar();
-    }//GEN-LAST:event_brnDesactivarCuentaActionPerformed
+    private void btnOperacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOperacionesActionPerformed
+        CuentasOperacionForm cuentasOperacionForm = new CuentasOperacionForm(this.conBD, this, this.cliente);
+        cuentasOperacionForm.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnOperacionesActionPerformed
 
     private void btnAvanzarPaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAvanzarPaginaActionPerformed
          configPaginado.avanzarPag();
@@ -286,13 +304,18 @@ public class CuentasForm extends javax.swing.JFrame {
         this.llenarTablaCuentas();
     }//GEN-LAST:event_btnRetrocederPaginaActionPerformed
 
+    private void brnDesactivarCuenta1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brnDesactivarCuenta1ActionPerformed
+        this.desactivar();
+    }//GEN-LAST:event_brnDesactivarCuenta1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background3;
-    private javax.swing.JButton brnDesactivarCuenta;
+    private javax.swing.JButton brnDesactivarCuenta1;
     private javax.swing.JButton btnAvanzarPagina;
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnEditarCuenta;
+    private javax.swing.JButton btnOperaciones;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnRetiroSinTarjeta;
     private javax.swing.JButton btnRetrocederPagina;
