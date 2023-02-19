@@ -41,9 +41,9 @@ public class CuentasForm extends javax.swing.JFrame {
     public CuentasForm(IConexionBD conBD, Cliente cliente) {
         this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
         this.conBD = conBD;
-        this.configPaginado = new ConfiguracionPaginado();
         this.cliente = cliente;
         initComponents();
+        this.configPaginado = new ConfiguracionPaginado(this.tablaCuentas.getModel().getRowCount(), 0);
         this.llenarTablaCuentas();
         this.cargarMensajeBienvenida();
     }
@@ -66,7 +66,9 @@ public class CuentasForm extends javax.swing.JFrame {
         tablaCuentas = new javax.swing.JTable();
         btnRegresar = new javax.swing.JButton();
         brnDesactivarCuenta = new javax.swing.JButton();
+        btnAvanzarPagina = new javax.swing.JButton();
         btnRetiroSinTarjeta = new javax.swing.JButton();
+        btnRetrocederPagina = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -134,7 +136,16 @@ public class CuentasForm extends javax.swing.JFrame {
 
         tablaCuentas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
                 "No. Cuenta", "Fecha Apertura", "Saldo MXN", "Estado"
@@ -159,7 +170,7 @@ public class CuentasForm extends javax.swing.JFrame {
         panelTablaCuentas.setViewportView(tablaCuentas);
         tablaCuentas.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        background3.add(panelTablaCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 560, 210));
+        background3.add(panelTablaCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 560, 190));
 
         btnRegresar.setBackground(new java.awt.Color(0, 102, 255));
         btnRegresar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
@@ -187,6 +198,19 @@ public class CuentasForm extends javax.swing.JFrame {
         });
         background3.add(brnDesactivarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 130, 40));
 
+        btnAvanzarPagina.setBackground(new java.awt.Color(0, 102, 255));
+        btnAvanzarPagina.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnAvanzarPagina.setForeground(new java.awt.Color(255, 255, 255));
+        btnAvanzarPagina.setText(">");
+        btnAvanzarPagina.setBorder(null);
+        btnAvanzarPagina.setBorderPainted(false);
+        btnAvanzarPagina.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAvanzarPaginaActionPerformed(evt);
+            }
+        });
+        background3.add(btnAvanzarPagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 310, 30, 30));
+
         btnRetiroSinTarjeta.setBackground(new java.awt.Color(0, 102, 255));
         btnRetiroSinTarjeta.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
         btnRetiroSinTarjeta.setForeground(new java.awt.Color(255, 255, 255));
@@ -199,6 +223,19 @@ public class CuentasForm extends javax.swing.JFrame {
             }
         });
         background3.add(btnRetiroSinTarjeta, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 350, 120, 40));
+
+        btnRetrocederPagina.setBackground(new java.awt.Color(0, 102, 255));
+        btnRetrocederPagina.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnRetrocederPagina.setForeground(new java.awt.Color(255, 255, 255));
+        btnRetrocederPagina.setText("<");
+        btnRetrocederPagina.setBorder(null);
+        btnRetrocederPagina.setBorderPainted(false);
+        btnRetrocederPagina.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRetrocederPaginaActionPerformed(evt);
+            }
+        });
+        background3.add(btnRetrocederPagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 310, 30, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -225,11 +262,10 @@ public class CuentasForm extends javax.swing.JFrame {
         this.desactivar();
     }//GEN-LAST:event_brnDesactivarCuentaActionPerformed
 
-    private void btnRetiroSinTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinTarjetaActionPerformed
-        CrearRetiroSinCuentaForm crearRetiroSinCuentaForm = new CrearRetiroSinCuentaForm(this.conBD, this, this.cliente);
-        crearRetiroSinCuentaForm.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnRetiroSinTarjetaActionPerformed
+    private void btnAvanzarPaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAvanzarPaginaActionPerformed
+         configPaginado.avanzarPag();
+         this.llenarTablaCuentas();
+    }//GEN-LAST:event_btnAvanzarPaginaActionPerformed
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         this.cerrarSesion();
@@ -239,14 +275,27 @@ public class CuentasForm extends javax.swing.JFrame {
         this.editarCuenta();
     }//GEN-LAST:event_btnEditarCuentaActionPerformed
 
+    private void btnRetiroSinTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinTarjetaActionPerformed
+        CrearRetiroSinCuentaForm crearRetiroSinCuentaForm = new CrearRetiroSinCuentaForm(this.conBD, this, this.cliente);
+        crearRetiroSinCuentaForm.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnRetiroSinTarjetaActionPerformed
+
+    private void btnRetrocederPaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetrocederPaginaActionPerformed
+        configPaginado.retrocederPag();
+        this.llenarTablaCuentas();
+    }//GEN-LAST:event_btnRetrocederPaginaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background3;
     private javax.swing.JButton brnDesactivarCuenta;
+    private javax.swing.JButton btnAvanzarPagina;
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnEditarCuenta;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnRetiroSinTarjeta;
+    private javax.swing.JButton btnRetrocederPagina;
     private javax.swing.JPanel head3;
     private javax.swing.JScrollPane panelTablaCuentas;
     private javax.swing.JTable tablaCuentas;
@@ -257,6 +306,10 @@ public class CuentasForm extends javax.swing.JFrame {
         try {
 
             List<CuentaBancaria> listaCuentas = this.cuentasBancariasDAO.consultar(this.configPaginado, this.cliente.getId());
+            if(listaCuentas.isEmpty()){
+                this.configPaginado.retrocederPag();
+                return;
+            }
             DefaultTableModel modeloTabla = (DefaultTableModel) this.tablaCuentas.getModel();
             modeloTabla.setRowCount(0);
 
