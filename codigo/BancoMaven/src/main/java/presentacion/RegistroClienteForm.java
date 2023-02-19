@@ -34,11 +34,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
 
     // TODO msg email repetido
     
-    ClienteForm clnFrm;
+    IniciarSesionForm clnFrm;
     private final IClientesDAO clientesDAO;
     private final IDomiciliosDAO domiciliosDAO;
 
-    public RegistroClienteForm(ClienteForm clnFrm, IConexionBD conexionBD) {
+    public RegistroClienteForm(IniciarSesionForm clnFrm, IConexionBD conexionBD) {
         initComponents();
         this.clnFrm = clnFrm;
         this.clientesDAO = new ClientesDAO(conexionBD);
@@ -420,7 +420,6 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         String apellidoM = txtApellidoM.getText();
         String correo = txtCorreo.getText();
         String contrasenha = txtContrasena.getText();
-
         return Validaciones.validarEmail(correo)
                 && Validaciones.validarContrasena(contrasenha)
                 && Validaciones.validarNombreCompleto(nombre, apellidoP, apellidoM);

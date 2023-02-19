@@ -21,7 +21,7 @@ import org.mindrot.jbcrypt.BCrypt;
  *
  * @author Elkur
  */
-public class ClienteForm extends javax.swing.JFrame {
+public class IniciarSesionForm extends javax.swing.JFrame {
 
     private final static int INGRESAR = 1;
     private final static int REGISTRAR = 2;
@@ -33,7 +33,7 @@ public class ClienteForm extends javax.swing.JFrame {
     private final ICuentasBancariasDAO cuentasBancariasDAO;
     private Cliente cliente;
 
-    public ClienteForm(IConexionBD conBD) {
+    public IniciarSesionForm(IConexionBD conBD) {
         initComponents();
         this.conBD = conBD;
         this.registroClienteForm = new RegistroClienteForm(this,conBD);

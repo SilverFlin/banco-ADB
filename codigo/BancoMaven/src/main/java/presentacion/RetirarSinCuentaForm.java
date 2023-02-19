@@ -30,12 +30,12 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
 
     
     private final IRetirosSinCuentaDAO retirosSinCuentaDAO;
-    private ClienteForm clienteForm;
+    private IniciarSesionForm clienteForm;
 
     public RetirarSinCuentaForm(IConexionBD conBD) {
         initComponents();
         this.retirosSinCuentaDAO = new RetirosSinCuentaDAO(conBD);
-        this.clienteForm = new ClienteForm(conBD);
+        this.clienteForm = new IniciarSesionForm(conBD);
     }
     
     @SuppressWarnings("unchecked")
