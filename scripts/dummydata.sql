@@ -445,7 +445,7 @@ INSERT INTO `operaciones` (`id`, `fechaHora`, `detalles`, `idCuentaBancaria`) VA
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (1, '3f360116413461c64a5856cc0a986d99afee2941', '9999.9999', '378297986408075', 'Cobrado', '1993-04-28 05:48:32', '1977-04-17 05:29:28', 1);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (2, '4b5c7834d2836b31ad17ed08ea38ea50c09a6e89', '9999.9999', '5173153473864463', 'Cobrado', '1988-12-28 08:19:49', '1986-12-31 16:48:32', 2);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (3, 'b544c31d50d221192c02b777f11580a579cc51aa', '334.8096', '5122178934124234', 'Pendiente', '1978-02-15 08:48:59', '2006-05-17 00:09:23', 3);
-INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (4, '395ff2fc8f24246cb14ff54f338c3755a67f71a5', '0.0000', '5555536638793612', 'Pendiente', '2016-12-18 01:51:23', '1980-03-31 04:11:36', 4);
+INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (4, '395ff2fc8f24246cb14ff54f338c3755a67f71a5', '4.0000', '5555536638793612', 'Pendiente', '2016-12-18 01:51:23', '1980-03-31 04:11:36', 4);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (5, 'bd64d107db7e3abb5b7f2609cb5f1516bc1a8bc8', '9999.9999', '4539296834588', 'Pendiente', '2007-03-03 11:37:00', '1977-03-31 18:28:34', 5);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (6, '53ae5e6fea6d26d91e17911ce767015304fae377', '9999.9999', '4929355313217214', 'Pendiente', '1995-05-05 21:30:45', '1976-09-07 03:17:50', 6);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (7, '1cd56ce9cda4be3610c24a02bea516190b90e412', '9999.9999', '6011309082894459', 'Pendiente', '2008-08-15 04:28:58', '2019-06-21 05:01:21', 7);
@@ -457,7 +457,7 @@ INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `f
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (13, '0471d76eab6ee1368c00d25702312c2d8fc6ff35', '3073.8240', '4716404082333', 'Cobrado', '1989-10-22 02:44:32', '1978-01-16 04:42:43', 13);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (14, '9d0fe8f6f4dfcb4be416d69d2e90d976d539086a', '9999.9999', '379687774079482', 'Pendiente', '1995-11-13 00:53:03', '2013-03-26 12:05:45', 14);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (15, 'a9bc81612d3761d4f578da68a120c434367860c7', '23.2452', '4916847748116810', 'Cobrado', '2013-04-02 15:50:39', '2018-09-15 01:07:35', 15);
-INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (16, 'bf79c55bfd3b05e65ce2259e781e341f5fc8a9de', '0.0000', '5496060227334138', 'Pendiente', '2023-01-29 14:54:05', '1996-12-08 23:11:20', 16);
+INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (16, 'bf79c55bfd3b05e65ce2259e781e341f5fc8a9de', '5.0000', '5496060227334138', 'Pendiente', '2023-01-29 14:54:05', '1996-12-08 23:11:20', 16);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (17, 'bd3131b7b950c80fc5a659827539e5d2d91e2481', '17.0850', '5325021598177335', 'Cobrado', '1970-05-23 17:37:25', '2015-12-24 18:19:12', 17);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (18, 'da850c767854dc84c4c66509fde66b7caa7ad896', '73.0638', '5258812627164087', 'Cobrado', '2012-02-10 02:33:44', '2001-04-10 23:34:52', 18);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (19, '2464d169b7f9112457c4330c24206333ff2187c4', '340.7849', '5271760434791946', 'Pendiente', '2000-11-01 10:54:18', '1971-07-07 01:45:18', 19);
@@ -498,7 +498,7 @@ INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `f
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (54, 'c9a7fc41bbdd0e49f2c438d4e69ab627536fe323', '243.6359', '5386452088266372', 'Cobrado', '2009-10-29 07:23:54', '1986-05-10 11:58:21', 54);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (55, 'fc6e42720b076b638f00f88c00a5b523ee4622cf', '9999.9999', '5538400278841101', 'Cobrado', '1989-09-08 12:34:07', '1988-12-14 00:19:29', 55);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (56, '789d11ae79814971248667bd069576f7c8ae8d68', '12.7980', '5594404137133093', 'Pendiente', '2002-01-01 15:35:02', '1998-01-11 08:49:07', 56);
-INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (57, '44469c0f20dc777a9808b4fe808d8c2d38bb2535', '0.0000', '5457298676878489', 'Cobrado', '2004-11-10 05:01:08', '2022-01-06 20:26:43', 57);
+INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (57, '44469c0f20dc777a9808b4fe808d8c2d38bb2535', '6.0000', '5457298676878489', 'Cobrado', '2004-11-10 05:01:08', '2022-01-06 20:26:43', 57);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (58, '8e273c34f23e19d80d44a49cca387920faab3376', '9999.9999', '6011971566902678', 'Cobrado', '1991-09-24 05:49:46', '1997-01-29 10:32:38', 58);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (59, 'ff145a068d56ce89e420cdbbca05ae17513322d7', '1789.0000', '6011088885486057', 'Pendiente', '2011-11-10 10:23:44', '2000-06-06 00:57:42', 59);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (60, '400dde07f4b7345823199f6163cab66ae402e507', '10.1511', '6011962784706916', 'Pendiente', '2022-07-04 23:51:43', '2015-10-08 10:25:44', 60);
@@ -529,9 +529,9 @@ INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `f
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (85, '3ad00b4222ab5783b2719b3ad14ea2c0e81f528a', '9999.9999', '5512741883720564', 'Cobrado', '1985-04-25 16:10:34', '1990-07-31 19:01:51', 85);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (86, '0bd4ee0bf8d0875a911e55cf820a5b6a9cce281e', '2.7000', '4485573007707518', 'Cobrado', '2013-01-08 20:09:09', '1977-08-12 19:34:35', 86);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (87, '261c0bd56ea1f189aee081d586083f8fa8bcb20d', '9999.9999', '5273843656251412', 'Cobrado', '2011-03-13 14:06:47', '1983-02-01 13:13:00', 87);
-INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (88, 'e601528d5adc53170f9f3813788519b420a49ef8', '0.0000', '5576705678835732', 'Cobrado', '2004-07-08 06:04:15', '1987-07-31 18:05:37', 88);
+INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (88, 'e601528d5adc53170f9f3813788519b420a49ef8', '77.0000', '5576705678835732', 'Cobrado', '2004-07-08 06:04:15', '1987-07-31 18:05:37', 88);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (89, 'aaad26deb8e3019622ff516e35c674096bfa5ae9', '6.0721', '371124549318434', 'Cobrado', '2016-03-17 06:40:24', '2022-09-21 03:11:31', 89);
-INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (90, 'b585cb0854a0d725f36d5834a65cc86b019fe6db', '0.4914', '5596852151011300', 'Cobrado', '1985-04-25 04:55:57', '2010-10-01 03:55:51', 90);
+INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (90, 'b585cb0854a0d725f36d5834a65cc86b019fe6db', '7777.4914', '5596852151011300', 'Cobrado', '1985-04-25 04:55:57', '2010-10-01 03:55:51', 90);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (91, '8f67cdc5bdcf238cbd1cc877f4e8436b02e7e457', '9999.9999', '4556021712297', 'Cobrado', '2022-12-09 16:11:38', '1997-03-20 15:13:12', 91);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (92, '6f01ab4d819e6361e6671a9af895315d259c6123', '9999.9999', '4916947396759775', 'Cobrado', '2006-03-22 20:09:59', '2003-03-17 13:06:17', 92);
 INSERT INTO `retirosSinCuenta` (`id`, `password`, `monto`, `folio`, `Estado`, `fechaInicio`, `fechaFin`, `idCuentaBancaria`) VALUES (93, '4d79cd4322741de3702dab3c4637f5401a3ab5bc', '9999.9999', '5503500173617465', 'Pendiente', '1994-07-01 03:25:55', '1999-10-21 14:43:34', 93);
@@ -558,10 +558,10 @@ INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idC
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (5, '9999.9999', '1971-11-10 03:32:30', 5, 5);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (6, '64.3039', '1981-05-25 03:03:12', 6, 6);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (7, '9999.9999', '1990-01-14 22:40:40', 7, 7);
-INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (8, '0.0000', '1997-10-24 02:08:09', 8, 8);
+INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (8, '1.0000', '1997-10-24 02:08:09', 8, 8);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (9, '9999.9999', '1986-03-15 09:57:12', 9, 9);
-INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (10, '0.0000', '1983-11-27 16:31:07', 10, 10);
-INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (11, '0.0000', '1980-08-22 23:30:44', 11, 11);
+INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (10, '1.0000', '1983-11-27 16:31:07', 10, 10);
+INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (11, '1.0000', '1980-08-22 23:30:44', 11, 11);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (12, '80.7660', '1983-04-17 18:28:22', 12, 12);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (13, '4.7547', '1980-06-09 20:16:37', 13, 13);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (14, '9999.9999', '2005-02-11 15:19:40', 14, 14);
@@ -581,12 +581,12 @@ INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idC
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (28, '9999.9999', '2010-07-06 16:43:27', 28, 28);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (29, '62.2000', '2018-06-23 06:11:29', 29, 29);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (30, '9999.9999', '1996-06-30 04:39:57', 30, 30);
-INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (31, '0.0000', '1986-04-11 23:25:24', 31, 31);
+INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (31, '1.0000', '1986-04-11 23:25:24', 31, 31);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (32, '9999.9999', '1977-04-11 03:08:56', 32, 32);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (33, '4.8228', '2004-06-12 04:22:16', 33, 33);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (34, '4053.6746', '1995-09-26 10:20:22', 34, 34);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (35, '3333.7900', '1982-12-27 03:32:16', 35, 35);
-INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (36, '0.0000', '1972-04-13 13:26:46', 36, 36);
+INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (36, '1.0000', '1972-04-13 13:26:46', 36, 36);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (37, '9999.9999', '2011-04-21 22:29:57', 37, 37);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (38, '9999.9999', '1996-09-26 12:34:41', 38, 38);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (39, '2.5168', '1971-06-14 13:09:03', 39, 39);
@@ -606,11 +606,11 @@ INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idC
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (53, '9999.9999', '1972-08-29 16:24:41', 53, 53);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (54, '1746.2000', '2006-08-27 08:00:21', 54, 54);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (55, '9999.9999', '1975-08-26 13:04:48', 55, 55);
-INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (56, '0.0000', '2014-07-08 04:48:57', 56, 56);
+INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (56, '1.0000', '2014-07-08 04:48:57', 56, 56);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (57, '14.0000', '1993-02-27 16:46:56', 57, 57);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (58, '9999.9999', '2014-03-27 14:09:45', 58, 58);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (59, '0.9708', '1986-03-21 16:27:41', 59, 59);
-INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (60, '0.0000', '1989-07-17 15:21:10', 60, 60);
+INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (60, '1.0000', '1989-07-17 15:21:10', 60, 60);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (61, '9999.9999', '1982-06-16 12:42:15', 61, 61);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (62, '4.0000', '2009-09-15 03:28:35', 62, 62);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (63, '6.8475', '1985-06-09 02:58:44', 63, 63);
@@ -619,7 +619,7 @@ INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idC
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (66, '3.2121', '1973-04-09 01:56:09', 66, 66);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (67, '9999.9999', '2006-11-20 20:20:30', 67, 67);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (68, '5126.6225', '2021-07-20 12:07:48', 68, 68);
-INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (69, '0.0000', '1973-06-22 19:47:10', 69, 69);
+INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (69, '1.0000', '1973-06-22 19:47:10', 69, 69);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (70, '651.5921', '2009-11-28 03:29:40', 70, 70);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (71, '9999.9999', '1988-06-09 03:54:38', 71, 71);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (72, '4.0112', '2001-09-01 07:10:08', 72, 72);
@@ -636,7 +636,7 @@ INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idC
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (83, '9999.9999', '1975-09-05 08:33:17', 83, 83);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (84, '9999.9999', '1974-05-26 00:34:52', 84, 84);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (85, '9999.9999', '1975-05-08 07:40:18', 85, 85);
-INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (86, '0.0000', '1983-05-06 14:55:06', 86, 86);
+INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (86, '1.0000', '1983-05-06 14:55:06', 86, 86);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (87, '9999.9999', '1986-09-10 04:53:40', 87, 87);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (88, '6271.3310', '2007-08-18 22:41:39', 88, 88);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (89, '9999.9999', '1975-10-15 15:45:39', 89, 89);
@@ -647,8 +647,8 @@ INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idC
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (94, '9999.9999', '1987-10-06 16:27:29', 94, 94);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (95, '9999.9999', '2011-09-03 15:50:03', 95, 95);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (96, '2.0000', '2010-11-07 04:47:33', 96, 96);
-INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (97, '0.0000', '2004-04-13 17:01:44', 97, 97);
-INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (98, '0.0000', '2011-03-16 16:09:20', 98, 98);
+INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (97, '1.0000', '2004-04-13 17:01:44', 97, 97);
+INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (98, '1.0000', '2011-03-16 16:09:20', 98, 98);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (99, '269.9222', '1993-08-12 01:59:25', 99, 99);
 INSERT INTO `transferencias` (`id`, `monto`, `fechaHora`, `idCuentaOrigen`, `idCuentaDestino`) VALUES (100, '59.1060', '1989-05-06 15:54:42', 100, 100);
 
