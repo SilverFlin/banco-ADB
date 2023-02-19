@@ -2,12 +2,13 @@
 Script que crea la base de datos, tablas, vistas, y triggers del sistema.
 TODO: Vistas, Triggers
 TODO: domicilios NOT NULL
-TODO: password
 */
 
 DROP DATABASE IF EXISTS banco_transacciones;
 CREATE DATABASE banco_transacciones;
 USE banco_transacciones;
+
+--  TABLAS --
 
 CREATE TABLE domicilios(
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -66,8 +67,111 @@ CREATE TABLE retirosSinCuenta(
     monto DECIMAL(8,4) NOT NULL,
     folio VARCHAR(50) NOT NULL,
     estado ENUM("Cobrado","Pendiente","Expirado") DEFAULT("Pendiente"),
-    fechaInicio DATETIME NOT NULL,
+    fechaInicio DATETIME DEFAULT(CURRENT_TIMESTAMP) NOT NULL,
     fechaFin DATETIME NOT NULL,
     idCuentaBancaria INT NOT NULL,
 	FOREIGN KEY (idCuentaBancaria ) REFERENCES cuentasBancarias (id)
 );
+
+--  TRIGGERS --
+
+
+DELIMITER $$
+
+CREATE TRIGGER RetiroPositivo
+     BEFORE INSERT ON RetirosSinCuenta FOR EACH ROW
+     BEGIN
+          IF NEW.monto <= 0
+          THEN
+              SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'Monto debe ser mayor a cero.';
+          END IF;
+     END;
+$$
+
+DELIMITER ;
+
+###
+
+DELIMITER $$
+
+CREATE TRIGGER SaldoPositivo
+     BEFORE INSERT ON CuentasBancarias FOR EACH ROW
+     BEGIN
+          IF NEW.saldoMXN < 0
+          THEN
+              SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'Saldo debe ser mayor o igual a cero.';
+          END IF;
+     END;
+$$
+
+DELIMITER ;
+
+### 
+
+DELIMITER $$
+
+CREATE TRIGGER MontoTransferenciaPositiva
+     BEFORE INSERT ON Transferencias FOR EACH ROW
+     BEGIN
+          IF NEW.monto <= 0
+          THEN
+              SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'Monto debe ser mayor a cero.';
+          END IF;
+     END;
+$$
+
+DELIMITER ;
+
+### 
+
+DELIMITER $$
+
+CREATE TRIGGER FechaNacimientoValida
+     BEFORE INSERT ON Clientes FOR EACH ROW
+     BEGIN
+          IF NEW.fechaNacimiento > now()
+          THEN
+              SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'Fecha Nacimiento no puede ser mayor a la actual.';
+          END IF;
+     END;
+$$
+
+DELIMITER ;
+
+###
+
+DELIMITER $$
+
+CREATE TRIGGER FechaAperturaValida
+     BEFORE INSERT ON CuentasBancarias FOR EACH ROW
+     BEGIN
+          IF NEW.fechaApertura > now()
+          THEN
+              SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'Fecha apertura no puede ser mayor a la actual.';
+          END IF;
+     END;
+$$
+
+DELIMITER ;
+
+###
+
+DELIMITER $$
+
+CREATE TRIGGER FechaFinMayorAInicio
+     BEFORE INSERT ON RetirosSinCuenta FOR EACH ROW
+     BEGIN
+          IF NEW.fechaInicio < new.fechaInicio
+          THEN
+              SIGNAL SQLSTATE '45000'
+                    SET MESSAGE_TEXT = 'fechaFin no puede ser menor a fechaInicio..';
+          END IF;
+     END;
+$$
+
+DELIMITER ;
