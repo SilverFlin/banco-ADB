@@ -15,8 +15,12 @@ import interfaces.ICuentasBancariasDAO;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.table.DefaultTableModel;
+import org.mindrot.jbcrypt.BCrypt;
 import utils.ConfiguracionPaginado;
 
 /**
@@ -229,20 +233,29 @@ public class CuentasForm extends javax.swing.JFrame {
     }
 
     private void desactivar() {
-
+        
         String input = this.pedirInputUsuario("Desactivar Cuenta", "Ingresa el numero de cuenta");
         try {
             CuentaBancaria cuentaBancaria = this.cuentasBancariasDAO.consultar(input);
+            
+            // TODO pedir password
+            String password = pedirPassword();
+            if (!validarPassword(password)) {
+                this.mostrarError("Contraseña invalida");
+                return;
+            }
+            
+            
             cuentaBancaria.desactivarCuenta();
             this.cuentasBancariasDAO.actualizar(cuentaBancaria);
             this.llenarTablaCuentas();
         } catch (PersistenciaException e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            this.mostrarMensajeError("Ingresa un Numero de Cuenta valido");
+            this.mostrarError("Ingresa un Numero de Cuenta valido");
         }
     }
 
-    private void mostrarMensajeError(String msg) {
+    private void mostrarError(String msg) {
         JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
@@ -254,4 +267,27 @@ public class CuentasForm extends javax.swing.JFrame {
         return (String) JOptionPane.showInputDialog(this, texto, titulo, JOptionPane.QUESTION_MESSAGE);
     }
 
+    private String pedirPassword() {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Ingresa una contraseña:");
+        JPasswordField pass = new JPasswordField(10);
+        panel.add(label);
+        panel.add(pass);
+        String[] options = new String[]{"OK", "Cancelar"};
+        int option = JOptionPane.showOptionDialog(null, panel, "Credenciales",
+                JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, options, options[1]);
+        // pressing OK button
+        if (option == 0) {
+            char[] password = pass.getPassword();
+            return new String(password);
+        }
+        return "";
+    }
+
+    private boolean validarPassword(String passwordCandidato) {
+        System.out.println(passwordCandidato);
+        System.out.println(cliente.getContrasenia());
+        return BCrypt.checkpw(passwordCandidato, cliente.getContrasenia());
+    }
 }
