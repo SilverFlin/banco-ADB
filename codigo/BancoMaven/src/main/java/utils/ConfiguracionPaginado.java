@@ -28,6 +28,7 @@ public class ConfiguracionPaginado {
     }
 
     public int getOffset() {
+        calcOffset();
         return offset;
     }
 
@@ -44,7 +45,7 @@ public class ConfiguracionPaginado {
     }
 
     public void retrocederPag() {
-        if (this.numPagina == 0) {
+        if (this.numPagina != 0) {
             this.numPagina--;
         }
     }
