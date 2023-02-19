@@ -45,6 +45,7 @@ public class CuentasForm extends javax.swing.JFrame {
         this.cliente = cliente;
         initComponents();
         this.llenarTablaCuentas();
+        this.cargarMensajeBienvenida();
     }
 
     /**
@@ -59,6 +60,8 @@ public class CuentasForm extends javax.swing.JFrame {
         background3 = new javax.swing.JPanel();
         head3 = new javax.swing.JPanel();
         txtBienvenida = new javax.swing.JLabel();
+        btnCerrarSesion = new javax.swing.JButton();
+        btnEditarCuenta = new javax.swing.JButton();
         panelTablaCuentas = new javax.swing.JScrollPane();
         tablaCuentas = new javax.swing.JTable();
         btnRegresar = new javax.swing.JButton();
@@ -79,6 +82,30 @@ public class CuentasForm extends javax.swing.JFrame {
         txtBienvenida.setForeground(new java.awt.Color(255, 255, 255));
         txtBienvenida.setText("Bienvenido");
 
+        btnCerrarSesion.setBackground(new java.awt.Color(0, 102, 255));
+        btnCerrarSesion.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnCerrarSesion.setForeground(new java.awt.Color(255, 255, 255));
+        btnCerrarSesion.setText("Cerrar Sesion");
+        btnCerrarSesion.setBorder(null);
+        btnCerrarSesion.setBorderPainted(false);
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
+            }
+        });
+
+        btnEditarCuenta.setBackground(new java.awt.Color(0, 102, 255));
+        btnEditarCuenta.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnEditarCuenta.setForeground(new java.awt.Color(255, 255, 255));
+        btnEditarCuenta.setText("Editar Cuenta");
+        btnEditarCuenta.setBorder(null);
+        btnEditarCuenta.setBorderPainted(false);
+        btnEditarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarCuentaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout head3Layout = new javax.swing.GroupLayout(head3);
         head3.setLayout(head3Layout);
         head3Layout.setHorizontalGroup(
@@ -86,14 +113,21 @@ public class CuentasForm extends javax.swing.JFrame {
             .addGroup(head3Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(txtBienvenida)
-                .addContainerGap(460, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 237, Short.MAX_VALUE)
+                .addComponent(btnEditarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22))
         );
         head3Layout.setVerticalGroup(
             head3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(head3Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addComponent(txtBienvenida)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addGroup(head3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtBienvenida)
+                    .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEditarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         background3.add(head3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 90));
@@ -197,10 +231,20 @@ public class CuentasForm extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnRetiroSinTarjetaActionPerformed
 
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        this.cerrarSesion();
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+    private void btnEditarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarCuentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditarCuentaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background3;
     private javax.swing.JButton brnDesactivarCuenta;
+    private javax.swing.JButton btnCerrarSesion;
+    private javax.swing.JButton btnEditarCuenta;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnRetiroSinTarjeta;
     private javax.swing.JPanel head3;
@@ -233,19 +277,18 @@ public class CuentasForm extends javax.swing.JFrame {
     }
 
     private void desactivar() {
-        
+
         String input = this.pedirInputUsuario("Desactivar Cuenta", "Ingresa el numero de cuenta");
         try {
             CuentaBancaria cuentaBancaria = this.cuentasBancariasDAO.consultar(input);
-            
+
             // TODO pedir password
             String password = pedirPassword();
             if (!validarPassword(password)) {
                 this.mostrarError("Contraseña invalida");
                 return;
             }
-            
-            
+
             cuentaBancaria.desactivarCuenta();
             this.cuentasBancariasDAO.actualizar(cuentaBancaria);
             this.llenarTablaCuentas();
@@ -289,5 +332,15 @@ public class CuentasForm extends javax.swing.JFrame {
         System.out.println(passwordCandidato);
         System.out.println(cliente.getContrasenia());
         return BCrypt.checkpw(passwordCandidato, cliente.getContrasenia());
+    }
+
+    private void cerrarSesion() {
+        ClienteForm clienteForm = new ClienteForm(conBD);
+        clienteForm.setVisible(true);
+        this.setVisible(false);
+    }
+
+    private void cargarMensajeBienvenida() {
+        this.txtBienvenida.setText("Hola, " + this.cliente.getNombres() + "!");
     }
 }

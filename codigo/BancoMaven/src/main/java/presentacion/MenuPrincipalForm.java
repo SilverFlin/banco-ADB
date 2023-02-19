@@ -54,11 +54,13 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         background3 = new javax.swing.JPanel();
         head3 = new javax.swing.JPanel();
         txtBienvenida = new javax.swing.JLabel();
+        btnCerrarSesion = new javax.swing.JButton();
+        btnEditarCuenta = new javax.swing.JButton();
         btnHistorialActividad = new javax.swing.JButton();
         btnTransferencia = new javax.swing.JButton();
-        btnCrearCuentaBancaria = new javax.swing.JButton();
         btnMisCuentas = new javax.swing.JButton();
         imgMenuPrincipal = new javax.swing.JLabel();
+        btnCrearCuentaBancaria1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("BancoTransacciones");
@@ -76,6 +78,30 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         txtBienvenida.setForeground(new java.awt.Color(255, 255, 255));
         txtBienvenida.setText("Bienvenido");
 
+        btnCerrarSesion.setBackground(new java.awt.Color(0, 102, 255));
+        btnCerrarSesion.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnCerrarSesion.setForeground(new java.awt.Color(255, 255, 255));
+        btnCerrarSesion.setText("Cerrar Sesion");
+        btnCerrarSesion.setBorder(null);
+        btnCerrarSesion.setBorderPainted(false);
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
+            }
+        });
+
+        btnEditarCuenta.setBackground(new java.awt.Color(0, 102, 255));
+        btnEditarCuenta.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnEditarCuenta.setForeground(new java.awt.Color(255, 255, 255));
+        btnEditarCuenta.setText("Editar Cuenta");
+        btnEditarCuenta.setBorder(null);
+        btnEditarCuenta.setBorderPainted(false);
+        btnEditarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarCuentaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout head3Layout = new javax.swing.GroupLayout(head3);
         head3.setLayout(head3Layout);
         head3Layout.setHorizontalGroup(
@@ -83,14 +109,21 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
             .addGroup(head3Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(txtBienvenida)
-                .addContainerGap(463, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 237, Short.MAX_VALUE)
+                .addComponent(btnEditarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
         head3Layout.setVerticalGroup(
             head3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(head3Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addComponent(txtBienvenida)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addGroup(head3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtBienvenida)
+                    .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEditarCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         background3.add(head3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 90));
@@ -121,19 +154,6 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         });
         background3.add(btnTransferencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 110, 100, 40));
 
-        btnCrearCuentaBancaria.setBackground(new java.awt.Color(0, 102, 255));
-        btnCrearCuentaBancaria.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
-        btnCrearCuentaBancaria.setForeground(new java.awt.Color(255, 255, 255));
-        btnCrearCuentaBancaria.setText("Crear Cuenta");
-        btnCrearCuentaBancaria.setBorder(null);
-        btnCrearCuentaBancaria.setBorderPainted(false);
-        btnCrearCuentaBancaria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCrearCuentaBancariaActionPerformed(evt);
-            }
-        });
-        background3.add(btnCrearCuentaBancaria, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, 100, 40));
-
         btnMisCuentas.setBackground(new java.awt.Color(0, 102, 255));
         btnMisCuentas.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
         btnMisCuentas.setForeground(new java.awt.Color(255, 255, 255));
@@ -147,6 +167,19 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         });
         background3.add(btnMisCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 110, 100, 40));
         background3.add(imgMenuPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 600, 240));
+
+        btnCrearCuentaBancaria1.setBackground(new java.awt.Color(0, 102, 255));
+        btnCrearCuentaBancaria1.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnCrearCuentaBancaria1.setForeground(new java.awt.Color(255, 255, 255));
+        btnCrearCuentaBancaria1.setText("Crear Cuenta");
+        btnCrearCuentaBancaria1.setBorder(null);
+        btnCrearCuentaBancaria1.setBorderPainted(false);
+        btnCrearCuentaBancaria1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrearCuentaBancaria1ActionPerformed(evt);
+            }
+        });
+        background3.add(btnCrearCuentaBancaria1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, 100, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -169,9 +202,9 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnMisCuentasActionPerformed
 
-    private void btnCrearCuentaBancariaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearCuentaBancariaActionPerformed
-        this.crearCuenta();
-    }//GEN-LAST:event_btnCrearCuentaBancariaActionPerformed
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        this.cerrarSesion();
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     private void btnTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferenciaActionPerformed
 
@@ -182,10 +215,20 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnHistorialActividadActionPerformed
 
+    private void btnCrearCuentaBancaria1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearCuentaBancaria1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrearCuentaBancaria1ActionPerformed
+
+    private void btnEditarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarCuentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditarCuentaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background3;
-    private javax.swing.JButton btnCrearCuentaBancaria;
+    private javax.swing.JButton btnCerrarSesion;
+    private javax.swing.JButton btnCrearCuentaBancaria1;
+    private javax.swing.JButton btnEditarCuenta;
     private javax.swing.JButton btnHistorialActividad;
     private javax.swing.JButton btnMisCuentas;
     private javax.swing.JButton btnTransferencia;
@@ -195,7 +238,7 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void cargarMensajeBienvenida() {
-        this.txtBienvenida.setText("Hola, " + this.cliente.getNombres()+ "!");
+        this.txtBienvenida.setText("Hola, " + this.cliente.getNombres() + "!");
     }
 
     /**
@@ -242,5 +285,11 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
 
     private String pedirInputUsuario(String titulo, String texto) {
         return (String) JOptionPane.showInputDialog(this, texto, titulo, JOptionPane.QUESTION_MESSAGE);
+    }
+
+    private void cerrarSesion() {
+        ClienteForm clienteForm = new ClienteForm(conBD);
+        clienteForm.setVisible(true);
+        this.setVisible(false);
     }
 }
