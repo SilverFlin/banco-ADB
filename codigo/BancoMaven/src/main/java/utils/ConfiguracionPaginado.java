@@ -10,6 +10,7 @@ package utils;
  * @author Toled
  */
 public class ConfiguracionPaginado {
+
     int limite;
     int numPagina;
     int offset;
@@ -20,8 +21,6 @@ public class ConfiguracionPaginado {
         this.calcOffset();
     }
 
-    
-    
     public ConfiguracionPaginado(int limite, int numPagina) {
         this.limite = limite;
         this.numPagina = numPagina;
@@ -35,11 +34,18 @@ public class ConfiguracionPaginado {
     public int getLimite() {
         return limite;
     }
-    
 
     private void calcOffset() {
         this.offset = (this.limite * this.numPagina);
     }
-    
-    
+
+    public void avanzarPag() {
+        numPagina++;
+    }
+
+    public void retrocederPag() {
+        if (this.numPagina == 0) {
+            this.numPagina--;
+        }
+    }
 }
