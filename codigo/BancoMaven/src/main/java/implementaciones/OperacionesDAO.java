@@ -86,22 +86,22 @@ public class OperacionesDAO implements IOperacionesDAO {
     }
 
     @Override
-    public List<Operacion> consultar(ConfiguracionPaginado configPaginado) throws PersistenciaException {
+    public List<Operacion> consultar(ConfiguracionPaginado configPaginado,int idCuentaBancaria) throws PersistenciaException {
         String codigoSQL = "SELECT id, fechaHora, detalles, idCuentaBancaria "
-                + "FROM operaciones LIMIT ? OFFSET ?";
+                + "FROM operaciones WHERE idCuentaBancaria = ? LIMIT ? OFFSET ?";
         List<Operacion> listaOperaciones = new LinkedList<>();
         try (
                 Connection conexion = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement comando = conexion.prepareStatement(codigoSQL);) {
-
-            comando.setInt(1, configPaginado.getLimite());
-            comando.setInt(2, configPaginado.getOffset());
+            
+            comando.setInt(1, idCuentaBancaria);
+            comando.setInt(2, configPaginado.getLimite());
+            comando.setInt(3, configPaginado.getOffset());
             ResultSet resultado = comando.executeQuery();
 
             while (resultado.next()) {
                 Integer id = resultado.getInt("id");
                 Date fechaHora = resultado.getDate("fechaHora");
                 String detalles = resultado.getString("detalles");
-                int idCuentaBancaria = resultado.getInt("idCuentaBancaria");
                 Operacion operacion = new Operacion(id, fechaHora, detalles, idCuentaBancaria);
                 listaOperaciones.add(operacion);
             }
