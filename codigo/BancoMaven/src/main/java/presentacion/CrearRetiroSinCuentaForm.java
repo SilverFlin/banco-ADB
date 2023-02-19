@@ -28,7 +28,10 @@ import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.ConfiguracionPaginado;
 import utils.Conversiones;
@@ -204,18 +207,26 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
     private void crearRetiro() {
 
         try {
-            // TODO Consultar Cuenta
             consultarCuenta();
-            // TODO Validar Monto
             if (this.cuentaBancaria == null) {
-                // msg no existe
+                this.mostrarError("Cuenta no existente");
                 return;
             }
             if (!isValidMonto()) {
-                //msg no existe
+                this.mostrarError("Monto invalido");
                 return;
             }
 
+            if (!fondosSuficientes()) {
+                this.mostrarError("Fondos insuficientes");
+                return;
+            }
+
+            String password = pedirPassword();
+            if (!validarPassword(password)) {
+                this.mostrarError("Contraseña invalida");
+                return;
+            }
             // TODO pedir password de cuenta
             //TODO generar password de retiro
             String passwordRetiro = this.generarPasswordRetiro(); // Mostrar
@@ -295,8 +306,8 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
 
     private void mostrarFolioYPassword(String passwordRetiro, RetiroSinCuenta retiroSinCuenta) {
         String msg
-                = "Retiro creado\n"
-                + " Folio: " + retiroSinCuenta.getFolio()
+                = "Retiro creado"
+                + "\nFolio: " + retiroSinCuenta.getFolio()
                 + "\nPassword: " + passwordRetiro
                 + "\n Caduca a las: " + retiroSinCuenta.getFechaFin();
 
@@ -306,5 +317,38 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
     private void regresarACuentas() {
         this.cuentasForm.setVisible(true);
         this.setVisible(false);
+    }
+
+    private boolean fondosSuficientes() {
+        double saldo = this.cuentaBancaria.getSaldoMXN();
+        return saldo >= this.obtenerMonto();
+    }
+
+    private void mostrarError(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Algo salio mal", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private String pedirPassword() {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Ingresa una contraseña:");
+        JPasswordField pass = new JPasswordField(10);
+        panel.add(label);
+        panel.add(pass);
+        String[] options = new String[]{"OK", "Cancelar"};
+        int option = JOptionPane.showOptionDialog(null, panel, "Credenciales",
+                JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, options, options[1]);
+        // pressing OK button
+        if (option == 0) {
+            char[] password = pass.getPassword();
+            return new String(password);
+        }
+        return "";
+    }
+
+    private boolean validarPassword(String passwordCandidato) {
+        System.out.println(passwordCandidato);
+        System.out.println(cliente.getContrasenia());
+        return BCrypt.checkpw(passwordCandidato, cliente.getContrasenia());
     }
 }
