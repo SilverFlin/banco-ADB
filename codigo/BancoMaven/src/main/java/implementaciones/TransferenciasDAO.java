@@ -4,11 +4,13 @@ import dominio.Transferencia;
 import excepciones.PersistenciaException;
 import interfaces.IConexionBD;
 import interfaces.ITransferenciasDAO;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,15 +22,15 @@ import utils.ConfiguracionPaginado;
  * @author Toled
  */
 public class TransferenciasDAO implements ITransferenciasDAO {
-    
+
     private static final Logger LOG = Logger.getLogger(CuentasBancariasDAO.class.getName());
     private final IConexionBD GENERADOR_CONEXIONES;
     private final String NOMBRE_TABLA = "transferencias";
-    
+
     public TransferenciasDAO(IConexionBD GENERADOR_CONEXIONES) {
         this.GENERADOR_CONEXIONES = GENERADOR_CONEXIONES;
     }
-    
+
     @Override
     public Transferencia consultarOrigen(int idCuentaOrigen) throws PersistenciaException {
         /* Consultas */
@@ -52,10 +54,10 @@ public class TransferenciasDAO implements ITransferenciasDAO {
         } catch (SQLException e) {
             LOG.log(Level.SEVERE, e.getMessage());
             throw new PersistenciaException("Error en la conexion");
-            
+
         }
     }
-    
+
     @Override
     public Transferencia consultarDestino(int idCuentaDestino) throws PersistenciaException {
         /* Consultas */
@@ -79,7 +81,7 @@ public class TransferenciasDAO implements ITransferenciasDAO {
         } catch (SQLException e) {
             LOG.log(Level.SEVERE, e.getMessage());
             throw new PersistenciaException("Error en la conexion");
-            
+
         }
     }
 
@@ -117,7 +119,7 @@ public class TransferenciasDAO implements ITransferenciasDAO {
             throw new PersistenciaException("Error al consultar cuentas");
         }
     }
-    
+
     @Override
     public List<Transferencia> consultarDestino(ConfiguracionPaginado configPaginado, int idCuentaDestino) throws PersistenciaException {
         try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion()) {
@@ -146,37 +148,36 @@ public class TransferenciasDAO implements ITransferenciasDAO {
             throw new PersistenciaException("Error al consultar cuentas");
         }
     }
-    
+
     @Override
     public Transferencia insertar(Transferencia transferencia) throws PersistenciaException {
         /* Consultas */
-        String insertStatement = "INSERT INTO " + NOMBRE_TABLA + " (monto, idCuentaOrigen, idCuentaDestino) "
-                + "VALUES (?,?,?)";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement insertTransferencia = con.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);) {
+        String insertStatement = "{CALL ReflejarTransferencia(?,?,?,?)}";
+        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  CallableStatement callableStatement = con.prepareCall(insertStatement);) {
 
             /* Asignar valores a consulta INSERT*/
-            insertTransferencia.setDouble(1, transferencia.getMonto());
-            insertTransferencia.setInt(2, transferencia.getIdCuentaOrigen());
-            insertTransferencia.setInt(3, transferencia.getIdCuentaDestino());
+            callableStatement.setDouble(1, transferencia.getMonto());
+            callableStatement.setInt(2, transferencia.getIdCuentaOrigen());
+            callableStatement.setInt(3, transferencia.getIdCuentaDestino());
+            callableStatement.registerOutParameter(4, Types.INTEGER);
 
             /* Ejecutar las consultas */
-            insertTransferencia.executeUpdate();
-            
-            ResultSet llavesGeneradas = insertTransferencia.getGeneratedKeys();
+            callableStatement.execute();
+
+            Integer llavesGeneradas = callableStatement.getInt(4);
             /* Validar consultas*/
-            if (llavesGeneradas.next()) {
-                transferencia.setId(llavesGeneradas.getInt(Statement.RETURN_GENERATED_KEYS));
+            if (llavesGeneradas != null) {
+                transferencia.setId(llavesGeneradas);
                 return transferencia;
             }
-            
             throw new PersistenciaException("Error al insertar transferencia");
-            
+
         } catch (SQLException e) {
             LOG.log(Level.SEVERE, e.getMessage());
             throw new PersistenciaException("Error en la conexión");
         }
     }
-    
+
     private Transferencia crearTransferencia(ResultSet result) throws SQLException {
         /*Extraer del ResultSet*/
         Integer resultId = Integer.parseInt(result.getString("id"));
@@ -186,9 +187,10 @@ public class TransferenciasDAO implements ITransferenciasDAO {
         Integer idDestino = Integer.parseInt(result.getString("idCuentaDestino"));
 
         /* Crear Transferencia*/
-        Transferencia transferencia = new Transferencia(fechaHora, monto, idOrigen, idDestino);
+        Transferencia transferencia = new Transferencia(monto, idOrigen, idDestino);
+        transferencia.setFechaHora(fechaHora);
         transferencia.setId(resultId);
         return transferencia;
     }
-    
+
 }
