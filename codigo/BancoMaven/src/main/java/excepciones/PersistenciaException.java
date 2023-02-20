@@ -3,7 +3,6 @@ package excepciones;
 /**
  *
  * @author Elkur, Toled
- * @author Toled
  */
 public class PersistenciaException extends Exception {
 

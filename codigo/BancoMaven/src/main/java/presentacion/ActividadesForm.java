@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package presentacion;
 
 import dominio.Cliente;
@@ -48,7 +44,6 @@ public class ActividadesForm extends javax.swing.JFrame {
             }
             DefaultTableModel modeloTabla = (DefaultTableModel) this.tbActividades.getModel();
             modeloTabla.setRowCount(0);
-            System.out.println(listaOperaciones.size());
             for (Operacion operacion : listaOperaciones) {
                 Object[] fila = {operacion.getNoCuenta(), operacion.getFechaHora(), operacion.getDetalles()};
                 modeloTabla.addRow(fila);

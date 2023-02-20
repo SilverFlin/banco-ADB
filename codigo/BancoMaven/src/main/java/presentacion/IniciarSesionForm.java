@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package presentacion;
 
 import dominio.Cliente;
@@ -86,8 +81,6 @@ public class IniciarSesionForm extends javax.swing.JFrame {
     
     private boolean validarPassword(String password){
         String passwordCandidato = new String(txtContraseña.getPassword());
-        System.out.println(passwordCandidato);
-        System.out.println(password);
 	return BCrypt.checkpw(passwordCandidato, password);
     }
     

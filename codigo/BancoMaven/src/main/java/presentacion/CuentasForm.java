@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package presentacion;
 
 import dominio.Cliente;
@@ -400,7 +395,6 @@ public class CuentasForm extends javax.swing.JFrame {
         try {
             CuentaBancaria cuentaBancaria = this.cuentasBancariasDAO.consultar(input);
 
-            // TODO pedir password
             String password = pedirPassword();
             if (!validarPassword(password)) {
                 this.mostrarError("Contraseña invalida");
@@ -452,8 +446,6 @@ public class CuentasForm extends javax.swing.JFrame {
     }
 
     private boolean validarPassword(String passwordCandidato) {
-        System.out.println(passwordCandidato);
-        System.out.println(cliente.getContrasenia());
         return BCrypt.checkpw(passwordCandidato, cliente.getContrasenia());
     }
 

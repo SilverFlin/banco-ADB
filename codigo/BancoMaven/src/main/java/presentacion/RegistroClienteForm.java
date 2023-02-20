@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package presentacion;
 
 import dominio.Cliente;
@@ -26,8 +21,6 @@ import utils.Validaciones;
  */
 public class RegistroClienteForm extends javax.swing.JFrame {
 
-
-    // TODO msg email repetido
     
     IniciarSesionForm clnFrm;
     private final IClientesDAO clientesDAO;
@@ -43,12 +36,8 @@ public class RegistroClienteForm extends javax.swing.JFrame {
     private void registrar() {
         if (!validarFormulario()) {
             return;
-        }
-
-        
-        // TODO regresar a inicio
+        }        
         try {
-            // TODO transaccion
             Domicilio id = domiciliosDAO.insertar(extraerDomicilio());
             Cliente cliente = extraerCliente();
             cliente.setIdDomicilio(id.getId());
@@ -61,7 +50,6 @@ public class RegistroClienteForm extends javax.swing.JFrame {
             
         } catch (PersistenciaException ex) {
             JOptionPane.showMessageDialog(this, "No fue posible registrar al cliente", "Error", JOptionPane.ERROR_MESSAGE);
-            //TODO agregar LOG bien
             Logger.getLogger(RegistroClienteForm.class.getName()).log(Level.SEVERE, null, ex);
         }
 

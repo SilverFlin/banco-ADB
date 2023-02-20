@@ -226,11 +226,9 @@ public class EditarClienteForm extends javax.swing.JFrame {
     private void guardar() {
 
         if (this.validarCampos()) {
-            System.out.println(this.cliente.getIdDomicilio());
             Domicilio domicilio = new Domicilio(this.cliente.getIdDomicilio(), txtCalle.getText(), txtNumero.getText(), txtColonia.getText(), txtCodigoPostal.getText());
             try {
-                System.out.println(domicilio);
-                System.out.println(domiciliosDAO.editar(domicilio));
+                domiciliosDAO.editar(domicilio);
                 this.mostrarMensajeExito("Datos Actualizados");
                 this.regresar();
             } catch (PersistenciaException ex) {

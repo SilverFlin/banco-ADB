@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package presentacion;
 
 import dominio.Cliente;
@@ -238,9 +233,7 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
                 return;
             }
 
-            // TODO pedir password de cuenta
-            //TODO generar password de retiro
-            String passwordRetiro = this.generarPasswordRetiro(); // Mostrar
+            String passwordRetiro = this.generarPasswordRetiro();
             RetiroSinCuenta retiroSinCuenta = this.crearRetiro(obtenerMonto(), passwordRetiro);
             /*Registrar operacion*/
             Operacion operacion = new Operacion(null, Mensajes.generarRegistroRetiroSinCuenta(retiroSinCuenta.getMonto()), retiroSinCuenta.getIdCuentaBancaria());
@@ -248,17 +241,13 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
 
             this.mostrarFolioYPassword(passwordRetiro, retiroSinCuenta);
             this.regresarACuentas();
-            // TODO mostrar password de retiro y folio y tiempo fin
-            //
         } catch (PersistenciaException ex) {
             Logger.getLogger(MovimientoBancarioForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    // TODO mover a utils/Validaciones
     private void consultarCuenta() throws PersistenciaException {
         this.cuentaBancaria = this.cuentasBancariasDAO.consultar(String.valueOf(cBoxNoCuentas.getSelectedItem()));
-
     }
 
     private boolean isValidMonto() {
@@ -271,7 +260,6 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
     }
 
     private String generarPasswordRetiro() {
-
         long longitud = 8L;
         long limiteInferior = (long) Math.pow(10, longitud - 1);
         long limiteSuperior = (long) (Math.pow(10, longitud) - 1.0);

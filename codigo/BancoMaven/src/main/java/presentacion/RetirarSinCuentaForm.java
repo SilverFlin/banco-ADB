@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package presentacion;
 
 import dominio.EstadoRetiroSinCuenta;
@@ -198,13 +193,13 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
             }
             if (retiroSinCuenta.getEstado() == EstadoRetiroSinCuenta.PENDIENTE) {
                 if (validarPassword(retiroSinCuenta.getPassword())) {
-                    
-                    if(validarCuentaActiva(this.cuentasBancariasDAO, retiroSinCuenta)){
-                    retirosSinCuentaDAO.retirar(retiroSinCuenta);
-                    Dialogs.mostrarMensajeExito(this, "Retiro de $" + retiroSinCuenta.getMonto() + " efectuado");
-                    this.regresar();
-                        
-                    }else{
+
+                    if (validarCuentaActiva(this.cuentasBancariasDAO, retiroSinCuenta)) {
+                        retirosSinCuentaDAO.retirar(retiroSinCuenta);
+                        Dialogs.mostrarMensajeExito(this, "Retiro de $" + retiroSinCuenta.getMonto() + " efectuado");
+                        this.regresar();
+
+                    } else {
                         Dialogs.mostrarError(this, "La cuenta se encuentra inactiva.");
                     }
 
@@ -219,7 +214,6 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
         }
     }
 
-    // TODO mover a utils/Validaciones
     private RetiroSinCuenta consultarRetiro() throws PersistenciaException {
         return retirosSinCuentaDAO.consultar(txtFolio.getText());
 
@@ -249,5 +243,4 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
         this.setVisible(false);
     }
 
-    
 }
