@@ -262,7 +262,7 @@ public class CuentasOperacionForm extends javax.swing.JFrame {
                 return;
             }
             
-            OperacionesForm operacionesForm = new OperacionesForm(this.conBD, this.cliente);
+            OperacionesForm operacionesForm = new OperacionesForm(this.conBD,cliente, this.cuentaBancaria);
             operacionesForm.setVisible(true);
             this.setVisible(false);
             
