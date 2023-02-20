@@ -28,4 +28,6 @@ public interface IRetirosSinCuentaDAO {
     RetiroSinCuenta eliminar(Integer id);
 
     RetiroSinCuenta actualizar(RetiroSinCuenta retiroSinCuenta) throws PersistenciaException;
+    
+    RetiroSinCuenta retirar(RetiroSinCuenta retiroSinCuenta) throws PersistenciaException;
 }
