@@ -21,6 +21,7 @@ public class RetiroSinCuenta {
     private String password;
     private String folio;
     private int idCuentaBancaria;
+    private String tiempoExpiracion;
 
     public RetiroSinCuenta() {
     }
@@ -36,6 +37,7 @@ public class RetiroSinCuenta {
         this.monto = monto;
         this.password = password;
         this.idCuentaBancaria = idCuentaBancaria;
+        this.tiempoExpiracion = "00:10:00";
     }
 
     public int getId() {
@@ -49,6 +51,16 @@ public class RetiroSinCuenta {
     public String getFechaInicio() {
         return fechaInicio;
     }
+
+    public String getTiempoExpiracion() {
+        return tiempoExpiracion;
+    }
+
+    public void setTiempoExpiracion(String tiempoExpiracion) {
+        this.tiempoExpiracion = tiempoExpiracion;
+    }
+    
+    
 
     public void setFechaInicio(String fechaInicio) {
         this.fechaInicio = fechaInicio;

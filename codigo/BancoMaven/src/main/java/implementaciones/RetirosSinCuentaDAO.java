@@ -128,45 +128,40 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
     @Override
     public RetiroSinCuenta insertar(RetiroSinCuenta retiroSinCuenta, CuentaBancaria cuentaBancaria) throws PersistenciaException {
         /* Consultas */
-        String insertStatement = "INSERT INTO " + NOMBRE_TABLA
-                + " (password, monto, folio, estado, fechaInicio, fechaFin, "
-                + "idCuentaBancaria) VALUES (?,?,?,?,?,?,?);";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement insertRetiro = con.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);) {
+        String insertStatement = "{CALL CustomExpiracionRetiroSinCuenta(?,?,?,?,?)}";
+        Connection con = null;
+        try {
+            con = this.GENERADOR_CONEXIONES.crearConexion();
+            CallableStatement callableStatement = con.prepareCall(insertStatement);
+            /*Iniciando Transaccion*/
+            con.setAutoCommit(false);
 
-            /* Asignar valores a consulta INSERT*/
-            insertRetiro.setString(1, retiroSinCuenta.getPassword());
-            insertRetiro.setDouble(2, retiroSinCuenta.getMonto());
-            String estado;
-            switch (retiroSinCuenta.getEstado()) {
-                case COBRADO:
-                    estado = ESTADO_RETIRO_COBRADO;
-                    break;
-                case PENDIENTE:
-                    estado = ESTADO_RETIRO_PENDIENTE;
-                    break;
-                default:
-                    estado = ESTADO_RETIRO_EXPIRADO;
-                    break;
-            }
-            insertRetiro.setString(3, retiroSinCuenta.getFolio());
-            insertRetiro.setString(4, estado);
-            insertRetiro.setString(5, retiroSinCuenta.getFechaInicio());
-            insertRetiro.setString(6, retiroSinCuenta.getFechaFin());
-            insertRetiro.setInt(7, cuentaBancaria.getId());
+            /* Asignar valores a Stored Procedure*/
+            callableStatement.setString(1, retiroSinCuenta.getPassword());
+            callableStatement.setDouble(2, retiroSinCuenta.getMonto());
+            callableStatement.setString(3, retiroSinCuenta.getTiempoExpiracion());
+            callableStatement.setInt(4, retiroSinCuenta.getIdCuentaBancaria());
+            callableStatement.registerOutParameter(5, Types.INTEGER);
+
+
             /* Ejecutar las consultas */
-            insertRetiro.executeUpdate();
+            callableStatement.execute();
+            int id = callableStatement.getInt(5);
+            retiroSinCuenta.setId(id);
 
-            ResultSet llavesGeneradas = insertRetiro.getGeneratedKeys();
-            /* Validar consultas*/
-            if (llavesGeneradas.next()) {
-                retiroSinCuenta.setId(llavesGeneradas.getInt(Statement.RETURN_GENERATED_KEYS));
-                return retiroSinCuenta;
-            }
+            con.commit();
 
-            throw new PersistenciaException("Error al insertar retiro");
-
+            return retiroSinCuenta;
         } catch (SQLException e) {
             LOG.log(Level.SEVERE, e.getMessage());
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    LOG.log(Level.SEVERE, ex.getMessage());
+                    throw new PersistenciaException("Error al hacer rollback");
+                }
+            }
             throw new PersistenciaException("Error en la conexión");
         }
     }
@@ -266,7 +261,7 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
 
     @Override
     public RetiroSinCuenta retirar(RetiroSinCuenta retiroSinCuenta) throws PersistenciaException {
-         /* Consultas */
+        /* Consultas */
         String insertStatement = "{CALL CobrarRetiroSinCuenta(?,?,?)}";
         Connection con = null;
         try {
