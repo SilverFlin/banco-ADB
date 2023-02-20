@@ -5,6 +5,10 @@
  */
 package utils;
 
+import dominio.CuentaBancaria;
+import dominio.RetiroSinCuenta;
+import excepciones.PersistenciaException;
+import interfaces.ICuentasBancariasDAO;
 import java.awt.event.KeyEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -108,5 +112,15 @@ public class Validaciones {
         Matcher matcher = pattern.matcher(texto);
 
         return matcher.matches();
+    }
+    
+    public static boolean validarCuentaActiva(ICuentasBancariasDAO cuentasBancariasDAO, RetiroSinCuenta retiroSinCuenta) throws PersistenciaException {
+        CuentaBancaria cuentaBancaria = cuentasBancariasDAO.consultar(retiroSinCuenta.getIdCuentaBancaria());
+        String estado = cuentaBancaria.getEstadoCuenta();
+        return "Activa".equals(estado);
+    }
+    public static boolean validarCuentaActiva(ICuentasBancariasDAO cuentasBancariasDAO, CuentaBancaria cuentaBancaria) throws PersistenciaException {
+        String estado = cuentaBancaria.getEstadoCuenta();
+        return "Activa".equals(estado);
     }
 }

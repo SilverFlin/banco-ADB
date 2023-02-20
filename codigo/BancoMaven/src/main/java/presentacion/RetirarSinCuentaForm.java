@@ -6,14 +6,18 @@
 package presentacion;
 
 import dominio.Cliente;
+import dominio.CuentaBancaria;
+import dominio.EstadoCuenta;
 import dominio.EstadoRetiroSinCuenta;
 import dominio.RetiroSinCuenta;
 import excepciones.PersistenciaException;
 import implementaciones.ClientesDAO;
 import implementaciones.ConexionBD;
+import implementaciones.CuentasBancariasDAO;
 import implementaciones.RetirosSinCuentaDAO;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
+import interfaces.ICuentasBancariasDAO;
 import interfaces.IRetirosSinCuentaDAO;
 import java.awt.Color;
 import java.sql.Date;
@@ -24,6 +28,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.Dialogs;
+import static utils.Validaciones.validarCuentaActiva;
 
 /**
  *
@@ -32,11 +37,13 @@ import utils.Dialogs;
 public class RetirarSinCuentaForm extends javax.swing.JFrame {
 
     private final IRetirosSinCuentaDAO retirosSinCuentaDAO;
+    private final ICuentasBancariasDAO cuentasBancariasDAO;
     private IniciarSesionForm clienteForm;
 
     public RetirarSinCuentaForm(IConexionBD conBD) {
         initComponents();
         this.retirosSinCuentaDAO = new RetirosSinCuentaDAO(conBD);
+        this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
         this.clienteForm = new IniciarSesionForm(conBD);
     }
 
@@ -190,7 +197,6 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
                 Dialogs.mostrarError(this, "Folio inexistente");
                 return;
             }
-            System.out.println(retiroSinCuenta);
             retiroSinCuenta = this.validarCaducidad(retiroSinCuenta);
             if (retiroSinCuenta.getEstado() == EstadoRetiroSinCuenta.COBRADO) {
                 Dialogs.mostrarError(this, "Este retiro ya fue cobrado");
@@ -202,9 +208,15 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
             }
             if (retiroSinCuenta.getEstado() == EstadoRetiroSinCuenta.PENDIENTE) {
                 if (validarPassword(retiroSinCuenta.getPassword())) {
+                    
+                    if(validarCuentaActiva(this.cuentasBancariasDAO, retiroSinCuenta)){
                     retirosSinCuentaDAO.retirar(retiroSinCuenta);
                     Dialogs.mostrarMensajeExito(this, "Retiro de $" + retiroSinCuenta.getMonto() + " efectuado");
                     this.regresar();
+                        
+                    }else{
+                        Dialogs.mostrarError(this, "La cuenta se encuentra inactiva.");
+                    }
 
                 } else {
                     Dialogs.mostrarError(this, "Credenciales invalidas");
@@ -246,4 +258,6 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
         this.clienteForm.setVisible(true);
         this.setVisible(false);
     }
+
+    
 }
