@@ -8,17 +8,20 @@ package presentacion;
 import dominio.Cliente;
 import dominio.CuentaBancaria;
 import dominio.EstadoRetiroSinCuenta;
+import dominio.Operacion;
 import dominio.RetiroSinCuenta;
 import dominio.Transferencia;
 import excepciones.PersistenciaException;
 import implementaciones.ClientesDAO;
 import implementaciones.ConexionBD;
 import implementaciones.CuentasBancariasDAO;
+import implementaciones.OperacionesDAO;
 import implementaciones.RetirosSinCuentaDAO;
 import implementaciones.TransferenciasDAO;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
+import interfaces.IOperacionesDAO;
 import interfaces.IRetirosSinCuentaDAO;
 import interfaces.ITransferenciasDAO;
 import java.awt.Color;
@@ -38,6 +41,7 @@ import javax.swing.JPasswordField;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.ConfiguracionPaginado;
 import utils.Conversiones;
+import utils.Mensajes;
 import utils.Validaciones;
 
 /**
@@ -48,7 +52,8 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
 
     private final ITransferenciasDAO transferenciasDAO;
     private final ICuentasBancariasDAO cuentasBancariasDAO;
-
+    private final IOperacionesDAO operacionesDAO;
+    
     private final long TIEMPO_EXPIRACION = 1000 * 60 * 10;
     private CuentaBancaria cuentaBancaria;
     private Cliente cliente;
@@ -58,9 +63,10 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
         initComponents();
         this.transferenciasDAO = new TransferenciasDAO(conBD);
         this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
+        this.operacionesDAO = new OperacionesDAO(conBD);
         this.menuPrincipalForm = menuPrincipalForm;
         this.cliente = cliente;
-
+        
         this.llenarComboBox();
     }
 
@@ -317,7 +323,13 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
                 return;
             }
             Transferencia transferencia = new Transferencia(obtenerMonto(), this.cuentaBancaria.getId(), cuentaDestino.getId());
-            System.out.println(this.transferenciasDAO.insertar(transferencia));
+            Transferencia transferenciaExitosa = this.transferenciasDAO.insertar(transferencia);
+            
+            /* Registrar una operacion*/
+            int idCuentaOrigen = transferenciaExitosa.getIdCuentaOrigen();
+            Operacion operacion = new Operacion(null,Mensajes.generarRegistroTransferencia(transferenciaExitosa.getMonto(), idCuentaOrigen+"", transferenciaExitosa.getIdCuentaDestino()+""),idCuentaOrigen);
+            operacionesDAO.insertar(operacion);
+            
             this.mostrarExito("Transferencia satisfactoria");
             this.regresarAMenu();
         } catch (PersistenciaException ex) {
