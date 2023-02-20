@@ -13,10 +13,11 @@ public interface IClientesDAO {
 
     Cliente consultar(String correo);
 
+    List<Cliente> consultar(ConfiguracionPaginado configPaginado) throws PersistenciaException;
+    
     Cliente insertar(Cliente cliente) throws PersistenciaException;
     
-    Cliente editar(Cliente cliente) throws PersistenciaException;
+    Cliente actualizar(Cliente cliente) throws PersistenciaException;
 
-    List<Cliente> consultar(ConfiguracionPaginado configPaginado) throws PersistenciaException;
 
 }

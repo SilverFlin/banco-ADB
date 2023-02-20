@@ -82,7 +82,7 @@ public class DomiciliosDAO implements IDomiciliosDAO {
     }
 
     @Override
-    public Domicilio editar(Domicilio domicilio) throws PersistenciaException {
+    public Domicilio actualizar(Domicilio domicilio) throws PersistenciaException {
         String SQLQuery = "UPDATE domicilios SET calle = ?,numero = ?, colonia = ?,codigoPostal = ? WHERE id = ?";
 
         try (Connection conexion = GENERADOR_CONEXIONES.crearConexion(); PreparedStatement comando = conexion.prepareStatement(SQLQuery);) {

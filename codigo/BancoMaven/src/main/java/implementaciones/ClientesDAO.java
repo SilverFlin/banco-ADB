@@ -93,7 +93,7 @@ public class ClientesDAO implements IClientesDAO {
 
 
     @Override
-    public Cliente editar(Cliente cliente) throws PersistenciaException {
+    public Cliente actualizar(Cliente cliente) throws PersistenciaException {
         String SQLQuery = "UPDATE clientes SET password = ? WHERE id = ?";
 
         try (Connection conexion = GENERADOR_CONEXIONES.crearConexion(); PreparedStatement comando = conexion.prepareStatement(SQLQuery);) {

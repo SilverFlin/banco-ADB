@@ -228,7 +228,7 @@ public class EditarClienteForm extends javax.swing.JFrame {
         if (this.validarCampos()) {
             Domicilio domicilio = new Domicilio(this.cliente.getIdDomicilio(), txtCalle.getText(), txtNumero.getText(), txtColonia.getText(), txtCodigoPostal.getText());
             try {
-                domiciliosDAO.editar(domicilio);
+                domiciliosDAO.actualizar(domicilio);
                 this.mostrarMensajeExito("Datos Actualizados");
                 this.regresar();
             } catch (PersistenciaException ex) {

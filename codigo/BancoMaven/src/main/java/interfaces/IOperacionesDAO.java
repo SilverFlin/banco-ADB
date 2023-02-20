@@ -13,10 +13,10 @@ public interface IOperacionesDAO {
 
     public Operacion consultar(int id);
 
-    public Operacion insertar(Operacion operacion) throws PersistenciaException;
-
     List<Operacion> consultar(ConfiguracionPaginado configPaginado, int idCuentaBancaria) throws PersistenciaException;
 
     List<Operacion> consultar(ConfiguracionPaginado configPaginado, String idCliente) throws PersistenciaException;
+
+    public Operacion insertar(Operacion operacion) throws PersistenciaException;
 
 }

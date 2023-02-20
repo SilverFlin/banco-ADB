@@ -13,6 +13,6 @@ public interface IDomiciliosDAO {
 
     Domicilio insertar(Domicilio domicilio) throws PersistenciaException;
 
-    Domicilio editar(Domicilio domicilio) throws PersistenciaException;
+    Domicilio actualizar(Domicilio domicilio) throws PersistenciaException;
 
 }

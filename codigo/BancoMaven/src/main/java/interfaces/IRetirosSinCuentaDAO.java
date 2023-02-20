@@ -20,9 +20,9 @@ public interface IRetirosSinCuentaDAO {
 
     RetiroSinCuenta insertar(RetiroSinCuenta retiroSinCuenta, CuentaBancaria cuentaBancaria) throws PersistenciaException;
 
-    RetiroSinCuenta eliminar(Integer id);
-
     RetiroSinCuenta actualizar(RetiroSinCuenta retiroSinCuenta) throws PersistenciaException;
+    
+    RetiroSinCuenta eliminar(Integer id);
     
     RetiroSinCuenta retirar(RetiroSinCuenta retiroSinCuenta) throws PersistenciaException;
 }
