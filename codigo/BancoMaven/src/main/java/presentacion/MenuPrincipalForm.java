@@ -212,7 +212,7 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTransferenciaActionPerformed
 
     private void btnHistorialActividadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActividadActionPerformed
-        // TODO add your handling code here:
+        mostrarActividad();
     }//GEN-LAST:event_btnHistorialActividadActionPerformed
 
     private void btnCrearCuentaBancaria1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearCuentaBancaria1ActionPerformed
@@ -302,6 +302,12 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     private void cargarVentanaTransferencia() {
         CrearTransferenciaForm crearTransferenciaForm = new CrearTransferenciaForm(conBD, this, cliente);
         crearTransferenciaForm.setVisible(true);
+        this.setVisible(false);
+    }
+    
+    private void mostrarActividad(){
+        ActividadesForm actividadesForm = new ActividadesForm(conBD, cliente, this);
+        actividadesForm.setVisible(true);
         this.setVisible(false);
     }
 
