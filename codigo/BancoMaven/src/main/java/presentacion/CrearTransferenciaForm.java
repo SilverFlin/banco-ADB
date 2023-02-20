@@ -333,7 +333,7 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
             this.mostrarExito("Transferencia satisfactoria");
             this.regresarAMenu();
         } catch (PersistenciaException ex) {
-            Logger.getLogger(CrearRetiroSinCuentaForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MovimientoBancarioForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
