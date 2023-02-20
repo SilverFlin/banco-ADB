@@ -85,13 +85,13 @@ public class OperacionesDAO implements IOperacionesDAO {
     }
 
     @Override
-    public List<Operacion> consultar(ConfiguracionPaginado configPaginado,int idCuentaBancaria) throws PersistenciaException {
+    public List<Operacion> consultar(ConfiguracionPaginado configPaginado, int idCuentaBancaria) throws PersistenciaException {
         String codigoSQL = "SELECT id, fechaHora, detalles, idCuentaBancaria "
                 + "FROM operaciones WHERE idCuentaBancaria = ? LIMIT ? OFFSET ?";
         List<Operacion> listaOperaciones = new LinkedList<>();
         try (
                 Connection conexion = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement comando = conexion.prepareStatement(codigoSQL);) {
-            
+
             comando.setInt(1, idCuentaBancaria);
             comando.setInt(2, configPaginado.getLimite());
             comando.setInt(3, configPaginado.getOffset());
@@ -102,6 +102,37 @@ public class OperacionesDAO implements IOperacionesDAO {
                 Date fechaHora = resultado.getDate("fechaHora");
                 String detalles = resultado.getString("detalles");
                 Operacion operacion = new Operacion(id, fechaHora, detalles, idCuentaBancaria);
+                listaOperaciones.add(operacion);
+            }
+
+            return listaOperaciones;
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            throw new PersistenciaException("No fue posible consultar la lista de clientes");
+        }
+    }
+
+    @Override
+    public List<Operacion> consultar(ConfiguracionPaginado configPaginado, String idCliente) throws PersistenciaException {
+        String codigoSQL = "SELECT cu.noCuenta, op.id, op.fechaHora, op.detalles, op.idCuentaBancaria "
+                + "FROM operaciones op INNER JOIN cuentasBancarias cu INNER JOIN clientes cl "
+                + "ON op.idCuentaBancaria = cu.id AND cu.idCliente = cl.id WHERE cl.id = ? LIMIT ? OFFSET ?";
+        List<Operacion> listaOperaciones = new LinkedList<>();
+        try (
+                Connection conexion = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement comando = conexion.prepareStatement(codigoSQL);) {
+
+            comando.setInt(1, Integer.parseInt(idCliente));
+            comando.setInt(2, configPaginado.getLimite());
+            comando.setInt(3, configPaginado.getOffset());
+            ResultSet resultado = comando.executeQuery();
+
+            while (resultado.next()) {
+                String noCuenta = resultado.getString("noCuenta");
+                Integer id = resultado.getInt("id");
+                Date fechaHora = resultado.getDate("fechaHora");
+                String detalles = resultado.getString("detalles");
+                int idCuentaBancaria = resultado.getInt("idCuentaBancaria");
+                Operacion operacion = new Operacion(id, fechaHora, detalles, idCuentaBancaria, noCuenta);
                 listaOperaciones.add(operacion);
             }
 
