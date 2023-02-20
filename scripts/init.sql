@@ -249,7 +249,7 @@ DELIMITER //
 CREATE PROCEDURE CustomExpiracionRetiroSinCuenta(
     IN password VARCHAR(100),
     IN monto DECIMAL(8,4),
-    IN tiempoExpiracion TIME,
+    IN tiempoExpiracionMin TIME,
     IN idCuentaBancaria INT,
     OUT ultimoId INT
 )
@@ -258,7 +258,7 @@ BEGIN
     VALUES(
 		password,
 		monto,
-        CURRENT_TIMESTAMP + tiempoExpiracion,
+        TIMESTAMPADD(MINUTE,tiempoExpiracionMin,CURRENT_TIMESTAMP),
         idCuentaBancaria);
         
 	UPDATE RetirosSinCuenta

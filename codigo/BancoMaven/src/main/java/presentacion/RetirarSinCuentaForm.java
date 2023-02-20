@@ -16,7 +16,8 @@ import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
 import interfaces.IRetirosSinCuentaDAO;
 import java.awt.Color;
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -157,8 +158,7 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        this.clienteForm.setVisible(true);
-        this.setVisible(false);
+        this.regresar();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnRetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetirarActionPerformed
@@ -190,7 +190,7 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
                 Dialogs.mostrarError(this, "Folio inexistente");
                 return;
             }
-            
+            System.out.println(retiroSinCuenta);
             retiroSinCuenta = this.validarCaducidad(retiroSinCuenta);
             if (retiroSinCuenta.getEstado() == EstadoRetiroSinCuenta.COBRADO) {
                 Dialogs.mostrarError(this, "Este retiro ya fue cobrado");
@@ -203,7 +203,10 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
             if (retiroSinCuenta.getEstado() == EstadoRetiroSinCuenta.PENDIENTE) {
                 if (validarPassword(retiroSinCuenta.getPassword())) {
                     retirosSinCuentaDAO.retirar(retiroSinCuenta);
-                }else{
+                    Dialogs.mostrarMensajeExito(this, "Retiro de $" + retiroSinCuenta.getMonto() + " efectuado");
+                    this.regresar();
+
+                } else {
                     Dialogs.mostrarError(this, "Credenciales invalidas");
                     return;
                 }
@@ -222,20 +225,25 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
 
     private boolean validarPassword(String password) {
         String passwordCandidato = new String(txtContraseña.getPassword());
-        System.out.println(passwordCandidato);
-        System.out.println(password);
         return BCrypt.checkpw(passwordCandidato, password);
     }
 
     private RetiroSinCuenta validarCaducidad(RetiroSinCuenta retiroSinCuenta) throws PersistenciaException {
-        Date fechaFin = new Date(retiroSinCuenta.getFechaFin());
-        
-        if(fechaFin.after(new Date())){
+
+        Timestamp fechaFin = Timestamp.valueOf(retiroSinCuenta.getFechaFin());
+        Timestamp ahora = new Timestamp(System.currentTimeMillis());
+
+        if (fechaFin.before(ahora)) {
             retiroSinCuenta.setEstado(EstadoRetiroSinCuenta.EXPIRADO);
             retiroSinCuenta = retirosSinCuentaDAO.actualizar(retiroSinCuenta);
         }
-        
+
         return retiroSinCuenta;
-        
+
+    }
+
+    private void regresar() {
+        this.clienteForm.setVisible(true);
+        this.setVisible(false);
     }
 }

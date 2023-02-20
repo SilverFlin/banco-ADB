@@ -21,7 +21,7 @@ public class RetiroSinCuenta {
     private String password;
     private String folio;
     private int idCuentaBancaria;
-    private String tiempoExpiracion;
+    private String tiempoExpiracionMinutos;
 
     public RetiroSinCuenta() {
     }
@@ -37,7 +37,7 @@ public class RetiroSinCuenta {
         this.monto = monto;
         this.password = password;
         this.idCuentaBancaria = idCuentaBancaria;
-        this.tiempoExpiracion = "00:10:00";
+        this.tiempoExpiracionMinutos = "10";
     }
 
     public int getId() {
@@ -53,11 +53,11 @@ public class RetiroSinCuenta {
     }
 
     public String getTiempoExpiracion() {
-        return tiempoExpiracion;
+        return tiempoExpiracionMinutos;
     }
 
     public void setTiempoExpiracion(String tiempoExpiracion) {
-        this.tiempoExpiracion = tiempoExpiracion;
+        this.tiempoExpiracionMinutos = tiempoExpiracion;
     }
     
     
