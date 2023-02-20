@@ -23,6 +23,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import org.mindrot.jbcrypt.BCrypt;
+import presentacion.MovimientoBancarioForm.TipoMovimiento;
 import utils.ConfiguracionPaginado;
 
 /**
@@ -309,8 +310,8 @@ public class CuentasForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnOperacionesActionPerformed
 
     private void btnAvanzarPaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAvanzarPaginaActionPerformed
-         configPaginado.avanzarPag();
-         this.llenarTablaCuentas();
+        configPaginado.avanzarPag();
+        this.llenarTablaCuentas();
     }//GEN-LAST:event_btnAvanzarPaginaActionPerformed
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
@@ -322,7 +323,7 @@ public class CuentasForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarCuentaActionPerformed
 
     private void btnRetiroSinTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinTarjetaActionPerformed
-        CrearRetiroSinCuentaForm crearRetiroSinCuentaForm = new CrearRetiroSinCuentaForm(this.conBD, this, this.cliente);
+        MovimientoBancarioForm crearRetiroSinCuentaForm = new MovimientoBancarioForm(this.conBD, this, this.cliente, TipoMovimiento.RETIRO_SIN_CUENTA);
         crearRetiroSinCuentaForm.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnRetiroSinTarjetaActionPerformed
@@ -337,11 +338,15 @@ public class CuentasForm extends javax.swing.JFrame {
     }//GEN-LAST:event_brnDesactivarCuenta1ActionPerformed
 
     private void btnDepositarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepositarActionPerformed
-        // TODO add your handling code here:
+        MovimientoBancarioForm crearRetiroSinCuentaForm = new MovimientoBancarioForm(this.conBD, this, this.cliente, TipoMovimiento.DEPOSITO_CUENTA);
+        crearRetiroSinCuentaForm.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnDepositarActionPerformed
 
     private void btnRetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetirarActionPerformed
-        // TODO add your handling code here:
+        MovimientoBancarioForm crearRetiroSinCuentaForm = new MovimientoBancarioForm(this.conBD, this, this.cliente, TipoMovimiento.RETIRO_CUENTA);
+        crearRetiroSinCuentaForm.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnRetirarActionPerformed
 
 
@@ -363,11 +368,11 @@ public class CuentasForm extends javax.swing.JFrame {
     private javax.swing.JLabel txtBienvenida;
     // End of variables declaration//GEN-END:variables
 
-    private void llenarTablaCuentas() {
+    public void llenarTablaCuentas() {
         try {
 
             List<CuentaBancaria> listaCuentas = this.cuentasBancariasDAO.consultar(this.configPaginado, this.cliente.getId());
-            if(listaCuentas.isEmpty()){
+            if (listaCuentas.isEmpty()) {
                 this.configPaginado.retrocederPag();
                 return;
             }
@@ -459,7 +464,7 @@ public class CuentasForm extends javax.swing.JFrame {
     }
 
     private void editarCuenta() {
-        EditarClienteForm editarClienteForm = new EditarClienteForm(this, this.conBD,this.cliente);
+        EditarClienteForm editarClienteForm = new EditarClienteForm(this, this.conBD, this.cliente);
         editarClienteForm.setVisible(true);
         this.setVisible(false);
     }

@@ -20,13 +20,13 @@ public class CuentaBancaria {
     private Double saldoMXN;
     private Integer idCliente;
     private EstadoCuenta estadoCuenta;
-    
+
     public CuentaBancaria() {
         generarNoCuenta();
         this.saldoMXN = 0.0;
         this.estadoCuenta = EstadoCuenta.ACTIVO;
     }
-    
+
     public CuentaBancaria(Double saldoMXN) {
         generarNoCuenta();
         this.saldoMXN = saldoMXN;
@@ -41,7 +41,6 @@ public class CuentaBancaria {
         this.idCliente = idCliente;
         this.estadoCuenta = estadoCuenta;
     }
-    
 
     /**
      * Genera un String de 16 numeros con espaciado cada 4 y lo guarda en
@@ -115,7 +114,7 @@ public class CuentaBancaria {
     }
 
     public String getEstadoCuenta() {
-        return estadoCuenta == EstadoCuenta.ACTIVO ? "Activa":"Inactiva";
+        return estadoCuenta == EstadoCuenta.ACTIVO ? "Activa" : "Inactiva";
     }
 
     public void setSaldoMXN(Double saldoMXN) {
@@ -146,7 +145,7 @@ public class CuentaBancaria {
     public String toString() {
         return "CuentaBancaria{" + "id=" + id + ", noCuenta=" + noCuenta + ", fechaApertura=" + fechaApertura + ", saldoMXN=" + saldoMXN + ", idCliente=" + idCliente + ", estadoCuenta=" + estadoCuenta + '}';
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -174,6 +173,14 @@ public class CuentaBancaria {
             return false;
         }
         return true;
+    }
+
+    public void retirar(Double monto) {
+        this.setSaldoMXN(this.getSaldoMXN() - monto);
+    }
+
+    public void depositar(Double monto) {
+        this.setSaldoMXN(this.getSaldoMXN() + monto);
     }
 
 }
