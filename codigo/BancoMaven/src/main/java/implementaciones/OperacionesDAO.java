@@ -61,13 +61,12 @@ public class OperacionesDAO implements IOperacionesDAO {
 
     @Override
     public Operacion insertar(Operacion operacion) throws PersistenciaException {
-        String SQLQuery = "INSERT INTO operaciones(fechaHora,detalles, idCuentaBancaria) VALUES (?,?,?)";
+        String SQLQuery = "INSERT INTO operaciones(detalles, idCuentaBancaria) VALUES (?,?)";
 
         try (Connection conexion = GENERADOR_CONEXIONES.crearConexion(); PreparedStatement comando = conexion.prepareStatement(SQLQuery, Statement.RETURN_GENERATED_KEYS);) {
 
-            comando.setDate(1, operacion.getFechaHora());
-            comando.setString(2, operacion.getDetalles());
-            comando.setInt(3, operacion.getIdCuentaBancaria());
+            comando.setString(1, operacion.getDetalles());
+            comando.setInt(2, operacion.getIdCuentaBancaria());
 
             comando.executeUpdate();
 
