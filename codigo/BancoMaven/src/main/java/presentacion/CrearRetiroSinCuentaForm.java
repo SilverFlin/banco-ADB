@@ -8,15 +8,18 @@ package presentacion;
 import dominio.Cliente;
 import dominio.CuentaBancaria;
 import dominio.EstadoRetiroSinCuenta;
+import dominio.Operacion;
 import dominio.RetiroSinCuenta;
 import excepciones.PersistenciaException;
 import implementaciones.ClientesDAO;
 import implementaciones.ConexionBD;
 import implementaciones.CuentasBancariasDAO;
+import implementaciones.OperacionesDAO;
 import implementaciones.RetirosSinCuentaDAO;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
+import interfaces.IOperacionesDAO;
 import interfaces.IRetirosSinCuentaDAO;
 import java.awt.Color;
 import java.sql.Date;
@@ -35,6 +38,7 @@ import javax.swing.JPasswordField;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.ConfiguracionPaginado;
 import utils.Conversiones;
+import utils.Mensajes;
 import utils.Validaciones;
 
 /**
@@ -45,16 +49,18 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
 
     private final IRetirosSinCuentaDAO retirosSinCuentaDAO;
     private final ICuentasBancariasDAO cuentasBancariasDAO;
+    private final IOperacionesDAO operacionesDAO;
     private CuentasForm cuentasForm;
 
     private final long TIEMPO_EXPIRACION = 1000 * 60 * 10;
     private CuentaBancaria cuentaBancaria;
     private Cliente cliente;
-
+    
     public CrearRetiroSinCuentaForm(IConexionBD conBD, CuentasForm cuentasForm, Cliente cliente) {
         initComponents();
         this.retirosSinCuentaDAO = new RetirosSinCuentaDAO(conBD);
         this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
+        this.operacionesDAO = new OperacionesDAO(conBD);
         this.cuentasForm = cuentasForm;
         this.cliente = cliente;
 
@@ -233,6 +239,11 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
             RetiroSinCuenta retiroSinCuenta = this.crearRetiro(obtenerMonto(), passwordRetiro);
             System.out.println(retiroSinCuenta);
             System.out.println(passwordRetiro);
+            
+            /*Registrar operacion*/
+            Operacion operacion = new Operacion(null,Mensajes.generarRegistroRetiroSinCuenta(retiroSinCuenta.getMonto()),retiroSinCuenta.getIdCuentaBancaria());
+            this.operacionesDAO.insertar(operacion);
+            
             this.mostrarFolioYPassword(passwordRetiro, retiroSinCuenta);
             this.regresarACuentas();
             // TODO mostrar password de retiro y folio y tiempo fin
