@@ -12,10 +12,12 @@ import java.sql.Date;
  * @author Toled
  */
 public class Operacion {
+
     private int id;
     private Date fechaHora;
     private String detalles;
     private int idCuentaBancaria;
+    private String noCuenta;
 
     public Operacion(int id, Date fechaHora, String detalles, int idCuentaBancaria) {
         this.id = id;
@@ -28,6 +30,14 @@ public class Operacion {
         this.fechaHora = fechaHora;
         this.detalles = detalles;
         this.idCuentaBancaria = idCuentaBancaria;
+    }
+
+    public Operacion(int id, Date fechaHora, String detalles, int idCuentaBancaria,String noCuenta) {
+        this.id = id;
+        this.fechaHora = fechaHora;
+        this.detalles = detalles;
+        this.idCuentaBancaria = idCuentaBancaria;
+        this.noCuenta = noCuenta;
     }
 
     public int getId() {
@@ -62,6 +72,16 @@ public class Operacion {
         this.idCuentaBancaria = idCuentaBancaria;
     }
 
+    public String getNoCuenta() {
+        return noCuenta;
+    }
+
+    public void setNoCuenta(String noCuenta) {
+        this.noCuenta = noCuenta;
+    }
+    
+    
+    
     @Override
     public int hashCode() {
         int hash = 3;
@@ -88,6 +108,5 @@ public class Operacion {
     public String toString() {
         return "Operacion{" + "id=" + id + ", monto=" + ", fechaHora=" + fechaHora + ", detalles=" + detalles + ", idCuentaBancaria=" + idCuentaBancaria + '}';
     }
-    
-     
+
 }
