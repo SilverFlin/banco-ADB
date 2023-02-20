@@ -21,10 +21,11 @@ import utils.Validaciones;
  */
 public class RegistroClienteForm extends javax.swing.JFrame {
 
-    
     IniciarSesionForm clnFrm;
     private final IClientesDAO clientesDAO;
     private final IDomiciliosDAO domiciliosDAO;
+
+    private static final Logger LOG = Logger.getLogger(RegistroClienteForm.class.getName());
 
     public RegistroClienteForm(IniciarSesionForm clnFrm, IConexionBD conexionBD) {
         initComponents();
@@ -36,21 +37,21 @@ public class RegistroClienteForm extends javax.swing.JFrame {
     private void registrar() {
         if (!validarFormulario()) {
             return;
-        }        
+        }
         try {
             Domicilio id = domiciliosDAO.insertar(extraerDomicilio());
             Cliente cliente = extraerCliente();
             cliente.setIdDomicilio(id.getId());
             clientesDAO.insertar(cliente);
-            
+
             JOptionPane.showMessageDialog(this, "Cliente registrado");
-            
+
             cambiarVentana();
             limpiarCampos();
-            
+
         } catch (PersistenciaException ex) {
             JOptionPane.showMessageDialog(this, "No fue posible registrar al cliente", "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(RegistroClienteForm.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage());
         }
 
     }

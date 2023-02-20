@@ -233,7 +233,7 @@ public class EditarClienteForm extends javax.swing.JFrame {
                 this.regresar();
             } catch (PersistenciaException ex) {
                 this.mostrarError("Error al actualizar datos, intenta de nuevo.");
-                Logger.getLogger(EditarClienteForm.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, ex.getMessage());
             }
         }
 

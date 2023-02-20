@@ -36,11 +36,13 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
     private final ITransferenciasDAO transferenciasDAO;
     private final ICuentasBancariasDAO cuentasBancariasDAO;
     private final IOperacionesDAO operacionesDAO;
-    
+
     private final long TIEMPO_EXPIRACION = 1000 * 60 * 10;
     private CuentaBancaria cuentaBancaria;
     private Cliente cliente;
     private final MenuPrincipalForm menuPrincipalForm;
+    
+    private static final Logger LOG = Logger.getLogger(CrearTransferenciaForm.class.getName());
 
     public CrearTransferenciaForm(IConexionBD conBD, MenuPrincipalForm menuPrincipalForm, Cliente cliente) {
         initComponents();
@@ -49,7 +51,7 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
         this.operacionesDAO = new OperacionesDAO(conBD);
         this.menuPrincipalForm = menuPrincipalForm;
         this.cliente = cliente;
-        
+
         this.llenarComboBox();
     }
 
@@ -221,7 +223,7 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
         try {
             return this.cuentasBancariasDAO.consultar(this.txtCuentaDestino.getText());
         } catch (PersistenciaException ex) {
-            Logger.getLogger(CrearTransferenciaForm.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage());
             this.mostrarError("La cuenta destino no existe.");
             return null;
         }
@@ -233,7 +235,7 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
             List<String> noCuentasBancarias = extraerNoCuenta(cuentasBancarias);
             this.cBoxCuentasOrigen.setModel(new DefaultComboBoxModel<>(noCuentasBancarias.toArray(new String[0])));
         } catch (PersistenciaException ex) {
-            Logger.getLogger(CrearTransferenciaForm.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage());
         }
 
     }
@@ -307,16 +309,16 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
             }
             Transferencia transferencia = new Transferencia(obtenerMonto(), this.cuentaBancaria.getId(), cuentaDestino.getId());
             Transferencia transferenciaExitosa = this.transferenciasDAO.insertar(transferencia);
-            
+
             /* Registrar una operacion*/
             int idCuentaOrigen = transferenciaExitosa.getIdCuentaOrigen();
-            Operacion operacion = new Operacion(null,Mensajes.generarRegistroTransferencia(transferenciaExitosa.getMonto(), idCuentaOrigen+"", transferenciaExitosa.getIdCuentaDestino()+""),idCuentaOrigen);
+            Operacion operacion = new Operacion(null, Mensajes.generarRegistroTransferencia(transferenciaExitosa.getMonto(), idCuentaOrigen + "", transferenciaExitosa.getIdCuentaDestino() + ""), idCuentaOrigen);
             operacionesDAO.insertar(operacion);
-            
+
             this.mostrarExito("Transferencia satisfactoria");
             this.regresarAMenu();
         } catch (PersistenciaException ex) {
-            Logger.getLogger(MovimientoBancarioForm.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage());
         }
     }
 

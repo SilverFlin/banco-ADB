@@ -249,7 +249,7 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
             this.mostrarMensajeExito("Cuenta creada con No. " + cuentaCreada.getNoCuenta());
         } catch (PersistenciaException ex) {
             mostrarMensajeError("Error al crear cuenta");
-            Logger.getLogger(MenuPrincipalForm.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage());
         }
     }
 

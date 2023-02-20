@@ -34,6 +34,8 @@ public class CuentasOperacionForm extends javax.swing.JFrame {
     private CuentaBancaria cuentaBancaria;
     private Cliente cliente;
     private final IConexionBD conBD;
+    
+    private static final Logger LOG = Logger.getLogger(CuentasOperacionForm.class.getName());
 
     public CuentasOperacionForm(IConexionBD conBD, CuentasForm cuentasForm, Cliente cliente) {
         initComponents();
@@ -184,7 +186,7 @@ public class CuentasOperacionForm extends javax.swing.JFrame {
             List<String> noCuentasBancarias = extraerNoCuenta(cuentasBancarias);
             this.cBoxNoCuentas.setModel(new DefaultComboBoxModel<>(noCuentasBancarias.toArray(new String[0])));
         } catch (PersistenciaException ex) {
-            Logger.getLogger(CuentasOperacionForm.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage());
         }
 
     }
@@ -250,7 +252,7 @@ public class CuentasOperacionForm extends javax.swing.JFrame {
             this.setVisible(false);
             
         } catch (PersistenciaException ex) {
-            Logger.getLogger(CuentasOperacionForm.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage());
         }
     }
 }

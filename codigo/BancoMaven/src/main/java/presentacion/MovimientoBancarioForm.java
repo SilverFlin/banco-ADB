@@ -46,6 +46,8 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
     private Cliente cliente;
     private TipoMovimiento tipoMovimiento;
 
+    private static final Logger LOG = Logger.getLogger(MovimientoBancarioForm.class.getName());
+
     public enum TipoMovimiento {
         RETIRO_CUENTA, DEPOSITO_CUENTA, RETIRO_SIN_CUENTA
     };
@@ -242,7 +244,7 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
             this.mostrarFolioYPassword(passwordRetiro, retiroSinCuenta);
             this.regresarACuentas();
         } catch (PersistenciaException ex) {
-            Logger.getLogger(MovimientoBancarioForm.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage());
         }
     }
 
@@ -292,7 +294,7 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
             List<String> noCuentasBancarias = extraerNoCuenta(cuentasBancarias);
             this.cBoxNoCuentas.setModel(new DefaultComboBoxModel<>(noCuentasBancarias.toArray(new String[0])));
         } catch (PersistenciaException ex) {
-            Logger.getLogger(MovimientoBancarioForm.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage());
         }
 
     }
@@ -418,7 +420,7 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
 
             this.regresarACuentas();
         } catch (PersistenciaException ex) {
-            Logger.getLogger(MovimientoBancarioForm.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage());
         }
     }
 
@@ -459,7 +461,7 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
 
             this.regresarACuentas();
         } catch (PersistenciaException ex) {
-            Logger.getLogger(MovimientoBancarioForm.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage());
         }
     }
 }

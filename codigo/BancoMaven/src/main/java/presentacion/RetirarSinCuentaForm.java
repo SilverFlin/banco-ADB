@@ -25,6 +25,8 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
     private final ICuentasBancariasDAO cuentasBancariasDAO;
     private IniciarSesionForm clienteForm;
 
+    private static final Logger LOG = Logger.getLogger(RetirarSinCuentaForm.class.getName());
+
     public RetirarSinCuentaForm(IConexionBD conBD) {
         initComponents();
         this.retirosSinCuentaDAO = new RetirosSinCuentaDAO(conBD);
@@ -210,7 +212,7 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
             }
 
         } catch (PersistenciaException ex) {
-            Logger.getLogger(RetirarSinCuentaForm.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage());
         }
     }
 

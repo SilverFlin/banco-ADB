@@ -32,7 +32,7 @@ public class Main {
         try {
             clientesDAO.insertar(cliente);
         } catch (PersistenciaException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
 
         /*Iniciar Programa*/
