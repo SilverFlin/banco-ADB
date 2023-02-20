@@ -6,7 +6,6 @@
 package interfaces;
 
 import dominio.Cliente;
-import dominio.ClienteBorrar;
 import dominio.CuentaBancaria;
 import excepciones.PersistenciaException;
 import java.util.List;

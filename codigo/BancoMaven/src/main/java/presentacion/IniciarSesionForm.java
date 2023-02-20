@@ -7,13 +7,10 @@ package presentacion;
 
 import dominio.Cliente;
 import implementaciones.ClientesDAO;
-import implementaciones.ConexionBD;
 import implementaciones.CuentasBancariasDAO;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
-import java.awt.Color;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.mindrot.jbcrypt.BCrypt;
 

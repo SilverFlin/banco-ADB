@@ -6,7 +6,6 @@
 package presentacion;
 
 import dominio.Cliente;
-import dominio.ClienteBorrar;
 import dominio.CuentaBancaria;
 import excepciones.PersistenciaException;
 import implementaciones.CuentasBancariasDAO;

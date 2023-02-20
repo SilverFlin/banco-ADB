@@ -7,35 +7,23 @@ package presentacion;
 
 import dominio.Cliente;
 import dominio.CuentaBancaria;
-import dominio.EstadoRetiroSinCuenta;
-import dominio.RetiroSinCuenta;
 import excepciones.PersistenciaException;
-import implementaciones.ClientesDAO;
-import implementaciones.ConexionBD;
 import implementaciones.CuentasBancariasDAO;
 import implementaciones.RetirosSinCuentaDAO;
-import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
 import interfaces.IRetirosSinCuentaDAO;
-import java.awt.Color;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.ConfiguracionPaginado;
-import utils.Conversiones;
-import utils.Validaciones;
 
 /**
  *

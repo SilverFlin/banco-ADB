@@ -6,7 +6,6 @@
 package presentacion;
 
 import dominio.Cliente;
-import dominio.ClienteBorrar;
 import dominio.CuentaBancaria;
 import excepciones.PersistenciaException;
 import implementaciones.CuentasBancariasDAO;
@@ -19,8 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import org.mindrot.jbcrypt.BCrypt;
 import presentacion.MovimientoBancarioForm.TipoMovimiento;

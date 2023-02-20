@@ -6,8 +6,6 @@ package interfaces;
 
 import dominio.Domicilio;
 import excepciones.PersistenciaException;
-import java.util.List;
-import utils.ConfiguracionPaginado;
 
 /**
  *

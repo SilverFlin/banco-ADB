@@ -10,7 +10,6 @@ import dominio.Operacion;
 import excepciones.PersistenciaException;
 import implementaciones.OperacionesDAO;
 import interfaces.IConexionBD;
-import interfaces.ICuentasBancariasDAO;
 import interfaces.IOperacionesDAO;
 import java.util.List;
 import java.util.logging.Level;
