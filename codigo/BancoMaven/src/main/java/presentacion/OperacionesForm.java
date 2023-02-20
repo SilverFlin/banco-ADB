@@ -27,16 +27,16 @@ public class OperacionesForm extends javax.swing.JFrame {
     private IOperacionesDAO operacionesDAO;
     private ConfiguracionPaginado configPaginado;
     private static final Logger LOG = Logger.getLogger(OperacionesForm.class.getName());
-    private int idCuentaBancaria;
-    private final Cliente cliente;
+    private CuentaBancaria cuentaBancaria;
     private final IConexionBD conBD;
+    private final Cliente cliente;
     
-    public OperacionesForm(IConexionBD conBD,Cliente cliente) {
+    public OperacionesForm(IConexionBD conBD,Cliente cliente,CuentaBancaria cuentaBancaria) {
         initComponents();
-        this.idCuentaBancaria = cliente.getId();
-        this.lblNoCuenta.setText(idCuentaBancaria+"");
-        this.conBD = conBD;
+        this.cuentaBancaria = cuentaBancaria;
+        this.lblNoCuenta.setText(cuentaBancaria.getNoCuenta()+"");
         this.cliente = cliente;
+        this.conBD = conBD;
         this.operacionesDAO = new OperacionesDAO(this.conBD);
         this.configPaginado = new ConfiguracionPaginado(this.tblOperaciones.getModel().getRowCount(), 0);
         cargarTablaOperaciones();
@@ -44,7 +44,7 @@ public class OperacionesForm extends javax.swing.JFrame {
 
     private void cargarTablaOperaciones() {
         try {
-            List<Operacion> listaOperaciones = this.operacionesDAO.consultar(this.configPaginado,idCuentaBancaria);
+            List<Operacion> listaOperaciones = this.operacionesDAO.consultar(this.configPaginado,cuentaBancaria.getId());
             if(listaOperaciones.isEmpty()){
                 this.configPaginado.retrocederPag();
                 return;
