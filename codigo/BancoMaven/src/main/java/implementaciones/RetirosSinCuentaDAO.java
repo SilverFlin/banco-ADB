@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import utils.ConfiguracionPaginado;
+import static utils.DominioDeResultSet.crearRetiroSinCuenta;
 
 /**
  *
@@ -29,9 +30,9 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
     private final IConexionBD GENERADOR_CONEXIONES;
 
     private final String NOMBRE_TABLA = "retirosSinCuenta";
-    private final String ESTADO_RETIRO_COBRADO = "Cobrado";
-    private final String ESTADO_RETIRO_PENDIENTE = "Pendiente";
-    private final String ESTADO_RETIRO_EXPIRADO = "Expirado";
+    public static final String ESTADO_RETIRO_COBRADO = "Cobrado";
+    public static final String ESTADO_RETIRO_PENDIENTE = "Pendiente";
+    public static final String ESTADO_RETIRO_EXPIRADO = "Expirado";
 
     public RetirosSinCuentaDAO(IConexionBD GENERADOR_CONEXIONES) {
         this.GENERADOR_CONEXIONES = GENERADOR_CONEXIONES;
@@ -227,32 +228,7 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
         }
     }
 
-    private RetiroSinCuenta crearRetiroSinCuenta(ResultSet result) throws SQLException {
-        /*Extraer del ResultSet*/
-        Integer resultId = Integer.parseInt(result.getString("id"));
-        String password = result.getString("password");
-        Double monto = result.getDouble("monto");
-        String folio = result.getString("folio");
-        String estadoTransferencia = result.getString("estado");
-        String fechaInicio = result.getString("fechaInicio");
-        String fechaFin = result.getString("fechaFin");
-        Integer idCuenta = result.getInt("idCuentaBancaria");
-
-        /* Crear CuentaBancaria*/
-        EstadoRetiroSinCuenta enumEstadoCuenta;
-        if (estadoTransferencia.equals(ESTADO_RETIRO_COBRADO)) {
-            enumEstadoCuenta = EstadoRetiroSinCuenta.COBRADO;
-        } else if (estadoTransferencia.equals(ESTADO_RETIRO_PENDIENTE)) {
-            enumEstadoCuenta = EstadoRetiroSinCuenta.PENDIENTE;
-        } else {
-            enumEstadoCuenta = EstadoRetiroSinCuenta.EXPIRADO;
-        }
-        RetiroSinCuenta retiroSinCuenta;
-        retiroSinCuenta = new RetiroSinCuenta(fechaInicio, fechaFin, enumEstadoCuenta, monto, password, idCuenta);
-        retiroSinCuenta.setId(resultId);
-        retiroSinCuenta.setFolio(folio);
-        return retiroSinCuenta;
-    }
+    
 
     @Override
     public RetiroSinCuenta retirar(RetiroSinCuenta retiroSinCuenta) throws PersistenciaException {

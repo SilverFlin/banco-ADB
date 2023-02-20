@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import utils.ConfiguracionPaginado;
+import static utils.DominioDeResultSet.crearTransferencia;
 
 /**
  *
@@ -191,19 +192,6 @@ public class TransferenciasDAO implements ITransferenciasDAO {
         }
     }
 
-    private Transferencia crearTransferencia(ResultSet result) throws SQLException {
-        /*Extraer del ResultSet*/
-        Integer resultId = Integer.parseInt(result.getString("id"));
-        String fechaHora = result.getString("fechaHora");
-        Double monto = result.getDouble("monto");
-        Integer idOrigen = Integer.parseInt(result.getString("idCuentaOrigen"));
-        Integer idDestino = Integer.parseInt(result.getString("idCuentaDestino"));
-
-        /* Crear Transferencia*/
-        Transferencia transferencia = new Transferencia(monto, idOrigen, idDestino);
-        transferencia.setFechaHora(fechaHora);
-        transferencia.setId(resultId);
-        return transferencia;
-    }
+   
 
 }

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import utils.ConfiguracionPaginado;
+import static utils.DominioDeResultSet.crearCuentaBancaria;
 
 /**
  *
@@ -28,8 +29,8 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
     private final IConexionBD GENERADOR_CONEXIONES;
 
     private final String NOMBRE_TABLA = "cuentasBancarias";
-    private final String ESTADO_CUENTA_ACTIVO = "Activa";
-    private final String ESTADO_CUENTA_INACTIVO = "Inactiva";
+    public static final String ESTADO_CUENTA_ACTIVO = "Activa";
+    public static final String ESTADO_CUENTA_INACTIVO = "Inactiva";
 
     public CuentasBancariasDAO(IConexionBD generarConexion) {
         this.GENERADOR_CONEXIONES = generarConexion;
@@ -204,33 +205,6 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
             LOG.log(Level.SEVERE, e.getMessage());
             throw new PersistenciaException("Error al consultar cuentas");
         }
-    }
-
-    private CuentaBancaria crearCuentaBancaria(ResultSet result) throws SQLException {
-        /*Extraer del ResultSet*/
-        Integer resultId = Integer.parseInt(result.getString("id"));
-        String noCuenta = result.getString("noCuenta");
-        Date fechaApertura = result.getDate("fechaApertura");
-        Double saldoMXN = result.getDouble("saldoMXN");
-        String estadoCuenta = result.getString("estadoCuenta");
-        Integer idCliente = result.getInt("idCliente");
-
-        /* Crear CuentaBancaria*/
-        EstadoCuenta enumEstadoCuenta;
-        if (estadoCuenta.equals(ESTADO_CUENTA_ACTIVO)) {
-            enumEstadoCuenta = EstadoCuenta.ACTIVO;
-        } else {
-            enumEstadoCuenta = EstadoCuenta.INACTIVO;
-        }
-        CuentaBancaria cuentaBancaria;
-        cuentaBancaria = new CuentaBancaria(
-                resultId,
-                noCuenta,
-                fechaApertura,
-                saldoMXN,
-                idCliente,
-                enumEstadoCuenta);
-        return cuentaBancaria;
     }
 
     @Override
