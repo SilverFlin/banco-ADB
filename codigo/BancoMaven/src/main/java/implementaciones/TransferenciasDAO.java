@@ -153,9 +153,14 @@ public class TransferenciasDAO implements ITransferenciasDAO {
     public Transferencia insertar(Transferencia transferencia) throws PersistenciaException {
         /* Consultas */
         String insertStatement = "{CALL ReflejarTransferencia(?,?,?,?)}";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  CallableStatement callableStatement = con.prepareCall(insertStatement);) {
+        Connection con = null;
+        try {
+            con = this.GENERADOR_CONEXIONES.crearConexion();
+            CallableStatement callableStatement = con.prepareCall(insertStatement);
+            /*Iniciando Transaccion*/
+            con.setAutoCommit(false);
 
-            /* Asignar valores a consulta INSERT*/
+            /* Asignar valores a Stored Procedure*/
             callableStatement.setDouble(1, transferencia.getMonto());
             callableStatement.setInt(2, transferencia.getIdCuentaOrigen());
             callableStatement.setInt(3, transferencia.getIdCuentaDestino());
@@ -163,9 +168,10 @@ public class TransferenciasDAO implements ITransferenciasDAO {
 
             /* Ejecutar las consultas */
             callableStatement.execute();
-
             Integer llavesGeneradas = callableStatement.getInt(4);
-            /* Validar consultas*/
+
+            con.commit();
+
             if (llavesGeneradas != null) {
                 transferencia.setId(llavesGeneradas);
                 return transferencia;
@@ -174,6 +180,14 @@ public class TransferenciasDAO implements ITransferenciasDAO {
 
         } catch (SQLException e) {
             LOG.log(Level.SEVERE, e.getMessage());
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    LOG.log(Level.SEVERE, ex.getMessage());
+                    throw new PersistenciaException("Error al hacer rollback");
+                }
+            }
             throw new PersistenciaException("Error en la conexión");
         }
     }

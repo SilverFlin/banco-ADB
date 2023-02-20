@@ -210,18 +210,7 @@ $$
 
 DELIMITER ;
 
-###
 
-DELIMITER $$
-
-CREATE TRIGGER CalcularFolio
-     BEFORE INSERT ON RetirosSinCuenta FOR EACH ROW
-     BEGIN
-		SET new.folio = new.id + 10000;
-     END;
-$$
-
-DELIMITER ;
 
 
 -- Stored Procedures --
@@ -260,18 +249,24 @@ DELIMITER //
 CREATE PROCEDURE CustomExpiracionRetiroSinCuenta(
     IN password VARCHAR(100),
     IN monto DECIMAL(8,4),
-    IN folio VARCHAR(50),
-    IN tiempoExpiracion TIME,
-    IN idCuentaBancaria INT
+    IN tiempoExpiracionMin TIME,
+    IN idCuentaBancaria INT,
+    OUT ultimoId INT
 )
 BEGIN
-    INSERT INTO RetirosSinCuenta(password,monto,folio,fechaFin,idCuentaBancaria) 
+    INSERT INTO RetirosSinCuenta(password,monto,fechaFin,idCuentaBancaria) 
     VALUES(
 		password,
 		monto,
-        folio,
-        CURRENT_TIMESTAMP + tiempoExpiracion,
+        TIMESTAMPADD(MINUTE,tiempoExpiracionMin,CURRENT_TIMESTAMP),
         idCuentaBancaria);
+        
+	UPDATE RetirosSinCuenta
+    SET 
+		folio = id + 10000
+	WHERE id = LAST_INSERT_ID();
+    
+    SELECT LAST_INSERT_ID() INTO ultimoId;
     
 END //
 DELIMITER ;

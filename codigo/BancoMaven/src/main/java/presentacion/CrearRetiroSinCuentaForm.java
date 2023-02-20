@@ -237,9 +237,6 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
             //TODO generar password de retiro
             String passwordRetiro = this.generarPasswordRetiro(); // Mostrar
             RetiroSinCuenta retiroSinCuenta = this.crearRetiro(obtenerMonto(), passwordRetiro);
-            System.out.println(retiroSinCuenta);
-            System.out.println(passwordRetiro);
-            
             /*Registrar operacion*/
             Operacion operacion = new Operacion(null,Mensajes.generarRegistroRetiroSinCuenta(retiroSinCuenta.getMonto()),retiroSinCuenta.getIdCuentaBancaria());
             this.operacionesDAO.insertar(operacion);
@@ -291,8 +288,9 @@ public class CrearRetiroSinCuentaForm extends javax.swing.JFrame {
                 monto,
                 passwordEncriptada,
                 this.cuentaBancaria.getId());
-
-        return retirosSinCuentaDAO.insertar(retiroSinCuenta, this.cuentaBancaria);
+        retiroSinCuenta = retirosSinCuentaDAO.insertar(retiroSinCuenta, this.cuentaBancaria);
+        retiroSinCuenta = retirosSinCuentaDAO.consultar(retiroSinCuenta.getId());
+        return retiroSinCuenta;
     }
 
     private void llenarComboBox() {
