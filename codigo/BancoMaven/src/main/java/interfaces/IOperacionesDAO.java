@@ -21,4 +21,6 @@ public interface IOperacionesDAO {
 
     List<Operacion> consultar(ConfiguracionPaginado configPaginado, int idCuentaBancaria) throws PersistenciaException;
 
+    List<Operacion> consultar(ConfiguracionPaginado configPaginado, String idCliente) throws PersistenciaException;
+
 }
