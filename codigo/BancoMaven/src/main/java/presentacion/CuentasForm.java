@@ -25,6 +25,8 @@ import javax.swing.table.DefaultTableModel;
 import org.mindrot.jbcrypt.BCrypt;
 import presentacion.MovimientoBancarioForm.TipoMovimiento;
 import utils.ConfiguracionPaginado;
+import utils.Dialogs;
+import utils.Validaciones;
 
 /**
  *
@@ -405,6 +407,11 @@ public class CuentasForm extends javax.swing.JFrame {
             String password = pedirPassword();
             if (!validarPassword(password)) {
                 this.mostrarError("Contraseña invalida");
+                return;
+            }
+            
+            if (!Validaciones.validarCuentaActiva(cuentasBancariasDAO, cuentaBancaria)) {
+                Dialogs.mostrarError(this, "La cuenta ya se encuentra inactiva.");
                 return;
             }
 
