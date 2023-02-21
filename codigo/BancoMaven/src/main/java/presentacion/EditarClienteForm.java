@@ -7,6 +7,7 @@ import implementaciones.ClientesDAO;
 import implementaciones.DomiciliosDAO;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
+import interfaces.IDomiciliosDAO;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,15 +24,38 @@ import static utils.Validaciones.validarPassword;
 public class EditarClienteForm extends javax.swing.JFrame {
 
     /**
-     * Creates new form EditarClienteForm
+     * Logger de excepciones
      */
     private static final Logger LOG = Logger.getLogger(CuentasForm.class.getName());
+    /**
+     * Acceso a datos de clientes
+     */
     private final IClientesDAO clientesDAO;
+    /**
+     * Conexion a BD
+     */
     private final IConexionBD conBD;
+    /**
+     * Frame anterior
+     */
     private final JFrame frameAnterior;
+    /**
+     * Cliente logueado
+     */
     private final Cliente cliente;
-    private final DomiciliosDAO domiciliosDAO;
+    /**
+     * Acceso a datos de domicilios
+     */
+    private final IDomiciliosDAO domiciliosDAO;
 
+    /**
+     * Constructor que inicializa la ventana anterior, la conexion a BD y el
+     * cliente logueado
+     *
+     * @param frame
+     * @param conBD
+     * @param cliente
+     */
     public EditarClienteForm(JFrame frame, IConexionBD conBD, Cliente cliente) {
         initComponents();
         this.conBD = conBD;
@@ -193,11 +217,17 @@ public class EditarClienteForm extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Boton para guardar los cambios   
+     * @param evt Evento que lo acciona
+     */
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         this.guardar();
     }//GEN-LAST:event_btnGuardarActionPerformed
-
+    /**
+     * Cancela la operacion y regresa a la ventana anterior
+     * @param evt Evento que lo acciona
+     */
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.regresar();
     }//GEN-LAST:event_btnCancelarActionPerformed
@@ -225,7 +255,10 @@ public class EditarClienteForm extends javax.swing.JFrame {
     private javax.swing.JLabel txtEditar;
     private javax.swing.JTextField txtNumero;
     // End of variables declaration//GEN-END:variables
-
+    
+    /**
+     * Actualiza la informacion de los domicilios despues de que son validados los datos
+     */
     private void guardar() {
 
         if (this.validarCampos()) {
@@ -241,7 +274,11 @@ public class EditarClienteForm extends javax.swing.JFrame {
         }
 
     }
-
+    
+    /**
+     * Valida los diferentes campos y arroja un mensaje de error
+     * @return Si los campos son validos
+     */
     private boolean validarCampos() {
         if (!validarCamposVacios()) {
             JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacios");
@@ -253,7 +290,11 @@ public class EditarClienteForm extends javax.swing.JFrame {
         }
         return true;
     }
-
+    
+    /**
+     * Valida que no existan campos vacios
+     * @return Si los campos estan vacios
+     */
     private boolean validarCamposVacios() {
         String calle = txtCalle.getText();
         String colonia = txtColonia.getText();
@@ -265,8 +306,10 @@ public class EditarClienteForm extends javax.swing.JFrame {
                 && !codigoPostal.isEmpty()
                 && !contrasenha.isEmpty();
 
-    }
-
+    }   
+    /**
+     * Rellena los campos de manera automatica cuando el cliente entra al Frm
+     */
     private void rellenarCampos() {
         Domicilio domicilio = domiciliosDAO.consultar(cliente.getIdDomicilio());
         if (domicilio != null) {
@@ -274,14 +317,16 @@ public class EditarClienteForm extends javax.swing.JFrame {
             String colonia = domicilio.getColonia();
             String numero = domicilio.getNumero();
             String codigoPostal = domicilio.getCodigoPostal();
-            
+
             txtCalle.setText(calle);
             txtCodigoPostal.setText(codigoPostal);
             txtColonia.setText(colonia);
             txtNumero.setText(numero);
         }
     }
-
+    /**
+     * Regresa al frame anterior
+     */
     private void regresar() {
         this.frameAnterior.setVisible(true);
         this.setVisible(false);

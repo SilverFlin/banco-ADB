@@ -19,17 +19,43 @@ import utils.ConfiguracionPaginado;
  */
 public class OperacionesForm extends javax.swing.JFrame {
 
+    /**
+     * Acceso a datos de operaciones
+     */
     private IOperacionesDAO operacionesDAO;
+    /**
+     * Configuracion de paginado
+     */
     private ConfiguracionPaginado configPaginado;
+    /**
+     * Logger de excepciones
+     */
     private static final Logger LOG = Logger.getLogger(OperacionesForm.class.getName());
+    /**
+     * Cuenta bancaria a mostrar
+     */
     private CuentaBancaria cuentaBancaria;
+    /**
+     * Conexion a BD
+     */
     private final IConexionBD conBD;
+    /**
+     * Cliente logueado
+     */
     private final Cliente cliente;
-    
-    public OperacionesForm(IConexionBD conBD,Cliente cliente,CuentaBancaria cuentaBancaria) {
+
+    /**
+     * Inicializa la conexion conexion a BD BD, cliente logueado y la
+     * cuentaBancaria a mostrar
+     *
+     * @param conBD conexion a BD
+     * @param cliente cliente logueado
+     * @param cuentaBancaria cuentaBancaria a mostrar
+     */
+    public OperacionesForm(IConexionBD conBD, Cliente cliente, CuentaBancaria cuentaBancaria) {
         initComponents();
         this.cuentaBancaria = cuentaBancaria;
-        this.lblNoCuenta.setText(cuentaBancaria.getNoCuenta()+"");
+        this.lblNoCuenta.setText(cuentaBancaria.getNoCuenta() + "");
         this.cliente = cliente;
         this.conBD = conBD;
         this.operacionesDAO = new OperacionesDAO(this.conBD);
@@ -37,10 +63,13 @@ public class OperacionesForm extends javax.swing.JFrame {
         cargarTablaOperaciones();
     }
 
+    /**
+     * Consulta las operaciones asociadas a la cuenta y las carga en la tabla
+     */
     private void cargarTablaOperaciones() {
         try {
-            List<Operacion> listaOperaciones = this.operacionesDAO.consultar(this.configPaginado,cuentaBancaria.getId());
-            if(listaOperaciones.isEmpty()){
+            List<Operacion> listaOperaciones = this.operacionesDAO.consultar(this.configPaginado, cuentaBancaria.getId());
+            if (listaOperaciones.isEmpty()) {
                 this.configPaginado.retrocederPag();
                 return;
             }
@@ -54,10 +83,7 @@ public class OperacionesForm extends javax.swing.JFrame {
             LOG.log(Level.SEVERE, ex.getMessage());
         }
     }
-    
-    private void cargarCuentas(){
-    }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -212,18 +238,30 @@ public class OperacionesForm extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Dirige a la ventana anterior
+     *
+     * @param evt Evento que lo acciono
+     */
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         CuentasForm cuentasForm = new CuentasForm(this.conBD, this.cliente);
         cuentasForm.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnAtrasActionPerformed
-
+    /**
+     * Avanza en la pagina de operaciones
+     *
+     * @param evt Evento que lo acciono
+     */
     private void btnAdelanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdelanteActionPerformed
         this.configPaginado.avanzarPag();
         this.cargarTablaOperaciones();
     }//GEN-LAST:event_btnAdelanteActionPerformed
-
+    /**
+     * Retrocede en la pagina de operaciones
+     *
+     * @param evt Evento que lo acciono
+     */
     private void btnRetrocederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetrocederActionPerformed
         this.configPaginado.retrocederPag();
         this.cargarTablaOperaciones();
