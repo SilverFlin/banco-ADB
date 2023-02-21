@@ -421,6 +421,7 @@ public class CuentasForm extends javax.swing.JFrame {
 
     private boolean validarDesactivo(CuentaBancaria cuentaBancaria) throws PersistenciaException {
         String password = pedirPassword();
+        if(password.isEmpty())return false;
         if (!validarPassword(password, this.cliente)) {
             mostrarMensajeError(this, "Contraseña invalida");
             return false;

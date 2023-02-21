@@ -384,6 +384,7 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
         }
 
         String password = pedirPassword();
+        if(password.isEmpty())return false;
         if (!validarPassword(password, this.cliente)) {
             mostrarMensajeError(this, "Contraseña invalida");
             return false;
