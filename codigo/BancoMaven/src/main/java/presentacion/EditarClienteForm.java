@@ -39,7 +39,7 @@ public class EditarClienteForm extends javax.swing.JFrame {
         this.cliente = cliente;
         this.clientesDAO = new ClientesDAO(conBD);
         this.domiciliosDAO = new DomiciliosDAO(conBD);
-
+        rellenarCampos();
     }
 
     /**
@@ -265,6 +265,21 @@ public class EditarClienteForm extends javax.swing.JFrame {
                 && !codigoPostal.isEmpty()
                 && !contrasenha.isEmpty();
 
+    }
+
+    private void rellenarCampos() {
+        Domicilio domicilio = domiciliosDAO.consultar(cliente.getIdDomicilio());
+        if (domicilio != null) {
+            String calle = domicilio.getCalle();
+            String colonia = domicilio.getColonia();
+            String numero = domicilio.getNumero();
+            String codigoPostal = domicilio.getCodigoPostal();
+            
+            txtCalle.setText(calle);
+            txtCodigoPostal.setText(codigoPostal);
+            txtColonia.setText(colonia);
+            txtNumero.setText(numero);
+        }
     }
 
     private void regresar() {
