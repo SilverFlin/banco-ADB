@@ -241,7 +241,10 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
      */
     private void crearCuenta() {
         String input = pedirInputUsuario(this, "Crear Cuenta Bancaria", "Ingresa el monto inicial (Opcional)");
-
+        if (input == null) {
+            return;
+        }
+        
         CuentaBancaria cuentaBancaria = extraerDatosCuenta(input);
 
         try {
@@ -254,17 +257,14 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     }
 
     private CuentaBancaria extraerDatosCuenta(String input) {
-        if (!input.isBlank()) {
 
-            Double monto = crearMontoDeTexto(input);
-            if (!isPositivo(monto)) {
-                mostrarMensajeError(this, "Ingresa un monto valido");
-                this.crearCuenta();
-            }
-            return new CuentaBancaria(monto);
-
+        Double monto = crearMontoDeTexto(input);
+        if (!isPositivo(monto)) {
+            mostrarMensajeError(this, "Ingresa un monto valido");
+            this.crearCuenta();
         }
-        return new CuentaBancaria();
+        return new CuentaBancaria(monto);
+
     }
 
     private void cerrarSesion() {
