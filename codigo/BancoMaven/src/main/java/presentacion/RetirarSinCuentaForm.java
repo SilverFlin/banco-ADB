@@ -23,13 +23,33 @@ import static utils.Validaciones.validarPassword;
  */
 public class RetirarSinCuentaForm extends javax.swing.JFrame {
 
+    /**
+     * Acceso a datos de retiros sin cuenta
+     */
     private final IRetirosSinCuentaDAO retirosSinCuentaDAO;
+    /**
+     * Acceso a datos de cuentas bancarias
+     */
     private final ICuentasBancariasDAO cuentasBancariasDAO;
+    /**
+     * Ventana anterior
+     */
     private IniciarSesionForm clienteForm;
 
+    /**
+     * Logger de excepciones
+     */
     private static final Logger LOG = Logger.getLogger(RetirarSinCuentaForm.class.getName());
+    /**
+     * retiro auxiliar
+     */
     private RetiroSinCuenta retiroSinCuenta;
 
+    /**
+     * Constructor que inicializa la conexion con la BD
+     *
+     * @param conBD Conexion con la BD
+     */
     public RetirarSinCuentaForm(IConexionBD conBD) {
         initComponents();
         this.retirosSinCuentaDAO = new RetirosSinCuentaDAO(conBD);
@@ -153,11 +173,19 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Regresa a la ventana anterior
+     *
+     * @param evt Evento que lo acciono
+     */
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         this.regresar();
     }//GEN-LAST:event_btnRegresarActionPerformed
-
+    /**
+     * Comienza el proceso de retirar el dinero
+     *
+     * @param evt Evento que lo acciono
+     */
     private void btnRetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetirarActionPerformed
         this.retirar();
     }//GEN-LAST:event_btnRetirarActionPerformed
@@ -179,6 +207,9 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
     private javax.swing.JLabel txtIniciarSesion;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Valida si se puede realizar el retiro y lo realiza
+     */
     private void retirar() {
 
         try {
@@ -196,6 +227,11 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Consulta el retiro dado por el usuario
+     *
+     * @return
+     */
     private RetiroSinCuenta consultarRetiro() {
         try {
             return retirosSinCuentaDAO.consultar(txtFolio.getText());
@@ -206,11 +242,20 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Regresa a la ventana anterior
+     */
     private void regresar() {
         this.clienteForm.setVisible(true);
         this.setVisible(false);
     }
 
+    /**
+     * Realiza una serie de validaciones para poder realizar el retiro
+     *
+     * @return Si cumple las validaciones
+     * @throws PersistenciaException Si ocurrio una excepcion al consultar la BD
+     */
     private boolean validarRetiro() throws PersistenciaException {
         if (this.retiroSinCuenta == null) {
             Dialogs.mostrarMensajeError(this, "Folio inexistente");

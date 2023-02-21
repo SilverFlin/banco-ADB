@@ -21,12 +21,30 @@ import utils.Validaciones;
  */
 public class RegistroClienteForm extends javax.swing.JFrame {
 
+    /**
+     * Ventana anterior
+     */
     IniciarSesionForm clnFrm;
+    /**
+     * Acceso a datos de clientes
+     */
     private final IClientesDAO clientesDAO;
+    /**
+     * Acceso a datos de domicilios
+     */
     private final IDomiciliosDAO domiciliosDAO;
 
+    /**
+     * Logger de excepciones
+     */
     private static final Logger LOG = Logger.getLogger(RegistroClienteForm.class.getName());
 
+    /**
+     * Constructor que inicializa el frame anterior y la conexion a BD
+     *
+     * @param clnFrm frame anterior
+     * @param conexionBD Conexion a BD
+     */
     public RegistroClienteForm(IniciarSesionForm clnFrm, IConexionBD conexionBD) {
         initComponents();
         this.clnFrm = clnFrm;
@@ -34,6 +52,9 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         this.domiciliosDAO = new DomiciliosDAO(conexionBD);
     }
 
+    /**
+     * Registra al cliente despues de validar los campos y formatos
+     */
     private void registrar() {
         if (!validarFormulario()) {
             return;
@@ -56,6 +77,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Valida si los campos no estan vacios y los formatos correctos
+     *
+     * @return Si son campos validos
+     */
     private boolean validarFormulario() {
         if (!validarCamposVacios()) {
             JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacios");
@@ -69,11 +95,17 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         return true;
     }
 
+    /**
+     * Cambiar a la ventana anterior
+     */
     private void cambiarVentana() {
         this.setVisible(false);
         clnFrm.setVisible(true);
     }
 
+    /**
+     * Limpia los campos de texto de la ventana
+     */
     private void limpiarCampos() {
         txtApellidoM.setText("");
         txtApellidoP.setText("");
@@ -343,48 +375,92 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Boton que acciona el registrar
+     *
+     * @param evt Evento que lo acciona
+     */
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         this.registrar();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
+    /**
+     * Restringe los tipos de caracteres y longitud del texto
+     *
+     * @param evt Evento que lo acciono
+     */
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
         Validaciones.restringirCaracteres(evt, 50, txtNombre, Validaciones.NOMBRE);
     }//GEN-LAST:event_txtNombreKeyTyped
-
+    /**
+     * Restringe los tipos de caracteres y longitud del texto
+     *
+     * @param evt Evento que lo acciono
+     */
     private void txtApellidoPKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoPKeyTyped
         Validaciones.restringirCaracteres(evt, 50, txtApellidoP, Validaciones.NOMBRE);
     }//GEN-LAST:event_txtApellidoPKeyTyped
-
+    /**
+     * Restringe los tipos de caracteres y longitud del texto
+     *
+     * @param evt Evento que lo acciono
+     */
     private void txtApellidoMKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoMKeyTyped
         Validaciones.restringirCaracteres(evt, 50, txtApellidoM, Validaciones.NOMBRE);
     }//GEN-LAST:event_txtApellidoMKeyTyped
-
+    /**
+     * Restringe los tipos de caracteres y longitud del texto
+     *
+     * @param evt Evento que lo acciono
+     */
     private void txtNumeroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumeroKeyTyped
         Validaciones.restringirCaracteres(evt, 50, txtNumero, Validaciones.DIRECCION);
     }//GEN-LAST:event_txtNumeroKeyTyped
-
+    /**
+     * Restringe la longitud del texto
+     *
+     * @param evt Evento que lo acciono
+     */
     private void txtCorreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoKeyTyped
         Validaciones.restringirLargoCaracteres(evt, 100, txtCorreo);
     }//GEN-LAST:event_txtCorreoKeyTyped
-
+    /**
+     * Restringe los tipos de caracteres y longitud del texto
+     *
+     * @param evt Evento que lo acciono
+     */
     private void txtColoniaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtColoniaKeyTyped
         Validaciones.restringirCaracteres(evt, 50, txtColonia, Validaciones.DIRECCION);
     }//GEN-LAST:event_txtColoniaKeyTyped
-
+    /**
+     * Restringe los tipos de caracteres y longitud del texto
+     *
+     * @param evt Evento que lo acciono
+     */
     private void txtCodigoPostalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoPostalKeyTyped
         Validaciones.restringirCaracteres(evt, 10, txtCodigoPostal, Validaciones.CODIGOPOSTAL);
     }//GEN-LAST:event_txtCodigoPostalKeyTyped
-
+    /**
+     * Restringe la longitud del texto
+     *
+     * @param evt Evento que lo acciono
+     */
     private void txtContrasenaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContrasenaKeyTyped
         Validaciones.restringirLargoCaracteres(evt, 60, txtContrasena);
     }//GEN-LAST:event_txtContrasenaKeyTyped
-
+    /**
+     * Dirige hacia la ventana anterior
+     * @param evt Evento que lo acciono
+     */
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         cambiarVentana();
         limpiarCampos();
     }//GEN-LAST:event_btnAtrasActionPerformed
-
+    
+    /**
+     * Valida que los campos no esten vacios
+     * @return Si los campos estan vacios
+     */
     private boolean validarCamposVacios() {
         String nombre = txtNombre.getText();
         String apellidoP = txtApellidoP.getText();
@@ -402,7 +478,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
                 && !codigoPostal.isEmpty() && !contrasenha.isEmpty();
 
     }
-
+    
+    /**
+     * Valida que los textos sigan el formato estipulado
+     * @return Si siguen el formato
+     */
     private boolean validarFormatos() {
         String nombre = txtNombre.getText();
         String apellidoP = txtApellidoP.getText();
@@ -413,7 +493,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
                 && Validaciones.validarContrasena(contrasenha)
                 && Validaciones.validarNombreCompleto(nombre, apellidoP, apellidoM);
     }
-
+    
+    /**
+     * Extrae la informacion y devuelve un cliente con lo recolectado
+     * @return Cliente
+     */
     private Cliente extraerCliente() {
         String nombre = txtNombre.getText();
         String apellidoP = txtApellidoP.getText();
@@ -428,7 +512,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         cliente.setContrasenia(contrasena);
         return cliente;
     }
-
+    
+    /**
+     * Extrae la informacion y devuelve un domicilio con lo recolectado
+     * @return Domicilio
+     */
     private Domicilio extraerDomicilio() {
         String calle = txtCalle.getText();
         String colonia = txtColonia.getText();
