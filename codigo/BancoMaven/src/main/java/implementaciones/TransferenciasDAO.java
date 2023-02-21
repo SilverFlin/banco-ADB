@@ -23,21 +23,43 @@ import static utils.DominioDeResultSet.crearTransferencia;
  */
 public class TransferenciasDAO implements ITransferenciasDAO {
 
+    /**
+     * Logger de excepciones
+     */
     private static final Logger LOG = Logger.getLogger(CuentasBancariasDAO.class.getName());
+    /**
+     * Generador de conexiones
+     */
     private final IConexionBD GENERADOR_CONEXIONES;
+    /**
+     * Nombre de la tabla usada comunmente
+     */
     private final String NOMBRE_TABLA = "transferencias";
 
+    /**
+     * Constructor que recibe el generador de conexiones
+     *
+     * @param GENERADOR_CONEXIONES Generador de conexiones
+     */
     public TransferenciasDAO(IConexionBD GENERADOR_CONEXIONES) {
         this.GENERADOR_CONEXIONES = GENERADOR_CONEXIONES;
     }
 
+    /**
+     * Consulta en la base la transferencia mediante la cuenta origen
+     *
+     * @param idCuentaOrigen Identificador de la cuenta origen
+     * @return Transferencia encontrada
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
+     */
     @Override
     public Transferencia consultarOrigen(int idCuentaOrigen) throws PersistenciaException {
         /* Consultas */
         String query
                 = "SELECT id, fechaHora, monto, idCuentaOrigen, idCuentaDestino "
                 + "FROM " + NOMBRE_TABLA + " WHERE idCuentaOrigen = ?;";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement selectTransferencias = con.prepareStatement(query);) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement selectTransferencias = con.prepareStatement(query);) {
 
 
             /* Asignar valores a consulta*/
@@ -58,13 +80,21 @@ public class TransferenciasDAO implements ITransferenciasDAO {
         }
     }
 
+    /**
+     * Consulta en la base la transferencia mediante la cuenta destino
+     *
+     * @param idCuentaDestino Identificador de la cuenta destino
+     * @return Transferencia encontrada
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
+     */
     @Override
     public Transferencia consultarDestino(int idCuentaDestino) throws PersistenciaException {
         /* Consultas */
         String query
                 = "SELECT id, fechaHora, monto, idCuentaOrigen, idCuentaDestino "
                 + "FROM " + NOMBRE_TABLA + " WHERE idCuentaDestino = ?;";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement selectTransferencias = con.prepareStatement(query);) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement selectTransferencias = con.prepareStatement(query);) {
 
 
             /* Asignar valores a consulta*/
@@ -86,14 +116,17 @@ public class TransferenciasDAO implements ITransferenciasDAO {
     }
 
     /**
-     * @param configPaginado
-     * @param id
-     * @return
-     * @throws PersistenciaException
+     * Consulta la base de trasferencias asociadas a una cuenta origen
+     *
+     * @param configPaginado Configuracion de paginado
+     * @param idCuentaOrigen Identificador de la cuenta origen
+     * @return Lista de transferencias
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
      */
     @Override
     public List<Transferencia> consultarOrigen(ConfiguracionPaginado configPaginado, int idCuentaOrigen) throws PersistenciaException {
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion()) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion()) {
             /* Consultas */
             String query
                     = "SELECT id, fechaHora, monto, idCuentaOrigen, idCuentaDestino "
@@ -120,9 +153,17 @@ public class TransferenciasDAO implements ITransferenciasDAO {
         }
     }
 
+    /**
+     * Consulta la base de trasferencias asociadas a una cuenta destino
+     * @param configPaginado Configuracion de paginado
+     * @param idCuentaDestino Identificador de la cuenta destino
+     * @return Lista de transferencias
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
+     */
     @Override
     public List<Transferencia> consultarDestino(ConfiguracionPaginado configPaginado, int idCuentaDestino) throws PersistenciaException {
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion()) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion()) {
             /* Consultas */
             String query
                     = "SELECT id, fechaHora, monto, idCuentaOrigen, idCuentaDestino "
@@ -149,6 +190,13 @@ public class TransferenciasDAO implements ITransferenciasDAO {
         }
     }
 
+    /**
+     * Inserta en la base una transferencia dada
+     * @param transferencia Transferencia a insertar
+     * @return Transferencia insertada
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
+     */
     @Override
     public Transferencia insertar(Transferencia transferencia) throws PersistenciaException {
         /* Consultas */
@@ -191,7 +239,5 @@ public class TransferenciasDAO implements ITransferenciasDAO {
             throw new PersistenciaException("Error en la conexión");
         }
     }
-
-   
 
 }
