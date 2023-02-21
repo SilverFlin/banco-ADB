@@ -7,8 +7,14 @@ import java.sql.SQLException;
  *
  * @author Elkur, Toled
  */
-public interface IConexionBD  {
-    
-    Connection crearConexion()throws SQLException;
-    
+public interface IConexionBD {
+
+    /**
+     * Establece la conexion con la base con las credenciales que almacena
+     *
+     * @return Objeto de gestion de conexion
+     * @throws SQLException Si ocurre una excepcion al conectarse
+     */
+    Connection crearConexion() throws SQLException;
+
 }
