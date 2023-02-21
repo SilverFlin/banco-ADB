@@ -158,12 +158,15 @@ public class OperacionesForm extends javax.swing.JFrame {
         tblOperaciones.setColumnSelectionAllowed(true);
         panelTablaCuentas.setViewportView(tblOperaciones);
         tblOperaciones.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        if (tblOperaciones.getColumnModel().getColumnCount() > 0) {
+            tblOperaciones.getColumnModel().getColumn(2).setPreferredWidth(450);
+        }
 
         Background.add(panelTablaCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 560, 190));
 
         lblNoCuenta.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 16)); // NOI18N
         lblNoCuenta.setText("-");
-        Background.add(lblNoCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 120, -1));
+        Background.add(lblNoCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 250, -1));
 
         lblCuenta.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 16)); // NOI18N
         lblCuenta.setText("No. Cuenta");
