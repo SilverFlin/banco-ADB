@@ -288,7 +288,6 @@ public class RegistroClienteForm extends javax.swing.JFrame {
 
         dtFechaNacimiento.setBackground(new java.awt.Color(0, 0, 0));
         dtFechaNacimiento.setForeground(new java.awt.Color(255, 255, 255));
-        dtFechaNacimiento.setDateFormatString("yyyy/m/dd");
         dtFechaNacimiento.setName("dtFechaNacimiento"); // NOI18N
         background3.add(dtFechaNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 330, 190, -1));
 
@@ -419,6 +418,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         String nombre = txtNombre.getText();
         String apellidoP = txtApellidoP.getText();
         String apellidoM = txtApellidoM.getText();
+        System.out.println(dtFechaNacimiento.getDate());
         java.sql.Date fechaNacimiento = new java.sql.Date(dtFechaNacimiento.getDate().getTime());
         String correo = txtCorreo.getText();
         String contrasena = BCrypt.hashpw(new String(txtContrasena.getPassword()), BCrypt.gensalt());
