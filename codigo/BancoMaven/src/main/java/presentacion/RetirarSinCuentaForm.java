@@ -225,7 +225,7 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
             Dialogs.mostrarMensajeError(this, "Retiro invalido");
             return false;
         }
-        if (!validarPassword(retiroSinCuenta.getPassword(), Arrays.toString(txtContraseña.getPassword()))) {
+        if (!validarPassword(retiroSinCuenta.getPassword(), new String(txtContraseña.getPassword()))) {
             Dialogs.mostrarMensajeError(this, "Credenciales invalidas");
             return false;
         }
