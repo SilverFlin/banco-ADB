@@ -247,8 +247,7 @@ public class EditarClienteForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacios");
             return false;
         }
-
-        if (!validarPassword(Arrays.toString(txtContrasena.getPassword()), this.cliente)) {
+        if (!validarPassword(new String(txtContrasena.getPassword()), this.cliente)) {
             JOptionPane.showMessageDialog(this, "Password invalida");
             return false;
         }
