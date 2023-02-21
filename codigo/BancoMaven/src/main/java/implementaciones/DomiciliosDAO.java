@@ -27,7 +27,7 @@ public class DomiciliosDAO implements IDomiciliosDAO {
 
     @Override
     public Domicilio consultar(int id) {
-        String SQLQuery = "SELECT calle, numero, colonia,codigoPostal FROM direcciones WHERE id = ?";
+        String SQLQuery = "SELECT calle, numero, colonia,codigoPostal FROM domicilios WHERE id = ?";
 
         try (
                 Connection conexion = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement comando = conexion.prepareStatement(SQLQuery);) {

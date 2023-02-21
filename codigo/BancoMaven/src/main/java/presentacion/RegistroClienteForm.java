@@ -83,6 +83,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         txtContrasena.setText("");
         txtCorreo.setText("");
         txtNombre.setText("");
+        txtNumero.setText("");
     }
 
     @SuppressWarnings("unchecked")
@@ -92,7 +93,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         background3 = new javax.swing.JPanel();
         head3 = new javax.swing.JPanel();
         lblRegistar = new javax.swing.JLabel();
-        btnAtras = new javax.swing.JLabel();
+        btnAtras = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         txtNombre = new javax.swing.JTextField();
         lblNombre = new javax.swing.JLabel();
@@ -113,7 +114,6 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         txtNumero = new javax.swing.JTextField();
         jSeparator7 = new javax.swing.JSeparator();
         lblCodigoPostal = new javax.swing.JLabel();
-        btnRegistrar = new javax.swing.JButton();
         lblColonia1 = new javax.swing.JLabel();
         txtContrasena = new javax.swing.JPasswordField();
         jSeparator8 = new javax.swing.JSeparator();
@@ -124,6 +124,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         txtCodigoPostal = new javax.swing.JTextField();
         lblCodigoPostal1 = new javax.swing.JLabel();
         jSeparator10 = new javax.swing.JSeparator();
+        btnRegistrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(600, 400));
@@ -142,9 +143,15 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         lblRegistar.setForeground(new java.awt.Color(255, 255, 255));
         lblRegistar.setText("Registrar");
 
-        btnAtras.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                btnAtrasMousePressed(evt);
+        btnAtras.setBackground(new java.awt.Color(0, 102, 204));
+        btnAtras.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnAtras.setForeground(new java.awt.Color(255, 255, 255));
+        btnAtras.setText("Atras");
+        btnAtras.setBorder(null);
+        btnAtras.setBorderPainted(false);
+        btnAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtrasActionPerformed(evt);
             }
         });
 
@@ -152,21 +159,21 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         head3.setLayout(head3Layout);
         head3Layout.setHorizontalGroup(
             head3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, head3Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 194, Short.MAX_VALUE)
+            .addGroup(head3Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
                 .addComponent(lblRegistar)
                 .addGap(248, 248, 248))
         );
         head3Layout.setVerticalGroup(
             head3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, head3Layout.createSequentialGroup()
-                .addContainerGap(31, Short.MAX_VALUE)
+            .addGroup(head3Layout.createSequentialGroup()
+                .addContainerGap(22, Short.MAX_VALUE)
                 .addGroup(head3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblRegistar)
-                    .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27))
+                    .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33))
         );
 
         background3.add(head3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 90));
@@ -266,19 +273,6 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         lblCodigoPostal.setText("Numero");
         background3.add(lblCodigoPostal, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 90, 90, 20));
 
-        btnRegistrar.setBackground(new java.awt.Color(0, 102, 255));
-        btnRegistrar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
-        btnRegistrar.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegistrar.setText("Registrar");
-        btnRegistrar.setBorder(null);
-        btnRegistrar.setBorderPainted(false);
-        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegistrarActionPerformed(evt);
-            }
-        });
-        background3.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 340, 200, 30));
-
         lblColonia1.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
         lblColonia1.setText("Colonia");
         background3.add(lblColonia1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 230, 50, 20));
@@ -323,6 +317,19 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         background3.add(lblCodigoPostal1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 230, 90, 20));
         background3.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 270, 100, 10));
 
+        btnRegistrar.setBackground(new java.awt.Color(0, 102, 255));
+        btnRegistrar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 14)); // NOI18N
+        btnRegistrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegistrar.setText("Registrar");
+        btnRegistrar.setBorder(null);
+        btnRegistrar.setBorderPainted(false);
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
+        background3.add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 340, 200, 30));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -337,12 +344,6 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnAtrasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtrasMousePressed
-        cambiarVentana();
-        limpiarCampos();
-
-    }//GEN-LAST:event_btnAtrasMousePressed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         this.registrar();
@@ -379,6 +380,11 @@ public class RegistroClienteForm extends javax.swing.JFrame {
     private void txtContrasenaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContrasenaKeyTyped
         Validaciones.restringirLargoCaracteres(evt, 60, txtContrasena);
     }//GEN-LAST:event_txtContrasenaKeyTyped
+
+    private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
+        cambiarVentana();
+        limpiarCampos();
+    }//GEN-LAST:event_btnAtrasActionPerformed
 
     private boolean validarCamposVacios() {
         String nombre = txtNombre.getText();
@@ -436,7 +442,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background3;
-    private javax.swing.JLabel btnAtras;
+    private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnRegistrar;
     private com.toedter.calendar.JDateChooser dtFechaNacimiento;
     private javax.swing.JPanel head3;

@@ -8,6 +8,7 @@ import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import static utils.Conversiones.crearMontoDeTexto;
 import static utils.Dialogs.mostrarMensajeError;
 import static utils.Dialogs.mostrarMensajeExito;
@@ -34,6 +35,7 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
         initComponents();
         cargarMensajeBienvenida();
+        cargarImagen();
     }
 
     /**
@@ -241,7 +243,10 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
      */
     private void crearCuenta() {
         String input = pedirInputUsuario(this, "Crear Cuenta Bancaria", "Ingresa el monto inicial (Opcional)");
-
+        if (input == null) {
+            return;
+        }
+        
         CuentaBancaria cuentaBancaria = extraerDatosCuenta(input);
 
         try {
@@ -254,17 +259,14 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     }
 
     private CuentaBancaria extraerDatosCuenta(String input) {
-        if (!input.isBlank()) {
 
-            Double monto = crearMontoDeTexto(input);
-            if (!isPositivo(monto)) {
-                mostrarMensajeError(this, "Ingresa un monto valido");
-                this.crearCuenta();
-            }
-            return new CuentaBancaria(monto);
-
+        Double monto = crearMontoDeTexto(input);
+        if (!isPositivo(monto)) {
+            mostrarMensajeError(this, "Ingresa un monto valido");
+            this.crearCuenta();
         }
-        return new CuentaBancaria();
+        return new CuentaBancaria(monto);
+
     }
 
     private void cerrarSesion() {
@@ -289,6 +291,11 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         ActividadesForm actividadesForm = new ActividadesForm(conBD, cliente, this);
         actividadesForm.setVisible(true);
         this.setVisible(false);
+    }
+
+    private void cargarImagen() {
+        ImageIcon icon = new ImageIcon("recursos/fondoMenuPrincipal.jpg");
+        this.imgMenuPrincipal.setIcon(icon);
     }
 
 }

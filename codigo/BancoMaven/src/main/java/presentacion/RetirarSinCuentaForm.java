@@ -196,8 +196,13 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
         }
     }
 
-    private RetiroSinCuenta consultarRetiro() throws PersistenciaException {
-        return retirosSinCuentaDAO.consultar(txtFolio.getText());
+    private RetiroSinCuenta consultarRetiro() {
+        try {
+            return retirosSinCuentaDAO.consultar(txtFolio.getText());
+        } catch (PersistenciaException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            return null;
+        }
 
     }
 
