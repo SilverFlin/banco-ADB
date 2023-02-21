@@ -9,16 +9,15 @@ import interfaces.ICuentasBancariasDAO;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.table.DefaultTableModel;
-import org.mindrot.jbcrypt.BCrypt;
 import presentacion.MovimientoBancarioForm.TipoMovimiento;
 import utils.ConfiguracionPaginado;
-import utils.Dialogs;
-import utils.Validaciones;
+import static utils.Dialogs.mostrarMensajeError;
+import static utils.Dialogs.pedirInputUsuario;
+import static utils.Dialogs.pedirPassword;
+import static utils.FormUtils.cargarMensajeBienvenida;
+import static utils.Validaciones.validarCuentaActiva;
+import static utils.Validaciones.validarPassword;
 
 /**
  *
@@ -42,7 +41,7 @@ public class CuentasForm extends javax.swing.JFrame {
         initComponents();
         this.configPaginado = new ConfiguracionPaginado(this.tablaCuentas.getModel().getRowCount(), 0);
         this.llenarTablaCuentas();
-        this.cargarMensajeBienvenida();
+        cargarMensajeBienvenida(txtBienvenida, this.cliente);
     }
 
     /**
@@ -391,18 +390,11 @@ public class CuentasForm extends javax.swing.JFrame {
 
     private void desactivar() {
 
-        String input = this.pedirInputUsuario("Desactivar Cuenta", "Ingresa el numero de cuenta");
+        String input = pedirInputUsuario(this, "Desactivar Cuenta", "Ingresa el numero de cuenta");
         try {
             CuentaBancaria cuentaBancaria = this.cuentasBancariasDAO.consultar(input);
 
-            String password = pedirPassword();
-            if (!validarPassword(password)) {
-                this.mostrarError("Contraseña invalida");
-                return;
-            }
-            
-            if (!Validaciones.validarCuentaActiva(cuentasBancariasDAO, cuentaBancaria)) {
-                Dialogs.mostrarError(this, "La cuenta ya se encuentra inactiva.");
+            if (!this.validarDesactivo(cuentaBancaria)) {
                 return;
             }
 
@@ -411,42 +403,8 @@ public class CuentasForm extends javax.swing.JFrame {
             this.llenarTablaCuentas();
         } catch (PersistenciaException e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            this.mostrarError("Ingresa un Numero de Cuenta valido");
+            mostrarMensajeError(this, "Ingresa un Numero de Cuenta valido");
         }
-    }
-
-    private void mostrarError(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    private void mostrarMensajeExito(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Exito", JOptionPane.PLAIN_MESSAGE);
-    }
-
-    private String pedirInputUsuario(String titulo, String texto) {
-        return (String) JOptionPane.showInputDialog(this, texto, titulo, JOptionPane.QUESTION_MESSAGE);
-    }
-
-    private String pedirPassword() {
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel("Ingresa una contraseña:");
-        JPasswordField pass = new JPasswordField(10);
-        panel.add(label);
-        panel.add(pass);
-        String[] options = new String[]{"OK", "Cancelar"};
-        int option = JOptionPane.showOptionDialog(null, panel, "Credenciales",
-                JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
-                null, options, options[1]);
-        // pressing OK button
-        if (option == 0) {
-            char[] password = pass.getPassword();
-            return new String(password);
-        }
-        return "";
-    }
-
-    private boolean validarPassword(String passwordCandidato) {
-        return BCrypt.checkpw(passwordCandidato, cliente.getContrasenia());
     }
 
     private void cerrarSesion() {
@@ -455,13 +413,23 @@ public class CuentasForm extends javax.swing.JFrame {
         this.setVisible(false);
     }
 
-    private void cargarMensajeBienvenida() {
-        this.txtBienvenida.setText("Hola, " + this.cliente.getNombres() + "!");
-    }
-
     private void editarCuenta() {
         EditarClienteForm editarClienteForm = new EditarClienteForm(this, this.conBD, this.cliente);
         editarClienteForm.setVisible(true);
         this.setVisible(false);
+    }
+
+    private boolean validarDesactivo(CuentaBancaria cuentaBancaria) throws PersistenciaException {
+        String password = pedirPassword();
+        if (!validarPassword(password, this.cliente)) {
+            mostrarMensajeError(this, "Contraseña invalida");
+            return false;
+        }
+
+        if (!validarCuentaActiva(cuentasBancariasDAO, cuentaBancaria)) {
+            mostrarMensajeError(this, "La cuenta ya se encuentra inactiva.");
+            return false;
+        }
+        return true;
     }
 }

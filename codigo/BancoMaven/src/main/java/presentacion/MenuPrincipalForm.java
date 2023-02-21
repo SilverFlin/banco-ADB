@@ -8,9 +8,11 @@ import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import utils.Conversiones;
-import utils.Validaciones;
+import static utils.Conversiones.crearMontoDeTexto;
+import static utils.Dialogs.mostrarMensajeError;
+import static utils.Dialogs.mostrarMensajeExito;
+import static utils.Dialogs.pedirInputUsuario;
+import static utils.Validaciones.isPositivo;
 
 /**
  *
@@ -24,7 +26,6 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     private static final Logger LOG = Logger.getLogger(MenuPrincipalForm.class.getName());
     private Cliente cliente;
     private final ICuentasBancariasDAO cuentasBancariasDAO;
-//    public MenuPrincipalForm(IClientesDAO clientesDAO) {
     private final IConexionBD conBD;
 
     public MenuPrincipalForm(IConexionBD conBD, Cliente cliente) {
@@ -33,7 +34,6 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
         initComponents();
         cargarMensajeBienvenida();
-
     }
 
     /**
@@ -240,45 +240,31 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
      * si es que el monto es valido.
      */
     private void crearCuenta() {
-        String input = this.pedirInputUsuario("Crear Cuenta Bancaria", "Ingresa el monto inicial (Opcional)");
+        String input = pedirInputUsuario(this, "Crear Cuenta Bancaria", "Ingresa el monto inicial (Opcional)");
 
         CuentaBancaria cuentaBancaria = extraerDatosCuenta(input);
 
         try {
             CuentaBancaria cuentaCreada = this.cuentasBancariasDAO.insertar(cuentaBancaria, this.cliente);
-            this.mostrarMensajeExito("Cuenta creada con No. " + cuentaCreada.getNoCuenta());
+            mostrarMensajeExito(this, "Cuenta creada con No. " + cuentaCreada.getNoCuenta());
         } catch (PersistenciaException ex) {
-            mostrarMensajeError("Error al crear cuenta");
+            mostrarMensajeError(this, "Error al crear cuenta");
             LOG.log(Level.SEVERE, ex.getMessage());
         }
     }
 
     private CuentaBancaria extraerDatosCuenta(String input) {
-        if (input.isBlank()) {
-            return new CuentaBancaria();
-        } else {
-            Double monto = Conversiones.crearMontoDeTexto(input);
-            if (Validaciones.isPositivo(monto)) {
-                return new CuentaBancaria(monto);
-            } else {
-                this.mostrarMensajeError("Ingresa un monto valido");
+        if (!input.isBlank()) {
+
+            Double monto = crearMontoDeTexto(input);
+            if (!isPositivo(monto)) {
+                mostrarMensajeError(this, "Ingresa un monto valido");
                 this.crearCuenta();
             }
+            return new CuentaBancaria(monto);
 
         }
-        return null;
-    }
-
-    private void mostrarMensajeError(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    private void mostrarMensajeExito(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Exito", JOptionPane.PLAIN_MESSAGE);
-    }
-
-    private String pedirInputUsuario(String titulo, String texto) {
-        return (String) JOptionPane.showInputDialog(this, texto, titulo, JOptionPane.QUESTION_MESSAGE);
+        return new CuentaBancaria();
     }
 
     private void cerrarSesion() {
@@ -288,7 +274,7 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     }
 
     private void editarCuenta() {
-        EditarClienteForm editarClienteForm = new EditarClienteForm(this, this.conBD,this.cliente);
+        EditarClienteForm editarClienteForm = new EditarClienteForm(this, this.conBD, this.cliente);
         editarClienteForm.setVisible(true);
         this.setVisible(false);
     }
@@ -298,8 +284,8 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         crearTransferenciaForm.setVisible(true);
         this.setVisible(false);
     }
-    
-    private void mostrarActividad(){
+
+    private void mostrarActividad() {
         ActividadesForm actividadesForm = new ActividadesForm(conBD, cliente, this);
         actividadesForm.setVisible(true);
         this.setVisible(false);

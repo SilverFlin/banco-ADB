@@ -7,7 +7,7 @@ import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
 import javax.swing.JOptionPane;
-import org.mindrot.jbcrypt.BCrypt;
+import static utils.Validaciones.validarPassword;
 
 /**
  *
@@ -17,7 +17,7 @@ public class IniciarSesionForm extends javax.swing.JFrame {
 
     private final static int INGRESAR = 1;
     private final static int REGISTRAR = 2;
-    
+
     private final RegistroClienteForm registroClienteForm;
     private MenuPrincipalForm menuPrincipalForm;
     private IConexionBD conBD;
@@ -28,8 +28,8 @@ public class IniciarSesionForm extends javax.swing.JFrame {
     public IniciarSesionForm(IConexionBD conBD) {
         initComponents();
         this.conBD = conBD;
-        this.registroClienteForm = new RegistroClienteForm(this,conBD);
-        
+        this.registroClienteForm = new RegistroClienteForm(this, conBD);
+
         this.clientesDAO = new ClientesDAO(conBD);
         this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
     }
@@ -49,41 +49,36 @@ public class IniciarSesionForm extends javax.swing.JFrame {
     }
 
     private void login() {
-        if (validarCampos()) {
-            if (validarCredenciales()) {
-                openNewWindow(INGRESAR);
-            } else {
-                JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
+        if (!validarCampos()) {
             JOptionPane.showMessageDialog(this, "Credenciales no validas", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+        if (!validarCredenciales()) {
+            JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        openNewWindow(this.INGRESAR);
     }
 
     private boolean validarCampos() {
-        String correo = txtUsuario.getText();
-        String contraseña = new String(txtContraseña.getPassword());
+        String correo = this.txtUsuario.getText();
+        String password = new String(this.txtContraseña.getPassword());
 
-        return correo.length() > 0 && contraseña.length() > 0;
+        return correo.length() > 0 && password.length() > 0;
 
     }
 
     private boolean validarCredenciales() {
-        Cliente tempCliente = clientesDAO.consultar(txtUsuario.getText());
+        Cliente tempCliente = this.clientesDAO.consultar(txtUsuario.getText());
         this.cliente = tempCliente;
 
-        if (tempCliente != null) {
-            return validarPassword(tempCliente.getContrasenia());
-        }else{
+        if (tempCliente == null) {
             return false;
         }
+        
+        return validarPassword(tempCliente.getContrasenia(), this.cliente);
     }
-    
-    private boolean validarPassword(String password){
-        String passwordCandidato = new String(txtContraseña.getPassword());
-	return BCrypt.checkpw(passwordCandidato, password);
-    }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -225,7 +220,6 @@ public class IniciarSesionForm extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_lblRetiroSinTarjetaMousePressed
 
- 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Background;

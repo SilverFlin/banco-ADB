@@ -9,11 +9,13 @@ import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
 import interfaces.IRetirosSinCuentaDAO;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.mindrot.jbcrypt.BCrypt;
 import utils.Dialogs;
+import static utils.Validaciones.validarCaducidadRetiro;
 import static utils.Validaciones.validarCuentaActiva;
+import static utils.Validaciones.validarPassword;
 
 /**
  *
@@ -26,6 +28,7 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
     private IniciarSesionForm clienteForm;
 
     private static final Logger LOG = Logger.getLogger(RetirarSinCuentaForm.class.getName());
+    private RetiroSinCuenta retiroSinCuenta;
 
     public RetirarSinCuentaForm(IConexionBD conBD) {
         initComponents();
@@ -179,37 +182,14 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
     private void retirar() {
 
         try {
-            RetiroSinCuenta retiroSinCuenta = consultarRetiro();
-            if (retiroSinCuenta == null) {
-                Dialogs.mostrarError(this, "Folio inexistente");
+            this.retiroSinCuenta = consultarRetiro();
+            if (!this.validarRetiro()) {
                 return;
             }
-            retiroSinCuenta = this.validarCaducidad(retiroSinCuenta);
-            if (retiroSinCuenta.getEstado() == EstadoRetiroSinCuenta.COBRADO) {
-                Dialogs.mostrarError(this, "Este retiro ya fue cobrado");
-                return;
-            }
-            if (retiroSinCuenta.getEstado() == EstadoRetiroSinCuenta.EXPIRADO) {
-                Dialogs.mostrarError(this, "Este retiro ha expirado");
-                return;
-            }
-            if (retiroSinCuenta.getEstado() == EstadoRetiroSinCuenta.PENDIENTE) {
-                if (validarPassword(retiroSinCuenta.getPassword())) {
 
-                    if (validarCuentaActiva(this.cuentasBancariasDAO, retiroSinCuenta)) {
-                        retirosSinCuentaDAO.retirar(retiroSinCuenta);
-                        Dialogs.mostrarMensajeExito(this, "Retiro de $" + retiroSinCuenta.getMonto() + " efectuado");
-                        this.regresar();
-
-                    } else {
-                        Dialogs.mostrarError(this, "La cuenta se encuentra inactiva.");
-                    }
-
-                } else {
-                    Dialogs.mostrarError(this, "Credenciales invalidas");
-                    return;
-                }
-            }
+            retirosSinCuentaDAO.retirar(retiroSinCuenta);
+            Dialogs.mostrarMensajeExito(this, "Retiro de $" + retiroSinCuenta.getMonto() + " efectuado");
+            this.regresar();
 
         } catch (PersistenciaException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
@@ -221,28 +201,40 @@ public class RetirarSinCuentaForm extends javax.swing.JFrame {
 
     }
 
-    private boolean validarPassword(String password) {
-        String passwordCandidato = new String(txtContraseña.getPassword());
-        return BCrypt.checkpw(passwordCandidato, password);
-    }
-
-    private RetiroSinCuenta validarCaducidad(RetiroSinCuenta retiroSinCuenta) throws PersistenciaException {
-
-        Timestamp fechaFin = Timestamp.valueOf(retiroSinCuenta.getFechaFin());
-        Timestamp ahora = new Timestamp(System.currentTimeMillis());
-
-        if (fechaFin.before(ahora)) {
-            retiroSinCuenta.setEstado(EstadoRetiroSinCuenta.EXPIRADO);
-            retiroSinCuenta = retirosSinCuentaDAO.actualizar(retiroSinCuenta);
-        }
-
-        return retiroSinCuenta;
-
-    }
-
     private void regresar() {
         this.clienteForm.setVisible(true);
         this.setVisible(false);
+    }
+
+    private boolean validarRetiro() throws PersistenciaException {
+        if (this.retiroSinCuenta == null) {
+            Dialogs.mostrarMensajeError(this, "Folio inexistente");
+            return false;
+        }
+        this.retiroSinCuenta = validarCaducidadRetiro(this.retirosSinCuentaDAO, retiroSinCuenta);
+        if (this.retiroSinCuenta.getEstado() == EstadoRetiroSinCuenta.COBRADO) {
+            Dialogs.mostrarMensajeError(this, "Este retiro ya fue cobrado");
+            return false;
+        }
+        if (this.retiroSinCuenta.getEstado() == EstadoRetiroSinCuenta.EXPIRADO) {
+            Dialogs.mostrarMensajeError(this, "Este retiro ha expirado");
+            return false;
+        }
+
+        if (this.retiroSinCuenta.getEstado() != EstadoRetiroSinCuenta.PENDIENTE) {
+            Dialogs.mostrarMensajeError(this, "Retiro invalido");
+            return false;
+        }
+        if (!validarPassword(retiroSinCuenta.getPassword(), Arrays.toString(txtContraseña.getPassword()))) {
+            Dialogs.mostrarMensajeError(this, "Credenciales invalidas");
+            return false;
+        }
+        if (!validarCuentaActiva(this.cuentasBancariasDAO, retiroSinCuenta)) {
+            Dialogs.mostrarMensajeError(this, "La cuenta se encuentra inactiva.");
+            return false;
+        }
+
+        return true;
     }
 
 }

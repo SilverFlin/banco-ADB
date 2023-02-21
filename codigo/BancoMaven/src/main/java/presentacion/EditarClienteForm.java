@@ -7,11 +7,14 @@ import implementaciones.ClientesDAO;
 import implementaciones.DomiciliosDAO;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import org.mindrot.jbcrypt.BCrypt;
+import static utils.Dialogs.mostrarMensajeError;
+import static utils.Dialogs.mostrarMensajeExito;
+import static utils.Validaciones.validarPassword;
 
 /**
  *
@@ -229,10 +232,10 @@ public class EditarClienteForm extends javax.swing.JFrame {
             Domicilio domicilio = new Domicilio(this.cliente.getIdDomicilio(), txtCalle.getText(), txtNumero.getText(), txtColonia.getText(), txtCodigoPostal.getText());
             try {
                 domiciliosDAO.actualizar(domicilio);
-                this.mostrarMensajeExito("Datos Actualizados");
+                mostrarMensajeExito(this, "Datos Actualizados");
                 this.regresar();
             } catch (PersistenciaException ex) {
-                this.mostrarError("Error al actualizar datos, intenta de nuevo.");
+                mostrarMensajeError(this, "Error al actualizar datos, intenta de nuevo.");
                 LOG.log(Level.SEVERE, ex.getMessage());
             }
         }
@@ -245,7 +248,7 @@ public class EditarClienteForm extends javax.swing.JFrame {
             return false;
         }
 
-        if (!validarPassword()) {
+        if (!validarPassword(Arrays.toString(txtContrasena.getPassword()), this.cliente)) {
             JOptionPane.showMessageDialog(this, "Password invalida");
             return false;
         }
@@ -263,18 +266,6 @@ public class EditarClienteForm extends javax.swing.JFrame {
                 && !codigoPostal.isEmpty()
                 && !contrasenha.isEmpty();
 
-    }
-
-    private boolean validarPassword() {
-        return BCrypt.checkpw(new String(txtContrasena.getPassword()), this.cliente.getContrasenia());
-    }
-
-    private void mostrarError(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    private void mostrarMensajeExito(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Exito", JOptionPane.PLAIN_MESSAGE);
     }
 
     private void regresar() {

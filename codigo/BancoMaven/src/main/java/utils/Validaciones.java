@@ -1,13 +1,18 @@
 package utils;
 
+import dominio.Cliente;
 import dominio.CuentaBancaria;
+import dominio.EstadoRetiroSinCuenta;
 import dominio.RetiroSinCuenta;
 import excepciones.PersistenciaException;
 import interfaces.ICuentasBancariasDAO;
+import interfaces.IRetirosSinCuentaDAO;
 import java.awt.event.KeyEvent;
+import java.sql.Timestamp;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JTextField;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -108,14 +113,43 @@ public class Validaciones {
 
         return matcher.matches();
     }
-    
+
     public static boolean validarCuentaActiva(ICuentasBancariasDAO cuentasBancariasDAO, RetiroSinCuenta retiroSinCuenta) throws PersistenciaException {
         CuentaBancaria cuentaBancaria = cuentasBancariasDAO.consultar(retiroSinCuenta.getIdCuentaBancaria());
         String estado = cuentaBancaria.getEstadoCuenta();
         return "Activa".equals(estado);
     }
+
     public static boolean validarCuentaActiva(ICuentasBancariasDAO cuentasBancariasDAO, CuentaBancaria cuentaBancaria) throws PersistenciaException {
         String estado = cuentaBancaria.getEstadoCuenta();
         return "Activa".equals(estado);
     }
+
+    public static boolean validarPassword(String passwordCandidato, Cliente cliente) {
+        return BCrypt.checkpw(passwordCandidato, cliente.getContrasenia());
+    }
+
+    public static boolean validarPassword(String passwordCandidato, String passwordHashed) {
+        return BCrypt.checkpw(passwordCandidato, passwordHashed);
+    }
+
+    public static boolean tieneFondosSuficientes(CuentaBancaria cuentaBancaria, Double monto) {
+        double saldo = cuentaBancaria.getSaldoMXN();
+        return saldo >= monto;
+    }
+
+    public static RetiroSinCuenta validarCaducidadRetiro(IRetirosSinCuentaDAO retirosSinCuentaDAO, RetiroSinCuenta retiroSinCuenta) throws PersistenciaException {
+
+        Timestamp fechaFin = Timestamp.valueOf(retiroSinCuenta.getFechaFin());
+        Timestamp ahora = new Timestamp(System.currentTimeMillis());
+
+        if (fechaFin.before(ahora)) {
+            retiroSinCuenta.setEstado(EstadoRetiroSinCuenta.EXPIRADO);
+            retiroSinCuenta = retirosSinCuentaDAO.actualizar(retiroSinCuenta);
+        }
+
+        return retiroSinCuenta;
+
+    }
+
 }

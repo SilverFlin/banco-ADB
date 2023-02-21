@@ -19,16 +19,17 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.ConfiguracionPaginado;
 import utils.Conversiones;
-import utils.Dialogs;
+import static utils.Dialogs.mostrarMensajeError;
+import static utils.Dialogs.pedirPassword;
 import utils.Mensajes;
+import static utils.Utils.generarPasswordRetiro;
 import utils.Validaciones;
+import static utils.Validaciones.tieneFondosSuficientes;
+import static utils.Validaciones.validarPassword;
 
 /**
  *
@@ -212,30 +213,11 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
 
         try {
             consultarCuenta();
-            if (this.cuentaBancaria == null) {
-                this.mostrarError("Cuenta no existente");
-                return;
-            }
-            if (!isValidMonto()) {
-                this.mostrarError("Monto invalido");
-                return;
-            }
-            String password = pedirPassword();
-            if (!validarPassword(password)) {
-                this.mostrarError("Contraseña invalida");
-                return;
-            }
-            if (!Validaciones.validarCuentaActiva(cuentasBancariasDAO, cuentaBancaria)) {
-                Dialogs.mostrarError(this, "La cuenta se encuentra inactiva.");
+            if (!this.validarRetiro()) {
                 return;
             }
 
-            if (!fondosSuficientes()) {
-                this.mostrarError("Fondos insuficientes");
-                return;
-            }
-
-            String passwordRetiro = this.generarPasswordRetiro();
+            String passwordRetiro = generarPasswordRetiro();
             RetiroSinCuenta retiroSinCuenta = this.crearRetiro(obtenerMonto(), passwordRetiro);
             /*Registrar operacion*/
             Operacion operacion = new Operacion(null, Mensajes.generarRegistroRetiroSinCuenta(retiroSinCuenta.getMonto()), retiroSinCuenta.getIdCuentaBancaria());
@@ -259,15 +241,6 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
 
     private Double obtenerMonto() {
         return Conversiones.crearMontoDeTexto(this.txtMonto.getText());
-    }
-
-    private String generarPasswordRetiro() {
-        long longitud = 8L;
-        long limiteInferior = (long) Math.pow(10, longitud - 1);
-        long limiteSuperior = (long) (Math.pow(10, longitud) - 1.0);
-        long randomDigitNum = (long) (limiteInferior + Math.random() * limiteSuperior);
-        String password = Long.toString(randomDigitNum);
-        return password;
     }
 
     private RetiroSinCuenta crearRetiro(Double monto, String password) throws PersistenciaException {
@@ -323,36 +296,6 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
         this.setVisible(false);
     }
 
-    private boolean fondosSuficientes() {
-        double saldo = this.cuentaBancaria.getSaldoMXN();
-        return saldo >= this.obtenerMonto();
-    }
-
-    private void mostrarError(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Algo salio mal", JOptionPane.ERROR_MESSAGE);
-    }
-
-    private String pedirPassword() {
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel("Ingresa una contraseña:");
-        JPasswordField pass = new JPasswordField(10);
-        panel.add(label);
-        panel.add(pass);
-        String[] options = new String[]{"OK", "Cancelar"};
-        int option = JOptionPane.showOptionDialog(null, panel, "Credenciales",
-                JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
-                null, options, options[1]);
-        if (option == 0) {
-            char[] password = pass.getPassword();
-            return new String(password);
-        }
-        return "";
-    }
-
-    private boolean validarPassword(String passwordCandidato) {
-        return BCrypt.checkpw(passwordCandidato, cliente.getContrasenia());
-    }
-
     private void ajustarLabels() {
 
         switch (this.tipoMovimiento) {
@@ -391,23 +334,8 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
     private void realizarDeposito() {
         try {
             consultarCuenta();
-            if (this.cuentaBancaria == null) {
-                this.mostrarError("Cuenta no existente");
-                return;
-            }
-            if (!isValidMonto()) {
-                this.mostrarError("Monto invalido");
-                return;
-            }
 
-            String password = pedirPassword();
-            if (!validarPassword(password)) {
-                this.mostrarError("Contraseña invalida");
-                return;
-            }
-
-            if (!Validaciones.validarCuentaActiva(cuentasBancariasDAO, cuentaBancaria)) {
-                Dialogs.mostrarError(this, "La cuenta se encuentra inactiva.");
+            if (!this.validarRetiro()) {
                 return;
             }
 
@@ -427,28 +355,8 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
     private void realizarRetiro() {
         try {
             consultarCuenta();
-            if (this.cuentaBancaria == null) {
-                this.mostrarError("Cuenta no existente");
-                return;
-            }
-            if (!isValidMonto()) {
-                this.mostrarError("Monto invalido");
-                return;
-            }
 
-            String password = pedirPassword();
-            if (!validarPassword(password)) {
-                this.mostrarError("Contraseña invalida");
-                return;
-            }
-
-            if (!Validaciones.validarCuentaActiva(cuentasBancariasDAO, cuentaBancaria)) {
-                Dialogs.mostrarError(this, "La cuenta se encuentra inactiva.");
-                return;
-            }
-
-            if (!fondosSuficientes()) {
-                this.mostrarError("Fondos insuficientes");
+            if (!this.validarRetiro()) {
                 return;
             }
 
@@ -463,5 +371,33 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
         } catch (PersistenciaException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
         }
+    }
+
+    private boolean validarRetiro() throws PersistenciaException {
+        if (this.cuentaBancaria == null) {
+            mostrarMensajeError(this, "Cuenta no existente");
+            return false;
+        }
+        if (!isValidMonto()) {
+            mostrarMensajeError(this, "Monto invalido");
+            return false;
+        }
+
+        String password = pedirPassword();
+        if (!validarPassword(password, this.cliente)) {
+            mostrarMensajeError(this, "Contraseña invalida");
+            return false;
+        }
+
+        if (!Validaciones.validarCuentaActiva(cuentasBancariasDAO, cuentaBancaria)) {
+            mostrarMensajeError(this, "La cuenta se encuentra inactiva.");
+            return false;
+        }
+
+        if ((this.tipoMovimiento != TipoMovimiento.DEPOSITO_CUENTA) && !tieneFondosSuficientes(this.cuentaBancaria, obtenerMonto())) {
+            mostrarMensajeError(this, "Fondos insuficientes");
+            return false;
+        }
+        return true;
     }
 }

@@ -17,15 +17,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import org.mindrot.jbcrypt.BCrypt;
 import utils.ConfiguracionPaginado;
 import utils.Conversiones;
+import static utils.Dialogs.pedirPassword;
 import utils.Mensajes;
 import utils.Validaciones;
+import static utils.Dialogs.mostrarMensajeError;
+import static utils.Dialogs.mostrarMensajeExito;
+import static utils.Validaciones.tieneFondosSuficientes;
+import static utils.Validaciones.validarPassword;
 
 /**
  *
@@ -41,8 +41,9 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
     private CuentaBancaria cuentaBancaria;
     private Cliente cliente;
     private final MenuPrincipalForm menuPrincipalForm;
-    
+
     private static final Logger LOG = Logger.getLogger(CrearTransferenciaForm.class.getName());
+    private CuentaBancaria cuentaDestino;
 
     public CrearTransferenciaForm(IConexionBD conBD, MenuPrincipalForm menuPrincipalForm, Cliente cliente) {
         initComponents();
@@ -219,13 +220,12 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
 
     }
 
-    private CuentaBancaria obtenerCuentaDestino() {
+    private void obtenerCuentaDestino() {
         try {
-            return this.cuentasBancariasDAO.consultar(this.txtCuentaDestino.getText());
+            this.cuentaDestino = this.cuentasBancariasDAO.consultar(this.txtCuentaDestino.getText());
         } catch (PersistenciaException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
-            this.mostrarError("La cuenta destino no existe.");
-            return null;
+            mostrarMensajeError(this, "La cuenta destino no existe.");
         }
     }
 
@@ -253,69 +253,23 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
         this.setVisible(false);
     }
 
-    private void mostrarError(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Algo salio mal", JOptionPane.ERROR_MESSAGE);
-    }
-
-    private String pedirPassword() {
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel("Ingresa una contraseña:");
-        JPasswordField pass = new JPasswordField(10);
-        panel.add(label);
-        panel.add(pass);
-        String[] options = new String[]{"OK", "Cancelar"};
-        int option = JOptionPane.showOptionDialog(null, panel, "Credenciales",
-                JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
-                null, options, options[1]);
-        // pressing OK button
-        if (option == 0) {
-            char[] password = pass.getPassword();
-            return new String(password);
-        }
-        return "";
-    }
-
-    private boolean validarPassword(String passwordCandidato) {
-        return BCrypt.checkpw(passwordCandidato, cliente.getContrasenia());
-    }
-
     private void crearTransferencia() {
         try {
-            consultarCuenta();
-            if (this.cuentaBancaria == null) {
-                this.mostrarError("Cuenta Origen existente");
-                return;
-            }
-            CuentaBancaria cuentaDestino = this.obtenerCuentaDestino();
-
-            if (cuentaDestino == null) {
+            /*Validaciones*/
+            if (!this.validarTransferencia()) {
                 return;
             }
 
-            if (!isValidMonto()) {
-                this.mostrarError("Monto invalido");
-                return;
-            }
-
-            if (!fondosSuficientes()) {
-                this.mostrarError("Fondos insuficientes");
-                return;
-            }
-
-            String password = pedirPassword();
-            if (!validarPassword(password)) {
-                this.mostrarError("Contraseña invalida");
-                return;
-            }
-            Transferencia transferencia = new Transferencia(obtenerMonto(), this.cuentaBancaria.getId(), cuentaDestino.getId());
+            /*Crear transferencia*/
+            Transferencia transferencia = new Transferencia(obtenerMonto(), this.cuentaBancaria.getId(), this.cuentaDestino.getId());
             Transferencia transferenciaExitosa = this.transferenciasDAO.insertar(transferencia);
 
             /* Registrar una operacion*/
             int idCuentaOrigen = transferenciaExitosa.getIdCuentaOrigen();
-            Operacion operacion = new Operacion(null, Mensajes.generarRegistroTransferencia(transferenciaExitosa.getMonto(), idCuentaOrigen + "", transferenciaExitosa.getIdCuentaDestino() + ""), idCuentaOrigen);
+            String mensajeOperacion = Mensajes.generarRegistroTransferencia(transferenciaExitosa.getMonto(), idCuentaOrigen + "", transferenciaExitosa.getIdCuentaDestino() + "");
+            Operacion operacion = new Operacion(null, mensajeOperacion, idCuentaOrigen);
             operacionesDAO.insertar(operacion);
-
-            this.mostrarExito("Transferencia satisfactoria");
+            mostrarMensajeExito(this, "Transferencia satisfactoria");
             this.regresarAMenu();
         } catch (PersistenciaException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
@@ -331,12 +285,35 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
         return Conversiones.crearMontoDeTexto(this.txtMonto.getText());
     }
 
-    private boolean fondosSuficientes() {
-        double saldo = this.cuentaBancaria.getSaldoMXN();
-        return saldo >= this.obtenerMonto();
+    private boolean validarTransferencia() throws PersistenciaException {
+        this.consultarCuenta();
+
+        if (this.cuentaBancaria == null) {
+            mostrarMensajeError(this, "Cuenta Origen inexistente");
+            return false;
+        }
+        this.obtenerCuentaDestino();
+
+        if (this.cuentaDestino == null) {
+            return false;
+        }
+
+        if (!isValidMonto()) {
+            mostrarMensajeError(this, "Monto invalido");
+            return false;
+        }
+
+        if (!tieneFondosSuficientes(cuentaDestino, obtenerMonto())) {
+            mostrarMensajeError(this, "Fondos insuficientes");
+            return false;
+        }
+
+        String password = pedirPassword();
+        if (!validarPassword(password, this.cliente)) {
+            mostrarMensajeError(this, "Contraseña invalida");
+            return false;
+        }
+        return true;
     }
 
-    private void mostrarExito(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Exito", JOptionPane.INFORMATION_MESSAGE);
-    }
 }

@@ -13,12 +13,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import org.mindrot.jbcrypt.BCrypt;
 import utils.ConfiguracionPaginado;
+import static utils.Dialogs.mostrarMensajeError;
+import static utils.Dialogs.pedirPassword;
+import static utils.Validaciones.validarPassword;
 
 /**
  *
@@ -34,7 +32,7 @@ public class CuentasOperacionForm extends javax.swing.JFrame {
     private CuentaBancaria cuentaBancaria;
     private Cliente cliente;
     private final IConexionBD conBD;
-    
+
     private static final Logger LOG = Logger.getLogger(CuentasOperacionForm.class.getName());
 
     public CuentasOperacionForm(IConexionBD conBD, CuentasForm cuentasForm, Cliente cliente) {
@@ -199,60 +197,39 @@ public class CuentasOperacionForm extends javax.swing.JFrame {
         return noCuentasBancarias;
     }
 
-
     private void regresarACuentas() {
         this.cuentasForm.setVisible(true);
         this.setVisible(false);
     }
 
-
-    private void mostrarError(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Algo salio mal", JOptionPane.ERROR_MESSAGE);
-    }
-
-    private String pedirPassword() {
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel("Ingresa una contraseña:");
-        JPasswordField pass = new JPasswordField(10);
-        panel.add(label);
-        panel.add(pass);
-        String[] options = new String[]{"OK", "Cancelar"};
-        int option = JOptionPane.showOptionDialog(null, panel, "Credenciales",
-                JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
-                null, options, options[1]);
-        // pressing OK button
-        if (option == 0) {
-            char[] password = pass.getPassword();
-            return new String(password);
-        }
-        return "";
-    }
-
-    private boolean validarPassword(String passwordCandidato) {
-        return BCrypt.checkpw(passwordCandidato, cliente.getContrasenia());
-    }
-
     private void verOperaciones() {
         try {
             consultarCuenta();
-            if (this.cuentaBancaria == null) {
-                this.mostrarError("Cuenta no existente");
-                return;
-            }
-           
 
-            String password = pedirPassword();
-            if (!validarPassword(password)) {
-                this.mostrarError("Contraseña invalida");
+            if (!validarConsultaOperacion()) {
                 return;
             }
-            
-            OperacionesForm operacionesForm = new OperacionesForm(this.conBD,cliente, this.cuentaBancaria);
+
+            OperacionesForm operacionesForm = new OperacionesForm(this.conBD, cliente, this.cuentaBancaria);
             operacionesForm.setVisible(true);
             this.setVisible(false);
-            
+
         } catch (PersistenciaException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
         }
+    }
+
+    private boolean validarConsultaOperacion() {
+        if (this.cuentaBancaria == null) {
+            mostrarMensajeError(this, "Cuenta no existente");
+            return false;
+        }
+
+        String password = pedirPassword();
+        if (!validarPassword(password, this.cliente)) {
+            mostrarMensajeError(this, "Contraseña invalida");
+            return false;
+        }
+        return true;
     }
 }
