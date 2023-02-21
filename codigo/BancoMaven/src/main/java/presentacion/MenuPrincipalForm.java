@@ -8,6 +8,7 @@ import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import static utils.Conversiones.crearMontoDeTexto;
 import static utils.Dialogs.mostrarMensajeError;
 import static utils.Dialogs.mostrarMensajeExito;
@@ -34,6 +35,7 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
         initComponents();
         cargarMensajeBienvenida();
+        cargarImagen();
     }
 
     /**
@@ -289,6 +291,11 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         ActividadesForm actividadesForm = new ActividadesForm(conBD, cliente, this);
         actividadesForm.setVisible(true);
         this.setVisible(false);
+    }
+
+    private void cargarImagen() {
+        ImageIcon icon = new ImageIcon("recursos/fondoMenuPrincipal.jpg");
+        this.imgMenuPrincipal.setIcon(icon);
     }
 
 }
