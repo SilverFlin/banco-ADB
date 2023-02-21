@@ -1,4 +1,4 @@
-    # Modelo Relacional: BancoTransacciones
+# Modelo Relacional: BancoTransacciones
 
 - Domicilios (
     - <u>id</u>:entero 
@@ -8,7 +8,7 @@
     - Ciudad: texto(30)
     - Estado: texto(30)
     - Pais: texto(30)
-    - CodigoPostal: texto(30)
+    - CodigoPostal: texto(10)
 )
 
 - Clientes (
@@ -18,7 +18,7 @@
     - ApellidoMaterno: texto(50) opcional
     - FechaNacimiento:fecha
     - Correo: texto(100),
-    - password: texto(50)
+    - password: texto(60)
     - IdDomicilio: entero
 )
 > IdDomicilio, que viene de Domicilios.
@@ -27,7 +27,7 @@
     - <u>id</u>:entero 
     - NoCuenta: texto(20) unico
     - FechaApertura: fechaHora
-    - SaldoMXN: decimal
+    - SaldoMXN: decimal(19,4)
     - IdCliente: entero
 )
 > FechaApertura, que se genera al ingresar el registro
@@ -44,7 +44,7 @@
 
 - Transferencias (
     - <u>id</u>:entero 
-    - Monto: decimal
+    - Monto: decimal(19,4)
     - FechaHora: fechaHora
     - IdCuentaOrigen: entero
     - IdCuentaDestino: entero
@@ -55,11 +55,11 @@
 - RetirosSinCuenta (
     - <u>id</u>:entero 
     - Password: texto(100)
-    - Monto: decimal
+    - Monto: decimal(19,4)
     - Folio: texto(50)
     - FechaInicio: fechaHora
     - FechaFin: fechaHora
-    - Cobrado: texto("Cobrado","Pendiente")
+    - Cobrado: texto("Cobrado","Pendiente","Expirado")
     - IdCuentaBancaria: entero
 )
 > IdCuentaBancaria, que viene de CuentasBancarias
