@@ -6,6 +6,7 @@ import implementaciones.CuentasBancariasDAO;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
+import java.util.Arrays;
 import javax.swing.JOptionPane;
 import static utils.Validaciones.validarPassword;
 
@@ -76,7 +77,10 @@ public class IniciarSesionForm extends javax.swing.JFrame {
             return false;
         }
         
-        return validarPassword(tempCliente.getContrasenia(), this.cliente);
+        if(!validarPassword(new String(txtContraseña.getPassword()), this.cliente.getContrasenia())){
+            return false;
+        }
+        return true;
     }
 
     @SuppressWarnings("unchecked")
