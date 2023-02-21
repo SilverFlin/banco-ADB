@@ -24,17 +24,49 @@ import static utils.Validaciones.validarPassword;
  */
 public class CuentasOperacionForm extends javax.swing.JFrame {
 
+    /**
+     * Acceso a datos de retiros sin cuenta
+     */
     private final IRetirosSinCuentaDAO retirosSinCuentaDAO;
+    /**
+     * Acceso a datos de cuentas bancarias
+     */
     private final ICuentasBancariasDAO cuentasBancariasDAO;
+    /**
+     * Ventana anterior
+     */
     private CuentasForm cuentasForm;
 
+    /**
+     * Calculo de tiempo de expiracion
+     */
     private final long TIEMPO_EXPIRACION = 1000 * 60 * 10;
+    /**
+     * Cuenta empleada para ver sus operaciones
+     */
     private CuentaBancaria cuentaBancaria;
+    /**
+     * Cliente logueado
+     */
     private Cliente cliente;
+    /**
+     * Conexion a la BD
+     */
     private final IConexionBD conBD;
 
+    /**
+     * Logger de excepciones
+     */
     private static final Logger LOG = Logger.getLogger(CuentasOperacionForm.class.getName());
 
+    /**
+     * Constructor que inicializa la conexion con BD, la ventana anterior y el
+     * cliente logueado
+     *
+     * @param conBD conexion con BD
+     * @param cuentasFormla ventana anterior
+     * @param cliente cliente logueado
+     */
     public CuentasOperacionForm(IConexionBD conBD, CuentasForm cuentasForm, Cliente cliente) {
         initComponents();
         this.retirosSinCuentaDAO = new RetirosSinCuentaDAO(conBD);
@@ -149,10 +181,19 @@ public class CuentasOperacionForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Regresar a la ventana anterior
+     *
+     * @param evt evento que lo acciona
+     */
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         this.regresarACuentas();
     }//GEN-LAST:event_btnRegresarActionPerformed
-
+    /**
+     * Boton para poder seguir con el proceso de vista de operaciones
+     *
+     * @param evt evento que lo acciona
+     */
     private void btnVerOperacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerOperacionesActionPerformed
         this.verOperaciones();
     }//GEN-LAST:event_btnVerOperacionesActionPerformed
@@ -173,14 +214,24 @@ public class CuentasOperacionForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblTitulo;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Extrae la cuenta del combobox y consulta la BD para obtener su
+     * informacion
+     *
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
+     */
     private void consultarCuenta() throws PersistenciaException {
         this.cuentaBancaria = this.cuentasBancariasDAO.consultar(String.valueOf(cBoxNoCuentas.getSelectedItem()));
 
     }
-
+    
+    /**
+     * Consulta las cuentas del cliente y las ingresa en un combobox
+     */
     private void llenarComboBox() {
         try {
-            List<CuentaBancaria> cuentasBancarias = cuentasBancariasDAO.consultar(new ConfiguracionPaginado(50,0), this.cliente.getId());
+            List<CuentaBancaria> cuentasBancarias = cuentasBancariasDAO.consultar(new ConfiguracionPaginado(50, 0), this.cliente.getId());
             List<String> noCuentasBancarias = extraerNoCuenta(cuentasBancarias);
             this.cBoxNoCuentas.setModel(new DefaultComboBoxModel<>(noCuentasBancarias.toArray(new String[0])));
         } catch (PersistenciaException ex) {
@@ -188,7 +239,12 @@ public class CuentasOperacionForm extends javax.swing.JFrame {
         }
 
     }
-
+    
+    /**
+     * Extrae el numero de cuenta de la lista de cuentas bancarias
+     * @param cuentasBancarias lista de cuentas bancarias
+     * @return lista de numeros de cuentas
+     */
     private List<String> extraerNoCuenta(List<CuentaBancaria> cuentasBancarias) {
         List<String> noCuentasBancarias = new ArrayList<>();
         cuentasBancarias.forEach((cuenta) -> {
@@ -196,12 +252,18 @@ public class CuentasOperacionForm extends javax.swing.JFrame {
         });
         return noCuentasBancarias;
     }
-
+    
+    /**
+     * Regresa a la ventana anterior
+     */
     private void regresarACuentas() {
         this.cuentasForm.setVisible(true);
         this.setVisible(false);
     }
-
+    
+    /**
+     * Valida y dijire a la siguiente ventana de operaciones
+     */
     private void verOperaciones() {
         try {
             consultarCuenta();
@@ -218,7 +280,11 @@ public class CuentasOperacionForm extends javax.swing.JFrame {
             LOG.log(Level.SEVERE, ex.getMessage());
         }
     }
-
+    
+    /**
+     * Realiza las validaciones necesarias para ver las operaciones
+     * @return Si cumplio las condiciones
+     */
     private boolean validarConsultaOperacion() {
         if (this.cuentaBancaria == null) {
             mostrarMensajeError(this, "Cuenta no existente");
@@ -226,7 +292,9 @@ public class CuentasOperacionForm extends javax.swing.JFrame {
         }
 
         String password = pedirPassword();
-        if(password.isEmpty())return false;
+        if (password.isEmpty()) {
+            return false;
+        }
         if (!validarPassword(password, this.cliente)) {
             mostrarMensajeError(this, "Contraseña invalida");
             return false;

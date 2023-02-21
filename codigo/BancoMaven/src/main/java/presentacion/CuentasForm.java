@@ -26,14 +26,32 @@ import static utils.Validaciones.validarPassword;
 public class CuentasForm extends javax.swing.JFrame {
 
     /**
-     * Creates new form EditarClienteForm
+     * Logger de excepciones
      */
     private static final Logger LOG = Logger.getLogger(CuentasForm.class.getName());
+    /**
+     * Acceso a datos de cuentas bancarias
+     */
     private final ICuentasBancariasDAO cuentasBancariasDAO;
+    /**
+     * Configuracion de paginado
+     */
     private ConfiguracionPaginado configPaginado;
+    /**
+     * Cliente logueado
+     */
     private Cliente cliente;
+    /**
+     * Conexion con la BD
+     */
     private final IConexionBD conBD;
 
+    /**
+     * Constructor que inicializa la conexion con la BD y el cliente logueado
+     *
+     * @param conBD Conexion con BD
+     * @param cliente Cliente logueado
+     */
     public CuentasForm(IConexionBD conBD, Cliente cliente) {
         this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
         this.conBD = conBD;
@@ -291,52 +309,93 @@ public class CuentasForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Regresa a la ventana anterior
+     *
+     * @param evt evento que lo acciona
+     */
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         MenuPrincipalForm menuPrincipal = new MenuPrincipalForm(this.conBD, cliente);
         menuPrincipal.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnRegresarActionPerformed
-
+    /**
+     * Muestra la ventana de operaciones
+     *
+     * @param evt evento que lo acciona
+     */
     private void btnOperacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOperacionesActionPerformed
         CuentasOperacionForm cuentasOperacionForm = new CuentasOperacionForm(this.conBD, this, this.cliente);
         cuentasOperacionForm.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnOperacionesActionPerformed
-
+    /**
+     * Avanzar en la pagina de cuentas
+     *
+     * @param evt evento que lo acciona
+     */
     private void btnAvanzarPaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAvanzarPaginaActionPerformed
         configPaginado.avanzarPag();
         this.llenarTablaCuentas();
     }//GEN-LAST:event_btnAvanzarPaginaActionPerformed
-
+    /**
+     * Boton para cerrar sesion
+     *
+     * @param evt evento que lo acciona
+     */
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         this.cerrarSesion();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
-
+    /**
+     * Boton para editar la informacion de la cuenta
+     *
+     * @param evt evento que lo acciona
+     */
     private void btnEditarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarCuentaActionPerformed
         this.editarCuenta();
     }//GEN-LAST:event_btnEditarCuentaActionPerformed
-
+    /**
+     * Boton para acceder a la ventana de retiros sin cuenta
+     *
+     * @param evt evento que lo acciona
+     */
     private void btnRetiroSinTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroSinTarjetaActionPerformed
         MovimientoBancarioForm crearRetiroSinCuentaForm = new MovimientoBancarioForm(this.conBD, this, this.cliente, TipoMovimiento.RETIRO_SIN_CUENTA);
         crearRetiroSinCuentaForm.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnRetiroSinTarjetaActionPerformed
-
+    /**
+     * Boton para retroceder en las paginas de cuentas
+     *
+     * @param evt evento que lo acciona
+     */
     private void btnRetrocederPaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetrocederPaginaActionPerformed
         configPaginado.retrocederPag();
         this.llenarTablaCuentas();
     }//GEN-LAST:event_btnRetrocederPaginaActionPerformed
-
+    /**
+     * Boton para desactivar cuentas
+     *
+     * @param evt evento que lo acciona
+     */
     private void brnDesactivarCuenta1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brnDesactivarCuenta1ActionPerformed
         this.desactivar();
     }//GEN-LAST:event_brnDesactivarCuenta1ActionPerformed
-
+    /**
+     * Boton para depositar en una cuenta
+     *
+     * @param evt evento que lo acciona
+     */
     private void btnDepositarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepositarActionPerformed
         MovimientoBancarioForm crearRetiroSinCuentaForm = new MovimientoBancarioForm(this.conBD, this, this.cliente, TipoMovimiento.DEPOSITO_CUENTA);
         crearRetiroSinCuentaForm.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnDepositarActionPerformed
-
+    /**
+     * Boton para retirar en una cuenta
+     *
+     * @param evt evento que lo acciona
+     */
     private void btnRetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetirarActionPerformed
         MovimientoBancarioForm crearRetiroSinCuentaForm = new MovimientoBancarioForm(this.conBD, this, this.cliente, TipoMovimiento.RETIRO_CUENTA);
         crearRetiroSinCuentaForm.setVisible(true);
@@ -361,7 +420,9 @@ public class CuentasForm extends javax.swing.JFrame {
     private javax.swing.JTable tablaCuentas;
     private javax.swing.JLabel txtBienvenida;
     // End of variables declaration//GEN-END:variables
-
+    /**
+     * Consulta las cuentas asociadas al cliente y las agrega a la tabla
+     */
     public void llenarTablaCuentas() {
         try {
 
@@ -389,6 +450,9 @@ public class CuentasForm extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Desactiva la cuenta que se ingresa en el input de cuentas
+     */
     private void desactivar() {
 
         String input = pedirInputUsuario(this, "Desactivar Cuenta", "Ingresa el numero de cuenta");
@@ -411,18 +475,32 @@ public class CuentasForm extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Cierra sesion, llevandonos al menu de inicio de sesion
+     */
     private void cerrarSesion() {
         IniciarSesionForm clienteForm = new IniciarSesionForm(conBD);
         clienteForm.setVisible(true);
         this.setVisible(false);
     }
 
+    /**
+     * Nos dijire al frame de editar cuenta
+     */
     private void editarCuenta() {
         EditarClienteForm editarClienteForm = new EditarClienteForm(this, this.conBD, this.cliente);
         editarClienteForm.setVisible(true);
         this.setVisible(false);
     }
 
+    /**
+     * Valida la informacion necesaria para poder desactivar la cuenta
+     *
+     * @param cuentaBancaria cuenta a validar
+     * @return Si se puede eliminar
+     * @throws PersistenciaException Si ocurrio una excepcion al consultar la
+     * base
+     */
     private boolean validarDesactivo(CuentaBancaria cuentaBancaria) throws PersistenciaException {
         String password = pedirPassword();
         if (password.isEmpty()) {
