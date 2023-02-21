@@ -17,14 +17,37 @@ import utils.ConfiguracionPaginado;
  * @author Elkur
  */
 public class ActividadesForm extends javax.swing.JFrame {
-
+    /**
+     * Conexion a la base
+     */
     private final IConexionBD conBD;
+    /**
+     * Cliente logeado
+     */
     private Cliente cliente;
+    /**
+     * Conexion con el frame anterior
+     */
     private MenuPrincipalForm menuPrincipalForm;
+    /**
+     * Configuracion de paginado
+     */
     private ConfiguracionPaginado configPaginado;
+    /**
+     * Acceso a datos
+     */
     private IOperacionesDAO operacionesDAO;
+    /**
+     * Logger de excepciones
+     */
     private static final Logger LOG = Logger.getLogger(ActividadesForm.class.getName());
-
+    
+    /**
+     * Constructor que recibe la conexion, el cliente logeado y el frame anterior
+     * @param conBD Conexion a BD
+     * @param cliente Cliente que esta logueado
+     * @param menuPrincipalForm Frame que llamoa este
+     */
     public ActividadesForm(IConexionBD conBD, Cliente cliente, MenuPrincipalForm menuPrincipalForm) {
         initComponents();
         this.conBD = conBD;
@@ -34,14 +57,23 @@ public class ActividadesForm extends javax.swing.JFrame {
         operacionesDAO = new OperacionesDAO(conBD);
         cargarTablaOperaciones();
     }
-
+    
+    /**
+     * Carga en la tabla las operaciones del cliente y sus cuentas
+     */
     private void cargarTablaOperaciones() {
         try {
+            /*
+            Consulta las operaciones del cliente
+            */
             List<Operacion> listaOperaciones = this.operacionesDAO.consultar(this.configPaginado, cliente.getId() + "");
             if (listaOperaciones.isEmpty()) {
                 this.configPaginado.retrocederPag();
                 return;
             }
+            /*
+            Las ingresa en un modelo y luego a la tabla
+            */
             DefaultTableModel modeloTabla = (DefaultTableModel) this.tbActividades.getModel();
             modeloTabla.setRowCount(0);
             for (Operacion operacion : listaOperaciones) {
@@ -52,7 +84,10 @@ public class ActividadesForm extends javax.swing.JFrame {
             LOG.log(Level.SEVERE, ex.getMessage());
         }
     }
-
+    
+    /**
+     * Regresa al frame anterior, haciendose invisible y visible al otro
+     */
     public void regresarAMenu() {
         this.setVisible(false);
         menuPrincipalForm.setVisible(true);
@@ -174,16 +209,26 @@ public class ActividadesForm extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Boton que acciona el ir a al menu anterior
+     * @param evt evento que lo acciona
+     */
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         this.regresarAMenu();
     }//GEN-LAST:event_btnRegresarActionPerformed
-
+    /**
+     * Boton que retrocede en la pagina de la tabla
+     * @param evt Evento que lo acciona
+     */
     private void btnRetrocederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetrocederActionPerformed
         this.configPaginado.retrocederPag();
         this.cargarTablaOperaciones();
     }//GEN-LAST:event_btnRetrocederActionPerformed
-
+    
+    /**
+     * Boton que adelanta en la pagina de la tabla
+     * @param evt Evento que lo acciona
+     */
     private void btnAdelanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdelanteActionPerformed
         this.configPaginado.avanzarPag();
         this.cargarTablaOperaciones();

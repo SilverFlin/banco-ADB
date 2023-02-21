@@ -33,18 +33,53 @@ import static utils.Validaciones.validarPassword;
  */
 public class CrearTransferenciaForm extends javax.swing.JFrame {
 
+    /**
+     * Accedo a datos de transferencias
+     */
     private final ITransferenciasDAO transferenciasDAO;
+    /**
+     * Accedo a datos de cuentas bancarias
+     */
     private final ICuentasBancariasDAO cuentasBancariasDAO;
+    /**
+     * Accedo a datos de operaciones
+     */
     private final IOperacionesDAO operacionesDAO;
 
+    /**
+     * Calculo del tiempo de expiracion
+     */
     private final long TIEMPO_EXPIRACION = 1000 * 60 * 10;
+    /**
+     * Cuenta origen de transacciones
+     */
     private CuentaBancaria cuentaBancaria;
+    /**
+     * Cliente logeado
+     */
     private Cliente cliente;
+    /**
+     * Frame anterior
+     */
     private final MenuPrincipalForm menuPrincipalForm;
 
+    /**
+     * Logger de excepciones
+     */
     private static final Logger LOG = Logger.getLogger(CrearTransferenciaForm.class.getName());
+    /**
+     * Cuenta destino de transaccion
+     */
     private CuentaBancaria cuentaDestino;
 
+    /**
+     * Constructor que recibe una conexion, el frame anterior y el cliente
+     * logueado
+     *
+     * @param conBD Conexion a BD
+     * @param menuPrincipalForm Frame anterior
+     * @param cliente Cliente logeado
+     */
     public CrearTransferenciaForm(IConexionBD conBD, MenuPrincipalForm menuPrincipalForm, Cliente cliente) {
         initComponents();
         this.transferenciasDAO = new TransferenciasDAO(conBD);
@@ -184,11 +219,17 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Boton que regresa a la pagina anterior
+     * @param evt evento que lo acciona
+     */
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         this.regresarAMenu();
     }//GEN-LAST:event_btnRegresarActionPerformed
-
+    /**
+     * Boton para realizar la transferencia
+     * @param evt evento que lo acciona
+     */
     private void btnTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferirActionPerformed
         this.crearTransferencia();
     }//GEN-LAST:event_btnTransferirActionPerformed
@@ -215,11 +256,20 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtMonto;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Extrae el numero de cuenta y consulta la BD para obtener su informacion
+     *
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
+     */
     private void consultarCuenta() throws PersistenciaException {
         this.cuentaBancaria = this.cuentasBancariasDAO.consultar(String.valueOf(cBoxCuentasOrigen.getSelectedItem()));
 
     }
 
+    /**
+     * Extrae el numero de cuenta y consulta la BD para obtener su informacion
+     */
     private void obtenerCuentaDestino() {
         try {
             this.cuentaDestino = this.cuentasBancariasDAO.consultar(this.txtCuentaDestino.getText());
@@ -229,9 +279,13 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Consulta las cuentas asociadas al cliente y las trae para llegar el
+     * combobox
+     */
     private void llenarComboBox() {
         try {
-            List<CuentaBancaria> cuentasBancarias = cuentasBancariasDAO.consultar(new ConfiguracionPaginado(50,0), this.cliente.getId());
+            List<CuentaBancaria> cuentasBancarias = cuentasBancariasDAO.consultar(new ConfiguracionPaginado(50, 0), this.cliente.getId());
             List<String> noCuentasBancarias = extraerNoCuenta(cuentasBancarias);
             this.cBoxCuentasOrigen.setModel(new DefaultComboBoxModel<>(noCuentasBancarias.toArray(new String[0])));
         } catch (PersistenciaException ex) {
@@ -240,6 +294,12 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Extrae de la lista solamente los numeros de cuenta de las cuentas
+     *
+     * @param cuentasBancarias lista de cuentas
+     * @return lista de numeros de cuenta
+     */
     private List<String> extraerNoCuenta(List<CuentaBancaria> cuentasBancarias) {
         List<String> noCuentasBancarias = new ArrayList<>();
         cuentasBancarias.forEach((cuenta) -> {
@@ -248,11 +308,17 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
         return noCuentasBancarias;
     }
 
+    /**
+     * Regresa al frame anterior
+     */
     private void regresarAMenu() {
         this.menuPrincipalForm.setVisible(true);
         this.setVisible(false);
     }
 
+    /**
+     * Inserta en la BD la transferencia y la operacion
+     */
     private void crearTransferencia() {
         try {
             /*Validaciones*/
@@ -276,15 +342,32 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Valida si el monto existe y es positivo
+     *
+     * @return Si el monto existe y es positivo
+     */
     private boolean isValidMonto() {
         Double monto = obtenerMonto();
         return !Validaciones.isNull(monto) && Validaciones.isPositivo(monto);
     }
 
+    /**
+     * Extrae y transforma el monto en un valor numerico
+     *
+     * @return Monto
+     */
     private Double obtenerMonto() {
         return Conversiones.crearMontoDeTexto(this.txtMonto.getText());
     }
 
+    /**
+     * Realiza las distintas validaciones de una transferencia
+     *
+     * @return Si cumplio con todas
+     * @throws PersistenciaException Si ocurrio una excepcion al consultar la
+     * base
+     */
     private boolean validarTransferencia() throws PersistenciaException {
         this.consultarCuenta();
 
@@ -297,8 +380,8 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
         if (this.cuentaDestino == null) {
             return false;
         }
-        
-        if(this.cuentaBancaria.getNoCuenta().equals(this.cuentaDestino.getNoCuenta())){
+
+        if (this.cuentaBancaria.getNoCuenta().equals(this.cuentaDestino.getNoCuenta())) {
             mostrarMensajeError(this, "No puedes depositar a la cuenta de origen");
             return false;
         }
@@ -309,7 +392,9 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
         }
 
         String password = pedirPassword();
-        if(password.isEmpty())return false;
+        if (password.isEmpty()) {
+            return false;
+        }
         if (!validarPassword(password, this.cliente)) {
             mostrarMensajeError(this, "Contraseña invalida");
             return false;
@@ -318,7 +403,7 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
             mostrarMensajeError(this, "La cuenta se encuentra inactiva.");
             return false;
         }
-        if (!tieneFondosSuficientes(cuentaDestino, obtenerMonto())) {
+        if (!tieneFondosSuficientes(cuentaBancaria, obtenerMonto())) {
             mostrarMensajeError(this, "Fondos insuficientes");
             return false;
         }
