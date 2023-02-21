@@ -343,7 +343,7 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
             this.cuentasBancariasDAO.actualizar(this.cuentaBancaria);
 
             /*Registrar operacion*/
-            Operacion operacion = new Operacion(null, Mensajes.generarRegistroRetiroSinCuenta(this.obtenerMonto()), this.cuentaBancaria.getId());
+            Operacion operacion = new Operacion(null, Mensajes.generarRegistroDeposito(this.obtenerMonto()), this.cuentaBancaria.getId());
             this.operacionesDAO.insertar(operacion);
 
             this.regresarACuentas();
@@ -364,7 +364,7 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
             this.cuentasBancariasDAO.actualizar(this.cuentaBancaria);
 
             /*Registrar operacion*/
-            Operacion operacion = new Operacion(null, Mensajes.generarRegistroRetiroSinCuenta(this.obtenerMonto()), this.cuentaBancaria.getId());
+            Operacion operacion = new Operacion(null, Mensajes.generarRegistroRetiro(this.obtenerMonto()), this.cuentaBancaria.getId());
             this.operacionesDAO.insertar(operacion);
 
             this.regresarACuentas();
