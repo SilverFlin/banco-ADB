@@ -38,22 +38,60 @@ import static utils.Validaciones.validarPassword;
  */
 public class MovimientoBancarioForm extends javax.swing.JFrame {
 
+    /**
+     * Acceso a datos de retiros sin cuenta
+     */
     private final IRetirosSinCuentaDAO retirosSinCuentaDAO;
+    /**
+     * Acceso a dato de cuentas bancarias
+     */
     private final ICuentasBancariasDAO cuentasBancariasDAO;
+    /**
+     * Acceso a datos de operaciones
+     */
     private final IOperacionesDAO operacionesDAO;
+    /**
+     * Ventana anterior
+     */
     private CuentasForm cuentasForm;
 
+    /**
+     * Calculo del tiempo de expiracion
+     */
     private final long TIEMPO_EXPIRACION = 1000 * 60 * 10;
+    /**
+     * Cuenta bancaria de gestion
+     */
     private CuentaBancaria cuentaBancaria;
+    /**
+     * Cliente logueado
+     */
     private Cliente cliente;
+    /**
+     * Tipo de movimiento a realizar
+     */
     private TipoMovimiento tipoMovimiento;
-
+    /**
+     * Logger de excepciones
+     */
     private static final Logger LOG = Logger.getLogger(MovimientoBancarioForm.class.getName());
 
+    /**
+     * Enumeradores de tipos de movimientos
+     */
     public enum TipoMovimiento {
         RETIRO_CUENTA, DEPOSITO_CUENTA, RETIRO_SIN_CUENTA
     };
 
+    /**
+     * Constructor que inicializa la conexion a BD, la ventana anterior, cliente
+     * logueado y el tipo de movimiento
+     *
+     * @param conBD Conexion a BD
+     * @param cuentasForm Ventanaa anterior
+     * @param cliente Cliente logueado
+     * @param tipoMovimiento Tipo de movimiento a realizar
+     */
     public MovimientoBancarioForm(IConexionBD conBD, CuentasForm cuentasForm, Cliente cliente, TipoMovimiento tipoMovimiento) {
         initComponents();
         this.retirosSinCuentaDAO = new RetirosSinCuentaDAO(conBD);
@@ -182,11 +220,19 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Boton que te dirige a la ventana anterior
+     *
+     * @param evt Evento que lo acciona
+     */
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         this.regresarACuentas();
     }//GEN-LAST:event_btnRegresarActionPerformed
-
+    /**
+     * Acepta la accion segun lo que se desee hacer
+     *
+     * @param evt Evento que lo acciona
+     */
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         this.aceptar();
     }//GEN-LAST:event_btnAceptarActionPerformed
@@ -210,6 +256,10 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtMonto;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Genera y consulta los diferentes elementos necesarios para poder realizar
+     * el retiro sin cuenta
+     */
     private void realizarRetiroSinCuenta() {
 
         try {
@@ -232,19 +282,44 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Extrae de la combobox y consulta la BD
+     *
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
+     */
     private void consultarCuenta() throws PersistenciaException {
         this.cuentaBancaria = this.cuentasBancariasDAO.consultar(String.valueOf(cBoxNoCuentas.getSelectedItem()));
     }
 
+    /**
+     * Verifica si es un monto no nulo y positivo
+     *
+     * @return Si es valido
+     */
     private boolean isValidMonto() {
         Double monto = obtenerMonto();
         return !Validaciones.isNull(monto) && Validaciones.isPositivo(monto);
     }
 
+    /**
+     * Extrae la informacion del txt y la transforma en un monto
+     *
+     * @return monto
+     */
     private Double obtenerMonto() {
         return Conversiones.crearMontoDeTexto(this.txtMonto.getText());
     }
 
+    /**
+     * Genera y consulta la informacion necesaria para crear un retiro sin
+     * cuenta
+     *
+     * @param monto Monto a retirar
+     * @param password pass del retiro
+     * @return El retiro sin cuenta
+     * @throws PersistenciaException
+     */
     private RetiroSinCuenta crearRetiro(Double monto, String password) throws PersistenciaException {
 
         String fechaInicio = new Timestamp(System.currentTimeMillis()).toString();
@@ -263,9 +338,12 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
         return retiroSinCuenta;
     }
 
+    /**
+     * Consulta las cuentas del cliente y llena el combobox con ellas
+     */
     private void llenarComboBox() {
         try {
-            List<CuentaBancaria> cuentasBancarias = cuentasBancariasDAO.consultar(new ConfiguracionPaginado(50,0), this.cliente.getId());
+            List<CuentaBancaria> cuentasBancarias = cuentasBancariasDAO.consultar(new ConfiguracionPaginado(50, 0), this.cliente.getId());
             List<String> noCuentasBancarias = extraerNoCuenta(cuentasBancarias);
             this.cBoxNoCuentas.setModel(new DefaultComboBoxModel<>(noCuentasBancarias.toArray(new String[0])));
         } catch (PersistenciaException ex) {
@@ -274,6 +352,12 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Extrae los numeros de cuenta de una lista de cuentas
+     *
+     * @param cuentasBancarias Lista de cuentas
+     * @return Lista de numeros de cuenta
+     */
     private List<String> extraerNoCuenta(List<CuentaBancaria> cuentasBancarias) {
         List<String> noCuentasBancarias = new ArrayList<>();
         cuentasBancarias.forEach((cuenta) -> {
@@ -282,6 +366,12 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
         return noCuentasBancarias;
     }
 
+    /**
+     * Muestra la informacion al cliente con respecto a su retiro sin cuenta
+     *
+     * @param passwordRetiro contrasenia del retiro
+     * @param retiroSinCuenta Retiro realizado
+     */
     private void mostrarFolioYPassword(String passwordRetiro, RetiroSinCuenta retiroSinCuenta) {
         String msg
                 = "Retiro creado"
@@ -292,12 +382,18 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, msg);
     }
 
+    /**
+     * Regresar a la ventana anterior
+     */
     private void regresarACuentas() {
         this.cuentasForm.llenarTablaCuentas();
         this.cuentasForm.setVisible(true);
         this.setVisible(false);
     }
 
+    /**
+     * Ajusta la vista del frame en base al tipo de movimiento
+     */
     private void ajustarLabels() {
 
         switch (this.tipoMovimiento) {
@@ -316,6 +412,9 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Realiza distintas accones en base a el tipo de movimiento
+     */
     private void aceptar() {
         switch (this.tipoMovimiento) {
             case DEPOSITO_CUENTA:
@@ -333,6 +432,9 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Consulta y realiza el deposito indicado
+     */
     private void realizarDeposito() {
         try {
             consultarCuenta();
@@ -355,6 +457,9 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Consulta y realiza el deposito indicado
+     */
     private void realizarRetiro() {
         try {
             consultarCuenta();
@@ -377,6 +482,13 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Realiza distintas validaciones para antes de generar un retiro
+     *
+     * @return Si cumple los requitos
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
+     */
     private boolean validarRetiro() throws PersistenciaException {
         if (this.cuentaBancaria == null) {
             mostrarMensajeError(this, "Cuenta no existente");
