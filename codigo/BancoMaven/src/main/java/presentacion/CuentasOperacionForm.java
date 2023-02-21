@@ -64,7 +64,7 @@ public class CuentasOperacionForm extends javax.swing.JFrame {
      * cliente logueado
      *
      * @param conBD conexion con BD
-     * @param cuentasFormla ventana anterior
+     * @param cuentasForm Form de Cuentas
      * @param cliente cliente logueado
      */
     public CuentasOperacionForm(IConexionBD conBD, CuentasForm cuentasForm, Cliente cliente) {

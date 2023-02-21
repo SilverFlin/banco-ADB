@@ -27,7 +27,7 @@ public class Validaciones {
     /**
      * Checa si el monto es un numero positivo
      *
-     * @param monto
+     * @param monto El monto a validar
      * @return positivo, si el numero es mayor a 0
      */
     public static boolean isPositivo(Double monto) {

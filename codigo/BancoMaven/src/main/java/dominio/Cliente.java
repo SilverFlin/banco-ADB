@@ -232,7 +232,7 @@ public class Cliente {
     /**
      * Genera el hash del cliente
      *
-     * @return
+     * @return hash code 
      */
     @Override
     public int hashCode() {

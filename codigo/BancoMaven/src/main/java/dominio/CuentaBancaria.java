@@ -245,7 +245,7 @@ public class CuentaBancaria {
     /**
      * Genera el hash de la cuenta
      *
-     * @return
+     * @return hash code
      */
     @Override
     public int hashCode() {

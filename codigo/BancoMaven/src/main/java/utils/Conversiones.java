@@ -12,8 +12,8 @@ public final class Conversiones {
     /**
      * Regresa el monto en double, si es que es valido, null en caso contrario.
      *
-     * @param txtMonto
-     * @return
+     * @param txtMonto monto en texto
+     * @return La conversiond el monto en texto a double
      */
     public static Double crearMontoDeTexto(String txtMonto) {
         Double monto;

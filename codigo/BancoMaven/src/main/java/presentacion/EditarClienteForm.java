@@ -8,7 +8,6 @@ import implementaciones.DomiciliosDAO;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
 import interfaces.IDomiciliosDAO;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -52,14 +51,14 @@ public class EditarClienteForm extends javax.swing.JFrame {
      * Constructor que inicializa la ventana anterior, la conexion a BD y el
      * cliente logueado
      *
-     * @param frame
-     * @param conBD
-     * @param cliente
+     * @param frameAnterior JFrame anterior
+     * @param conBD Conexion a la base
+     * @param cliente Cliente actual
      */
-    public EditarClienteForm(JFrame frame, IConexionBD conBD, Cliente cliente) {
+    public EditarClienteForm(JFrame frameAnterior, IConexionBD conBD, Cliente cliente) {
         initComponents();
         this.conBD = conBD;
-        this.frameAnterior = frame;
+        this.frameAnterior = frameAnterior;
         this.cliente = cliente;
         this.clientesDAO = new ClientesDAO(conBD);
         this.domiciliosDAO = new DomiciliosDAO(conBD);

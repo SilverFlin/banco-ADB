@@ -2,12 +2,10 @@ package implementaciones;
 
 import dominio.Cliente;
 import dominio.CuentaBancaria;
-import dominio.EstadoCuenta;
 import excepciones.PersistenciaException;
 import interfaces.IConexionBD;
 import interfaces.ICuentasBancariasDAO;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -130,7 +128,7 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
      * @param cuentaBancaria Cuenta bancaria a insertar
      * @param cliente Cliente a emplear
      * @return la cuenta bancaria, pero con el id asignado por la base de datos.
-     * @throws PersistenciaException
+     * @throws PersistenciaException Si ocurre un error al insertar a la base de datos
      */
     @Override
     public CuentaBancaria insertar(CuentaBancaria cuentaBancaria, Cliente cliente) throws PersistenciaException {

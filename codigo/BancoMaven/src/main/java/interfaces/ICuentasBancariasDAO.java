@@ -51,7 +51,7 @@ public interface ICuentasBancariasDAO {
      * @param cuentaBancaria Cuenta bancaria a insertar
      * @param cliente Cliente a emplear
      * @return la cuenta bancaria, pero con el id asignado por la base de datos.
-     * @throws PersistenciaException
+     * @throws PersistenciaException Si ocurre un error al insertar a la base de datos
      */
     CuentaBancaria insertar(CuentaBancaria cuentaBancaria, Cliente cliente) throws PersistenciaException;
 
