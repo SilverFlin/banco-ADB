@@ -25,11 +25,26 @@ import static utils.DominioDeResultSet.crearCuentaBancaria;
  */
 public class CuentasBancariasDAO implements ICuentasBancariasDAO {
 
+    /**
+     * Logger de excepciones
+     */
     private static final Logger LOG = Logger.getLogger(CuentasBancariasDAO.class.getName());
+    /**
+     * Generador de conexiones
+     */
     private final IConexionBD GENERADOR_CONEXIONES;
 
+    /**
+     * Nombre de la tabla a la que se accede comunmente
+     */
     private final String NOMBRE_TABLA = "cuentasBancarias";
+    /**
+     * Identificador de cuenta activa
+     */
     public static final String ESTADO_CUENTA_ACTIVO = "Activa";
+    /**
+     * Identificador de cuenta inactiva
+     */
     public static final String ESTADO_CUENTA_INACTIVO = "Inactiva";
 
     public CuentasBancariasDAO(IConexionBD generarConexion) {
@@ -39,9 +54,10 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
     /**
      * Regresa la cuenta bancaria en base al id proporcionado
      *
-     * @param id
-     * @return
-     * @throws PersistenciaException
+     * @param id Identificador de la cuenta bancaria
+     * @return Cuenta bancaria encontrada
+     * @throws PersistenciaException Si ocurrio una exception al conectarse con
+     * la base
      */
     @Override
     public CuentaBancaria consultar(int id) throws PersistenciaException {
@@ -50,7 +66,7 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
                 = "SELECT id, noCuenta, fechaApertura, saldoMXN, "
                 + " estadoCuenta, idCliente "
                 + "FROM " + NOMBRE_TABLA + " WHERE id = ?;";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement updateClientes = con.prepareStatement(query);) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement updateClientes = con.prepareStatement(query);) {
 
 
             /* Asignar valores a consulta*/
@@ -71,6 +87,15 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
         }
     }
 
+    /**
+     * Consulta la base de datos de cuentas bancarias y trae la que tenga el
+     * numero de cuenta especificado
+     *
+     * @param noCuenta Numero de cuenta a buscar
+     * @return Cuenta bancaria
+     * @throws PersistenciaException Si ocurre una excepcion al conectarse a la
+     * base de datos
+     */
     @Override
     public CuentaBancaria consultar(String noCuenta) throws PersistenciaException {
         /* Consultas */
@@ -78,7 +103,7 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
                 = "SELECT id, noCuenta, fechaApertura, saldoMXN, "
                 + " estadoCuenta, idCliente "
                 + "FROM " + NOMBRE_TABLA + " WHERE noCuenta = ?;";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement updateClientes = con.prepareStatement(query);) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement updateClientes = con.prepareStatement(query);) {
 
 
             /* Asignar valores a consulta*/
@@ -102,8 +127,8 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
     /**
      * Inserta una cuenta bancaria, relacionandose con el id de un cliente.
      *
-     * @param cuentaBancaria
-     * @param cliente
+     * @param cuentaBancaria Cuenta bancaria a insertar
+     * @param cliente Cliente a emplear
      * @return la cuenta bancaria, pero con el id asignado por la base de datos.
      * @throws PersistenciaException
      */
@@ -113,7 +138,7 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
         /* Consultas */
         String insertStatement = "INSERT INTO " + NOMBRE_TABLA + " (noCuenta, saldoMXN, idCliente) "
                 + "VALUES (?,?,?)";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement insertCuenta = con.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement insertCuenta = con.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);) {
 
             /* Asignar valores a consulta INSERT*/
             insertCuenta.setString(1, cuentaBancaria.getNoCuenta());
@@ -142,14 +167,14 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
     /**
      * Elimina la cuenta bancaria de la base de datos, usando su id
      *
-     * @param id
+     * @param id identificador dela cuenta a eliminar
      * @return la cuenta bancaria eliminada o null si no existia
      */
     @Override
     public CuentaBancaria eliminar(Integer id) {
         /* Consultas */
         String deleteStatement = "DELETE FROM " + NOMBRE_TABLA + " WHERE id = ?;";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement deleteClientes = con.prepareStatement(deleteStatement);) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement deleteClientes = con.prepareStatement(deleteStatement);) {
 
 
             /* Verificar si la cuenta existe*/
@@ -177,9 +202,19 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
         }
     }
 
+    /**
+     * Consulta las cuentas bancarias asociadas al identificador del cliente
+     * dado
+     *
+     * @param configPaginado Configuracion del paginado
+     * @param idCliente identificador del cliente que se le buscan
+     * @return Lista de cuentas asociadas
+     * @throws PersistenciaException Si ocurre una excepcion al conectarse a la
+     * base
+     */
     @Override
     public List<CuentaBancaria> consultar(ConfiguracionPaginado configPaginado, int idCliente) throws PersistenciaException {
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion()) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion()) {
             /* Consultas */
             String query
                     = "SELECT id, noCuenta, fechaApertura, saldoMXN, "
@@ -207,6 +242,15 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
         }
     }
 
+    /**
+     * Actualiza la informacion de la cuenta bancaria en la base de datos con la
+     * informacion de la cuenta dada
+     *
+     * @param cuentaBancaria Cuenta a actualizar
+     * @return Cuenta actualizada
+     * @throws PersistenciaException Si ocurre una excepcion al conectarse a la
+     * base
+     */
     @Override
     public CuentaBancaria actualizar(CuentaBancaria cuentaBancaria) throws PersistenciaException {
         /* Consultas */
@@ -214,7 +258,7 @@ public class CuentasBancariasDAO implements ICuentasBancariasDAO {
                 + "saldoMXN = ? ,"
                 + "estadoCuenta = ? "
                 + "WHERE id = ?";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement updateCuenta = con.prepareStatement(updateStatement, Statement.RETURN_GENERATED_KEYS);) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement updateCuenta = con.prepareStatement(updateStatement, Statement.RETURN_GENERATED_KEYS);) {
 
             /* Asignar valores a consulta INSERT*/
             updateCuenta.setDouble(1, cuentaBancaria.getSaldoMXN());
