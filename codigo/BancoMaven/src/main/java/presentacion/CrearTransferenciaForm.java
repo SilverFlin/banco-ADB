@@ -303,14 +303,17 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
             return false;
         }
 
-        if (!tieneFondosSuficientes(cuentaDestino, obtenerMonto())) {
-            mostrarMensajeError(this, "Fondos insuficientes");
-            return false;
-        }
-
         String password = pedirPassword();
         if (!validarPassword(password, this.cliente)) {
             mostrarMensajeError(this, "Contraseña invalida");
+            return false;
+        }
+        if (!Validaciones.validarCuentaActiva(cuentasBancariasDAO, cuentaBancaria)) {
+            mostrarMensajeError(this, "La cuenta se encuentra inactiva.");
+            return false;
+        }
+        if (!tieneFondosSuficientes(cuentaDestino, obtenerMonto())) {
+            mostrarMensajeError(this, "Fondos insuficientes");
             return false;
         }
         return true;
