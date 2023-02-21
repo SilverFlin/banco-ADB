@@ -70,6 +70,7 @@ public class CuentasForm extends javax.swing.JFrame {
         btnRetirar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         background3.setBackground(new java.awt.Color(255, 255, 255));
         background3.setMaximumSize(new java.awt.Dimension(600, 400));
