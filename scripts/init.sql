@@ -37,7 +37,7 @@ CREATE TABLE cuentasBancarias(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     noCuenta VARCHAR(20) NOT NULL UNIQUE,
     fechaApertura DATETIME DEFAULT(CURRENT_TIMESTAMP) NOT NULL,
-    saldoMXN DECIMAL(8,4) NOT NULL DEFAULT 0,
+    saldoMXN DECIMAL(19,4) NOT NULL DEFAULT 0,
     idCliente INT NOT NULL,
     estadoCuenta ENUM("Activa","Inactiva") DEFAULT ("Activa") NOT NULL,
     FOREIGN KEY (idCliente) REFERENCES clientes (id)
@@ -53,7 +53,7 @@ CREATE TABLE operaciones(
 
 CREATE TABLE transferencias(
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    monto DECIMAL(8,4) NOT NULL,
+    monto DECIMAL(19,4) NOT NULL,
     fechaHora DATETIME DEFAULT(CURRENT_TIMESTAMP),
     idCuentaOrigen INT NOT NULL,
     idCuentaDestino INT NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE transferencias(
 CREATE TABLE retirosSinCuenta(
 	id INT PRIMARY KEY AUTO_INCREMENT,
     password VARCHAR(100) NOT NULL,
-    monto DECIMAL(8,4) NOT NULL,
+    monto DECIMAL(19,4) NOT NULL,
     folio VARCHAR(50),
     estado ENUM("Cobrado","Pendiente","Expirado") DEFAULT("Pendiente"),
     fechaInicio DATETIME DEFAULT(CURRENT_TIMESTAMP) NOT NULL,
