@@ -297,6 +297,11 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
         if (this.cuentaDestino == null) {
             return false;
         }
+        
+        if(this.cuentaBancaria.getNoCuenta().equals(this.cuentaDestino.getNoCuenta())){
+            mostrarMensajeError(this, "No puedes depositar a la cuenta de origen");
+            return false;
+        }
 
         if (!isValidMonto()) {
             mostrarMensajeError(this, "Monto invalido");
@@ -304,6 +309,7 @@ public class CrearTransferenciaForm extends javax.swing.JFrame {
         }
 
         String password = pedirPassword();
+        if(password.isEmpty())return false;
         if (!validarPassword(password, this.cliente)) {
             mostrarMensajeError(this, "Contraseña invalida");
             return false;
