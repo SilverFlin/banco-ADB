@@ -26,18 +26,43 @@ import static utils.DominioDeResultSet.crearRetiroSinCuenta;
  */
 public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
 
+    /**
+     * Logger de excepciones
+     */
     private static final Logger LOG = Logger.getLogger(RetirosSinCuentaDAO.class.getName());
+    /**
+     * Generador de conexiones
+     */
     private final IConexionBD GENERADOR_CONEXIONES;
 
+    /**
+     * Nombre de la tabla empleada comunmente
+     */
     private final String NOMBRE_TABLA = "retirosSinCuenta";
+    /**
+     * Estados del retiro sin cuenta
+     */
     public static final String ESTADO_RETIRO_COBRADO = "Cobrado";
     public static final String ESTADO_RETIRO_PENDIENTE = "Pendiente";
     public static final String ESTADO_RETIRO_EXPIRADO = "Expirado";
 
+    /**
+     * Constructor que recibe el generador de conexiones
+     *
+     * @param GENERADOR_CONEXIONES Generador de conexiones
+     */
     public RetirosSinCuentaDAO(IConexionBD GENERADOR_CONEXIONES) {
         this.GENERADOR_CONEXIONES = GENERADOR_CONEXIONES;
     }
 
+    /**
+     * Consulta la base de dato y trae el retiro que coincida con la id dada
+     *
+     * @param id identificador a buscar
+     * @return Retiro sin cuenta encontrado
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
+     */
     @Override
     public RetiroSinCuenta consultar(int id) throws PersistenciaException {
         /* Consultas */
@@ -45,7 +70,7 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
                 = "SELECT id, password, monto, folio, "
                 + " estado, fechaInicio, fechaFin, idCuentaBancaria "
                 + "FROM " + NOMBRE_TABLA + " WHERE id = ?;";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement updateClientes = con.prepareStatement(query);) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement updateClientes = con.prepareStatement(query);) {
 
 
             /* Asignar valores a consulta*/
@@ -65,6 +90,14 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
         }
     }
 
+    /**
+     * Consulta la base y trae el retiro que tenga el folio dado
+     *
+     * @param folio folio a buscar
+     * @return Retiro sin cuenta encontrado
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
+     */
     @Override
     public RetiroSinCuenta consultar(String folio) throws PersistenciaException {
         /* Consultas */
@@ -72,7 +105,7 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
                 = "SELECT id, password, monto, folio, "
                 + " estado, fechaInicio, fechaFin, idCuentaBancaria "
                 + "FROM " + NOMBRE_TABLA + " WHERE folio = ?;";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement updateClientes = con.prepareStatement(query);) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement updateClientes = con.prepareStatement(query);) {
 
 
             /* Asignar valores a consulta*/
@@ -92,9 +125,19 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
         }
     }
 
+    /**
+     * consulta en la base los retiros sin cuenta que coincidan con la id de
+     * cuenta dada
+     *
+     * @param configPaginado Configuracion de paginado
+     * @param idCuentaBancaria identificador de cuenta para buscar
+     * @return Lista de retiros sin cuenta
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
+     */
     @Override
     public List<RetiroSinCuenta> consultar(ConfiguracionPaginado configPaginado, int idCuentaBancaria) throws PersistenciaException {
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion()) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion()) {
             /* Consultas */
             String query
                     = "SELECT id, password, monto, folio, "
@@ -121,6 +164,15 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
         }
     }
 
+    /**
+     * Inserta en la base el retiro sin cuenta dado en el parametro
+     *
+     * @param retiroSinCuenta Retiro sin cuenta a insertar
+     * @param cuentaBancaria Cuenta auxiliar
+     * @return Retiro sin cuenta insertado
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
+     */
     @Override
     public RetiroSinCuenta insertar(RetiroSinCuenta retiroSinCuenta, CuentaBancaria cuentaBancaria) throws PersistenciaException {
         /* Consultas */
@@ -162,11 +214,17 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
         }
     }
 
+    /**
+     * Elimina de la base el retiro que tenga la misma id dada
+     *
+     * @param id identificador a eliminar
+     * @return Retiro eliminado
+     */
     @Override
     public RetiroSinCuenta eliminar(Integer id) {
         /* Consultas */
         String deleteStatement = "DELETE FROM " + NOMBRE_TABLA + " WHERE id = ?;";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement deleteRetiro = con.prepareStatement(deleteStatement);) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement deleteRetiro = con.prepareStatement(deleteStatement);) {
             /* Verificar si la cuenta existe*/
             RetiroSinCuenta retiroSinCuenta = null;
             try {
@@ -192,6 +250,14 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
         }
     }
 
+    /**
+     * Actualiza en la base el retiro dado en el parametro
+     *
+     * @param retiroSinCuenta retiro a actualizar
+     * @return retiro actualizado
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
+     */
     @Override
     public RetiroSinCuenta actualizar(RetiroSinCuenta retiroSinCuenta) throws PersistenciaException {
 
@@ -199,7 +265,7 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
         String updateStatement = "UPDATE " + NOMBRE_TABLA + " SET "
                 + "estado = ? "
                 + "WHERE id = ?";
-        try ( Connection con = this.GENERADOR_CONEXIONES.crearConexion();  PreparedStatement updateRetiro = con.prepareStatement(updateStatement, Statement.RETURN_GENERATED_KEYS);) {
+        try (Connection con = this.GENERADOR_CONEXIONES.crearConexion(); PreparedStatement updateRetiro = con.prepareStatement(updateStatement, Statement.RETURN_GENERATED_KEYS);) {
 
             /* Asignar valores a consulta INSERT*/
             // TODO Mover
@@ -228,8 +294,14 @@ public class RetirosSinCuentaDAO implements IRetirosSinCuentaDAO {
         }
     }
 
-    
-
+    /**
+     * Retira y actualiza el retiro sin cuenta de la base
+     *
+     * @param retiroSinCuenta retiro a realizar
+     * @return Retiro realizado
+     * @throws PersistenciaException Si ocurre una excepcion al consultar la
+     * base
+     */
     @Override
     public RetiroSinCuenta retirar(RetiroSinCuenta retiroSinCuenta) throws PersistenciaException {
         /* Consultas */
