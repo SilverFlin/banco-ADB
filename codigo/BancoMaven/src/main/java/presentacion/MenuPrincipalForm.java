@@ -22,13 +22,28 @@ import static utils.Validaciones.isPositivo;
 public class MenuPrincipalForm extends javax.swing.JFrame {
 
     /**
-     * Creates new form EditarClienteForm
+     * Logger de excepciones
      */
     private static final Logger LOG = Logger.getLogger(MenuPrincipalForm.class.getName());
+    /**
+     * Cliente logueado
+     */
     private Cliente cliente;
+    /**
+     * Acceso a dato de cuentas bancarias
+     */
     private final ICuentasBancariasDAO cuentasBancariasDAO;
+    /**
+     * Conexion a BD
+     */
     private final IConexionBD conBD;
 
+    /**
+     * Constructor que inicializa la conexion con BD y cliente logueado
+     *
+     * @param conBD Conexion a BD
+     * @param cliente Cliente logueado
+     */
     public MenuPrincipalForm(IConexionBD conBD, Cliente cliente) {
         this.cliente = cliente;
         this.conBD = conBD;
@@ -192,29 +207,59 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Dirige hacia una ventana de visualizacion de cuentas
+     *
+     * @param evt Evento que lo acciona
+     */
     private void btnMisCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMisCuentasActionPerformed
         CuentasForm cuentasForm = new CuentasForm(this.conBD, cliente);
         cuentasForm.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnMisCuentasActionPerformed
 
+    /**
+     * Boton que cierra sesion y te devuelve al inicio de sesion
+     *
+     * @param evt Evento que lo acciona
+     */
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         this.cerrarSesion();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
+    /**
+     * Boton que dirige hacia el menu de transferencias
+     *
+     * @param evt Evento que lo acciona
+     */
     private void btnTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferenciaActionPerformed
         this.cargarVentanaTransferencia();
 
     }//GEN-LAST:event_btnTransferenciaActionPerformed
 
+    /**
+     * Dirige hacia el historial de actividades de cliente
+     *
+     * @param evt Evento que lo acciona
+     */
     private void btnHistorialActividadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActividadActionPerformed
         mostrarActividad();
     }//GEN-LAST:event_btnHistorialActividadActionPerformed
 
+    /**
+     * Permite crear una cuenta nueva para el cliente
+     *
+     * @param evt Evento que lo acciona
+     */
     private void btnCrearCuentaBancaria1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearCuentaBancaria1ActionPerformed
         this.crearCuenta();
     }//GEN-LAST:event_btnCrearCuentaBancaria1ActionPerformed
 
+    /**
+     * Nos dirige hacia la ventana de editar cliente
+     *
+     * @param evt
+     */
     private void btnEditarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarCuentaActionPerformed
         this.editarCuenta();
     }//GEN-LAST:event_btnEditarCuentaActionPerformed
@@ -233,6 +278,9 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
     private javax.swing.JLabel txtBienvenida;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Carga el mensaje de bienvenida en la pantalla
+     */
     private void cargarMensajeBienvenida() {
         this.txtBienvenida.setText("Hola, " + this.cliente.getNombres() + "!");
     }
@@ -246,7 +294,7 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         if (input == null) {
             return;
         }
-        
+
         CuentaBancaria cuentaBancaria = extraerDatosCuenta(input);
 
         try {
@@ -258,6 +306,12 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Extrae el monto de creacion de cuenta
+     *
+     * @param input monto ingresado
+     * @return Cuenta bancaria generada con monto
+     */
     private CuentaBancaria extraerDatosCuenta(String input) {
 
         Double monto = crearMontoDeTexto(input);
@@ -269,30 +323,45 @@ public class MenuPrincipalForm extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Permite dirigirnos al menu de inicio de sesion
+     */
     private void cerrarSesion() {
         IniciarSesionForm clienteForm = new IniciarSesionForm(conBD);
         clienteForm.setVisible(true);
         this.setVisible(false);
     }
 
+    /**
+     * Permite dirigirnos al menu de editar cuenta
+     */
     private void editarCuenta() {
         EditarClienteForm editarClienteForm = new EditarClienteForm(this, this.conBD, this.cliente);
         editarClienteForm.setVisible(true);
         this.setVisible(false);
     }
 
+    /**
+     * Permite dirigirnos al menu de transferencias
+     */
     private void cargarVentanaTransferencia() {
         CrearTransferenciaForm crearTransferenciaForm = new CrearTransferenciaForm(conBD, this, cliente);
         crearTransferenciaForm.setVisible(true);
         this.setVisible(false);
     }
 
+    /**
+     * Permite dirigirnos al menu de actividades
+     */
     private void mostrarActividad() {
         ActividadesForm actividadesForm = new ActividadesForm(conBD, cliente, this);
         actividadesForm.setVisible(true);
         this.setVisible(false);
     }
 
+    /**
+     * Carga la imagen de los archivos del proyecto
+     */
     private void cargarImagen() {
         ImageIcon icon = new ImageIcon("recursos/fondoMenuPrincipal.jpg");
         this.imgMenuPrincipal.setIcon(icon);

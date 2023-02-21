@@ -15,17 +15,44 @@ import static utils.Validaciones.validarPassword;
  * @author Elkur
  */
 public class IniciarSesionForm extends javax.swing.JFrame {
-
+    /**
+     * Valor para ingresar a la ventana de cuentas
+     */
     private final static int INGRESAR = 1;
+    /**
+     * Ventana para ingresar a la ventana de registrar
+     */
     private final static int REGISTRAR = 2;
-
+    
+    /**
+     * Ventana de registro
+     */
     private final RegistroClienteForm registroClienteForm;
+    /**
+     * Menu principal para despues de loguearte
+     */
     private MenuPrincipalForm menuPrincipalForm;
+    /**
+     * Conexion a BD
+     */
     private IConexionBD conBD;
+    /**
+     * Acceso a datos de clientes
+     */
     private final IClientesDAO clientesDAO;
+    /**
+     * Acceso a datos de cuentas bancarias
+     */
     private final ICuentasBancariasDAO cuentasBancariasDAO;
+    /**
+     * Cliente a loguear
+     */
     private Cliente cliente;
 
+    /**
+     * Constructor que recibe la conexion a BD
+     * @param conBD Conexion a BD
+     */
     public IniciarSesionForm(IConexionBD conBD) {
         initComponents();
         this.conBD = conBD;
@@ -34,7 +61,11 @@ public class IniciarSesionForm extends javax.swing.JFrame {
         this.clientesDAO = new ClientesDAO(conBD);
         this.cuentasBancariasDAO = new CuentasBancariasDAO(conBD);
     }
-
+    
+    /**
+     * Cambia entre las diferentes ventanas
+     * @param type tipo de ventana
+     */
     private void openNewWindow(int type) {
         switch (type) {
             case INGRESAR:
@@ -47,8 +78,10 @@ public class IniciarSesionForm extends javax.swing.JFrame {
                 registroClienteForm.setVisible(true);
                 break;
         }
-    }
-
+    }   
+    /**
+     * Ingresa a una nueva ventana si cumple con las condiciones
+     */
     private void login() {
         if (!validarCampos()) {
             JOptionPane.showMessageDialog(this, "Credenciales no validas", "Error", JOptionPane.ERROR_MESSAGE);
@@ -60,7 +93,11 @@ public class IniciarSesionForm extends javax.swing.JFrame {
         }
         openNewWindow(this.INGRESAR);
     }
-
+    
+    /**
+     * Valida si los campos no estan vacios
+     * @return si los campos no estan vacios
+     */
     private boolean validarCampos() {
         String correo = this.txtCorreo.getText();
         String password = new String(this.txtContraseña.getPassword());
@@ -68,7 +105,11 @@ public class IniciarSesionForm extends javax.swing.JFrame {
         return correo.length() > 0 && password.length() > 0;
 
     }
-
+    
+    /**
+     * Verifica en la BD si las credenciales son validas
+     * @return 
+     */
     private boolean validarCredenciales() {
         Cliente tempCliente = this.clientesDAO.consultar(txtCorreo.getText());
         this.cliente = tempCliente;
@@ -209,15 +250,26 @@ public class IniciarSesionForm extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Dijire a registro de clients
+     * @param evt Evento que lo acciona
+     */
     private void lblRegistrarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRegistrarMousePressed
         openNewWindow(REGISTRAR);
     }//GEN-LAST:event_lblRegistrarMousePressed
-
+    
+    /**
+     * Inicia el proceso de login
+     * @param evt Evento que lo acciona
+     */
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         this.login();
     }//GEN-LAST:event_btnIngresarActionPerformed
-
+    
+    /**
+     * Dirige a la ventana de retiro sin cuenta
+     * @param evt Evento que lo acciona
+     */
     private void lblRetiroSinTarjetaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRetiroSinTarjetaMousePressed
         RetirarSinCuentaForm retiroSinCuentaForm = new RetirarSinCuentaForm(this.conBD);
         retiroSinCuentaForm.setVisible(true);
