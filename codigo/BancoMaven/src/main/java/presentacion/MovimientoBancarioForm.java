@@ -24,6 +24,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import utils.ConfiguracionPaginado;
 import utils.Conversiones;
 import static utils.Dialogs.mostrarMensajeError;
+import static utils.Dialogs.mostrarMensajeExito;
 import static utils.Dialogs.pedirPassword;
 import utils.Mensajes;
 import static utils.Utils.generarPasswordRetiro;
@@ -227,6 +228,7 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
             this.regresarACuentas();
         } catch (PersistenciaException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
+            mostrarMensajeError(this, "Error al crear retiro sin cuenta");
         }
     }
 
@@ -345,10 +347,11 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
             /*Registrar operacion*/
             Operacion operacion = new Operacion(null, Mensajes.generarRegistroDeposito(this.obtenerMonto()), this.cuentaBancaria.getId());
             this.operacionesDAO.insertar(operacion);
-
+            mostrarMensajeExito(this, "Deposito realizado");
             this.regresarACuentas();
         } catch (PersistenciaException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
+            mostrarMensajeError(this, "Error al depositar");
         }
     }
 
@@ -366,10 +369,11 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
             /*Registrar operacion*/
             Operacion operacion = new Operacion(null, Mensajes.generarRegistroRetiro(this.obtenerMonto()), this.cuentaBancaria.getId());
             this.operacionesDAO.insertar(operacion);
-
+            mostrarMensajeExito(this, "Deposito realizado");
             this.regresarACuentas();
         } catch (PersistenciaException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
+            mostrarMensajeError(this, "Error al retirar");
         }
     }
 
@@ -384,7 +388,9 @@ public class MovimientoBancarioForm extends javax.swing.JFrame {
         }
 
         String password = pedirPassword();
-        if(password.isEmpty())return false;
+        if (password.isEmpty()) {
+            return false;
+        }
         if (!validarPassword(password, this.cliente)) {
             mostrarMensajeError(this, "Contraseña invalida");
             return false;
