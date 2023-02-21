@@ -83,6 +83,7 @@ public class RegistroClienteForm extends javax.swing.JFrame {
         txtContrasena.setText("");
         txtCorreo.setText("");
         txtNombre.setText("");
+        txtNumero.setText("");
     }
 
     @SuppressWarnings("unchecked")
