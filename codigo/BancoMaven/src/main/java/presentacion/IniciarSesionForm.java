@@ -62,7 +62,7 @@ public class IniciarSesionForm extends javax.swing.JFrame {
     }
 
     private boolean validarCampos() {
-        String correo = this.txtUsuario.getText();
+        String correo = this.txtCorreo.getText();
         String password = new String(this.txtContraseña.getPassword());
 
         return correo.length() > 0 && password.length() > 0;
@@ -70,7 +70,7 @@ public class IniciarSesionForm extends javax.swing.JFrame {
     }
 
     private boolean validarCredenciales() {
-        Cliente tempCliente = this.clientesDAO.consultar(txtUsuario.getText());
+        Cliente tempCliente = this.clientesDAO.consultar(txtCorreo.getText());
         this.cliente = tempCliente;
 
         if (tempCliente == null) {
@@ -91,13 +91,13 @@ public class IniciarSesionForm extends javax.swing.JFrame {
         Background = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         lblBienvenido = new javax.swing.JLabel();
-        txtUsuario = new javax.swing.JTextField();
+        txtCorreo = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        lblUsuario = new javax.swing.JLabel();
+        lblCorreo = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         lblContraseña = new javax.swing.JLabel();
         txtContraseña = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        btnIngresar = new javax.swing.JButton();
         txtIniciarSesion = new javax.swing.JLabel();
         lblRegistrar = new javax.swing.JLabel();
         lblRetiroSinTarjeta = new javax.swing.JLabel();
@@ -137,15 +137,15 @@ public class IniciarSesionForm extends javax.swing.JFrame {
 
         Background.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 90));
 
-        txtUsuario.setForeground(new java.awt.Color(51, 51, 51));
-        txtUsuario.setToolTipText("");
-        txtUsuario.setBorder(null);
-        Background.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 180, 190, 20));
+        txtCorreo.setForeground(new java.awt.Color(51, 51, 51));
+        txtCorreo.setToolTipText("");
+        txtCorreo.setBorder(null);
+        Background.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 180, 190, 20));
         Background.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 200, 190, 10));
 
-        lblUsuario.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
-        lblUsuario.setText("Usuario");
-        Background.add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 180, 20));
+        lblCorreo.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
+        lblCorreo.setText("Correo");
+        Background.add(lblCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 180, 20));
         Background.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 190, 10));
 
         lblContraseña.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 14)); // NOI18N
@@ -155,19 +155,19 @@ public class IniciarSesionForm extends javax.swing.JFrame {
         txtContraseña.setBorder(null);
         Background.add(txtContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 260, 190, 20));
 
-        jButton1.setBackground(new java.awt.Color(0, 102, 204));
-        jButton1.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Ingresar");
-        jButton1.setBorder(null);
-        jButton1.setBorderPainted(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnIngresar.setBackground(new java.awt.Color(0, 102, 204));
+        btnIngresar.setFont(new java.awt.Font("Nirmala UI Semilight", 1, 12)); // NOI18N
+        btnIngresar.setForeground(new java.awt.Color(255, 255, 255));
+        btnIngresar.setText("Ingresar");
+        btnIngresar.setBorder(null);
+        btnIngresar.setBorderPainted(false);
+        btnIngresar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnIngresarActionPerformed(evt);
             }
         });
-        Background.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 310, 70, 30));
+        Background.add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 310, 70, 30));
 
         txtIniciarSesion.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 16)); // NOI18N
         txtIniciarSesion.setText("Iniciar sesion");
@@ -214,9 +214,9 @@ public class IniciarSesionForm extends javax.swing.JFrame {
         openNewWindow(REGISTRAR);
     }//GEN-LAST:event_lblRegistrarMousePressed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         this.login();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void lblRetiroSinTarjetaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRetiroSinTarjetaMousePressed
         RetirarSinCuentaForm retiroSinCuentaForm = new RetirarSinCuentaForm(this.conBD);
@@ -227,18 +227,18 @@ public class IniciarSesionForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Background;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnIngresar;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lblBienvenido;
     private javax.swing.JLabel lblContraseña;
+    private javax.swing.JLabel lblCorreo;
     private javax.swing.JLabel lblRegistrar;
     private javax.swing.JLabel lblRetiroSinTarjeta;
-    private javax.swing.JLabel lblUsuario;
     private javax.swing.JPasswordField txtContraseña;
+    private javax.swing.JTextField txtCorreo;
     private javax.swing.JLabel txtIniciarSesion;
-    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }
